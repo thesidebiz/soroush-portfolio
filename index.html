@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Soroush Seif — I build AI systems that run without me, and stop where they shouldn't. Multi-agent pipelines in production, with approval gates, scope allowlists and outcome attribution.">
+<meta name="author" content="Soroush Seif">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Soroush Seif — AI systems I've shipped">
+<meta property="og:description" content="Multi-agent pipelines in production, with the guardrails real teams require. ~72k LOC shipped · A− code-health audit · 17-node LangGraph DAG, nightly.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+<style>*,*::before,*::after{box-sizing:border-box}html,body{margin:0;padding:0}</style>
+<title>Soroush Seif — AI systems I've shipped</title>
+<style>
+  :root{
+    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#6E7A69;
+    --rule:#DCE0D6; --accent:#0F7F62; --gate:#9A6F1E; --spine:#C9D2C4;
+    --shadow:0 1px 2px rgba(18,24,15,.05), 0 8px 24px -12px rgba(18,24,15,.14);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+      --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+    --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+  :root[data-theme="light"]{
+    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#6E7A69;
+    --rule:#DCE0D6; --accent:#0F7F62; --gate:#9A6F1E; --spine:#C9D2C4;
+    --shadow:0 1px 2px rgba(18,24,15,.05), 0 8px 24px -12px rgba(18,24,15,.14);
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Palladio,Georgia,ui-serif,serif}
+  .mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
+
+  .wrap{max-width:60rem; margin:0 auto; padding:0 1.5rem}
+  .prose{max-width:38rem}
+
+  a{color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+
+  /* ---------- hero ---------- */
+  header{padding:5rem 0 3.5rem; border-bottom:1px solid var(--rule)}
+  .eyebrow{
+    font-size:.72rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--ink-3); margin:0 0 1.6rem;
+  }
+  h1{
+    font-size:clamp(2.4rem,6vw,3.9rem); line-height:1.04; margin:0 0 1.4rem;
+    font-weight:600; letter-spacing:-.02em; text-wrap:balance;
+  }
+  h1 em{font-style:italic; color:var(--accent)}
+  .lede{font-size:clamp(1.05rem,2.2vw,1.2rem); color:var(--ink-2); margin:0 0 2.4rem; max-width:34rem}
+  .id-line{
+    display:flex; flex-wrap:wrap; gap:.5rem 1.4rem; align-items:baseline;
+    font-size:.85rem; color:var(--ink-3); margin:0;
+  }
+
+  /* ---------- section scaffold ---------- */
+  section{padding:4rem 0; border-bottom:1px solid var(--rule)}
+  .sec-head{display:flex; align-items:baseline; gap:1rem; margin:0 0 .6rem}
+  .sec-num{font-size:.72rem; letter-spacing:.14em; color:var(--ink-3)}
+  h2{
+    font-size:clamp(1.45rem,3.4vw,1.95rem); margin:0; font-weight:600;
+    letter-spacing:-.01em; text-wrap:balance;
+  }
+  .sec-sub{color:var(--ink-2); margin:0 0 2.6rem; max-width:36rem}
+
+  /* ---------- system card ---------- */
+  .sys{
+    position:relative; background:var(--raise); border:1px solid var(--rule);
+    border-radius:3px; padding:2rem 1.75rem 1.75rem 2.25rem; margin-bottom:1.5rem;
+    box-shadow:var(--shadow);
+  }
+  .sys::before{
+    content:""; position:absolute; left:0; top:1.5rem; bottom:1.5rem; width:2px;
+    background:linear-gradient(var(--accent), var(--spine)); border-radius:2px;
+  }
+  .sys-kind{
+    font-size:.68rem; letter-spacing:.15em; text-transform:uppercase;
+    color:var(--ink-3); margin:0 0 .5rem;
+  }
+  .sys h3{font-size:1.3rem; margin:0 0 .4rem; font-weight:600; letter-spacing:-.01em}
+  .sys .what{color:var(--ink-2); margin:0 0 1.5rem; max-width:40rem}
+
+  .metrics{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));
+    gap:1px; background:var(--rule); border:1px solid var(--rule);
+    border-radius:2px; overflow:hidden; margin:0 0 1.5rem;
+  }
+  .metric{background:var(--raise); padding:.9rem 1rem}
+  .metric b{
+    display:block; font-size:1.5rem; line-height:1.1; font-weight:600;
+    letter-spacing:-.02em; font-variant-numeric:tabular-nums;
+  }
+  .metric span{display:block; font-size:.75rem; color:var(--ink-3); margin-top:.25rem; line-height:1.35}
+
+  /* ---------- pipeline run ---------- */
+  .run{display:flex; gap:0; overflow-x:auto; padding-bottom:.5rem; margin:0 0 1.25rem}
+  .stage{
+    flex:0 0 auto; display:flex; align-items:center; gap:.6rem;
+    font-size:.76rem; color:var(--ink-2); white-space:nowrap;
+  }
+  .stage .dot{width:6px; height:6px; border-radius:50%; background:var(--spine); flex:0 0 auto}
+  .stage.is-gate{color:var(--gate); font-weight:600}
+  .stage.is-gate .dot{background:var(--gate); box-shadow:0 0 0 3px color-mix(in srgb, var(--gate) 22%, transparent)}
+  .arrow{flex:0 0 auto; width:1.75rem; height:1px; background:var(--spine); margin:0 .7rem; align-self:center}
+
+  .role{
+    border-top:1px solid var(--rule); padding-top:1rem; margin:0;
+    font-size:.9rem; color:var(--ink-2);
+  }
+  .role b{color:var(--ink); font-weight:600}
+  .stack{font-size:.78rem; color:var(--ink-3); margin:.7rem 0 0}
+
+  /* ---------- method ---------- */
+  .method{display:grid; grid-template-columns:repeat(auto-fit,minmax(13rem,1fr)); gap:1.5rem}
+  .step h4{margin:0 0 .4rem; font-size:.95rem; font-weight:600}
+  .step p{margin:0; font-size:.9rem; color:var(--ink-2)}
+  .step .k{
+    font-size:.7rem; letter-spacing:.14em; color:var(--accent);
+    display:block; margin-bottom:.5rem;
+  }
+
+  .callout{
+    border-left:2px solid var(--accent); padding:.2rem 0 .2rem 1.25rem;
+    margin:2rem 0 0; color:var(--ink-2); font-size:.95rem; max-width:36rem;
+  }
+
+  footer{padding:3.5rem 0 5rem}
+  .contact{display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; margin:1rem 0 0; font-size:.95rem}
+
+  @media (max-width:34rem){
+    body{font-size:16px}
+    .sys{padding:1.5rem 1.15rem 1.35rem 1.5rem}
+    header{padding:3.5rem 0 2.5rem}
+    section{padding:3rem 0}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow mono">Soroush Seif · Vancouver, BC</p>
+    <h1 class="serif">I build AI systems that run without me — and <em>stop</em> where they shouldn't.</h1>
+    <p class="lede">Multi-agent pipelines in production, with the guardrails real teams require: approval gates, scope allowlists, outcome attribution. Shipped, audited, running.</p>
+    <p class="id-line mono">
+      <span>72k LOC shipped</span>
+      <span>A− code-health audit</span>
+      <span>17-node LangGraph DAG, nightly</span>
+      <span>0 unreviewed writes to main</span>
+    </p>
+  </header>
+
+  <section>
+    <div class="sec-head"><span class="sec-num mono">01</span><h2 class="serif">Systems I've built</h2></div>
+    <p class="sec-sub">Production software, not demos. I define the architecture, agent roles, acceptance criteria and gates — then direct AI coding agents through implementation and testing.</p>
+
+    <article class="sys">
+      <p class="sys-kind mono">Agentic SaaS · multi-tenant</p>
+      <h3>theSide.io Intelligence Platform</h3>
+      <p class="what">A multi-agent pipeline turns a business's live data into scored, human-approved actions. Agents propose, critique and rank; a supervisor gates quality. A human approves — then approved actions execute across ten integrations, with outcomes attributed back on a 7/14/28-day lag.</p>
+      <div class="metrics">
+        <div class="metric"><b>~72k</b><span>lines of code, shipped</span></div>
+        <div class="metric"><b>A−</b><span>automated code-health grade</span></div>
+        <div class="metric"><b>10</b><span>live production integrations</span></div>
+      </div>
+      <div class="run">
+        <span class="stage"><span class="dot"></span>Proposer generates options</span><span class="arrow"></span>
+        <span class="stage"><span class="dot"></span>Critic pressure-tests</span><span class="arrow"></span>
+        <span class="stage"><span class="dot"></span>Ranker scores &amp; orders</span><span class="arrow"></span>
+        <span class="stage is-gate"><span class="dot"></span>Supervisor gates → human approves</span>
+      </div>
+      <p class="role"><b>My role:</b> defined the product requirements, agent roles, data flows, approval gates and integration behaviour; set the acceptance criteria; directed AI coding agents through implementation and testing.</p>
+      <p class="stack mono">Next.js 15 · Anthropic SDK (tiered models) · Neon Postgres + pgvector (RAG) · Trigger.dev · Clerk multi-tenancy</p>
+    </article>
+
+    <article class="sys">
+      <p class="sys-kind mono">Autonomous pipeline · ships its own code</p>
+      <h3>Side Studios SEO &amp; AI-Visibility Engine</h3>
+      <p class="what">An autonomous system that keeps a site's search and AI-answer visibility improving every day, with no human writing each fix. It crawls, finds the gaps, prioritises by conversion weight, drafts brand-compliant code — and opens a pull request a human merges. Every PR sits behind a brand-QA check and a diff-scope allowlist.</p>
+      <div class="metrics">
+        <div class="metric"><b>17</b><span>nodes in the LangGraph DAG</span></div>
+        <div class="metric"><b>Daily</b><span>autonomous cron, no human writing fixes</span></div>
+        <div class="metric"><b>0</b><span>unreviewed writes to main</span></div>
+      </div>
+      <div class="run">
+        <span class="stage"><span class="dot"></span>Crawl &amp; mine SERP gaps</span><span class="arrow"></span>
+        <span class="stage"><span class="dot"></span>Prioritise by conversion weight</span><span class="arrow"></span>
+        <span class="stage"><span class="dot"></span>Draft brand-compliant code</span><span class="arrow"></span>
+        <span class="stage is-gate"><span class="dot"></span>Open do-not-merge PR → human merges</span>
+      </div>
+      <p class="role"><b>My role:</b> designed the workflow, agent responsibilities, conversion-weighted prioritisation, and the brand-QA and merge safeguards; directed AI coding agents through implementation and testing.</p>
+      <p class="stack mono">Python · LangGraph · daily cron</p>
+    </article>
+
+    <article class="sys">
+      <p class="sys-kind mono">Integration · Model Context Protocol</p>
+      <h3>PerfectMind MCP server</h3>
+      <p class="what">An MCP server on a Cloudflare Worker that exposes a recreation-management platform's operations to AI agents as typed, callable tools — so an assistant can work the real system instead of describing it.</p>
+      <p class="role"><b>My role:</b> defined the tool surface and access model; directed implementation.</p>
+      <p class="stack mono">Cloudflare Workers · MCP</p>
+    </article>
+
+    <article class="sys">
+      <p class="sys-kind mono">Reverse engineering · validated</p>
+      <h3>PlexROI</h3>
+      <p class="what">A proprietary multiplex-development proforma engine, rebuilt from its public behaviour alone with no access to source — including a distance-weighted comparables model and transit-aware BC Bill-44 unit logic, then proved against live captures.</p>
+      <div class="metrics">
+        <div class="metric"><b>16/16</b><span>golden tests passing</span></div>
+        <div class="metric"><b>0</b><span>runtime dependencies</span></div>
+        <div class="metric"><b>1:1</b><span>matched to the dollar</span></div>
+      </div>
+      <p class="role"><b>Why it's here:</b> it shows how I decompose and rebuild a system I don't have the source for — and how I prove it is right.</p>
+    </article>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">A revenue system, through three technology generations</h2></div>
+    <p class="sec-sub">The product I'm known for — and the reason I care about gates. I made the call at each transition and led the team through it.</p>
+
+    <article class="sys">
+      <p class="sys-kind mono">Revenue system · pre-construction real estate</p>
+      <h3>From First Touch to Transaction</h3>
+      <p class="what">Project-marketing firms served developers. Nothing served the <em>agent</em>. I designed the acquisition-to-close operating system that closed that gap: acquire → capture → prequalify → nurture → route → close, with CRM orchestration throughout.</p>
+      <div class="metrics">
+        <div class="metric"><b>1,000+</b><span>buyer conversations handled per day</span></div>
+        <div class="metric"><b>1% → 3%</b><span>lead-to-transaction conversion</span></div>
+        <div class="metric"><b>~$45M</b><span>year-one transaction value</span></div>
+      </div>
+      <div class="run">
+        <span class="stage"><span class="dot"></span>2020 — rule-based conversation workflows, pre-LLM</span><span class="arrow"></span>
+        <span class="stage"><span class="dot"></span>In-house NLU models on proprietary data</span><span class="arrow"></span>
+        <span class="stage"><span class="dot"></span>LLM-based conversational agents</span>
+      </div>
+      <p class="role"><b>My role:</b> Product &amp; Revenue-System Lead — identified the market gap, defined the business model and customer journey, designed the funnel and CRM logic, selected partners and tools, directed implementation, iterated on conversion. The 2020 system that carried 1,000+ conversations a day was <b>rule-based, not an LLM</b>; the in-house NLU models were built by the team. Productised into a subscription offering agents could buy. Partners: Avesdo, Zonda Home, MLA Canada.</p>
+    </article>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">Teaching 800 businesses to change how they work</h2></div>
+    <p class="sec-sub">Enablement at a scale most people never get to see — and the reason I can walk into an unfamiliar business and find the constraint fast.</p>
+
+    <article class="sys">
+      <p class="sys-kind mono">Advisory · Government of Canada</p>
+      <h3>CDAP — Canada Digital Adoption Program</h3>
+      <p class="what">As a government-appointed advisor I assessed small and mid-sized businesses and delivered custom growth and digital-transformation roadmaps — then built what they needed, inside each client's real budget, capabilities and adoption constraints. Adoption was the deliverable; a roadmap nobody follows is worth nothing.</p>
+      <div class="metrics">
+        <div class="metric"><b>800</b><span>businesses assessed</span></div>
+        <div class="metric"><b>300</b><span>custom roadmaps delivered</span></div>
+        <div class="metric"><b>4</b><span>pillars per engagement</span></div>
+      </div>
+      <div class="run">
+        <span class="stage"><span class="dot"></span>Sales — pipeline, CRM/RevOps, conversion</span><span class="arrow"></span>
+        <span class="stage"><span class="dot"></span>Marketing — demand generation</span><span class="arrow"></span>
+        <span class="stage"><span class="dot"></span>Automation — workflow &amp; ops</span><span class="arrow"></span>
+        <span class="stage"><span class="dot"></span>AI enablement — practical, adoptable</span>
+      </div>
+      <p class="role"><b>Why it matters:</b> 800 diagnoses is a rare at-scale read on what actually blocks B2B growth — and 300 delivered roadmaps is 300 teams who changed how they work.</p>
+    </article>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">How I work</h2></div>
+    <p class="sec-sub">Outcome first. I own the system and the result; AI coding agents are how the implementation gets done.</p>
+    <div class="method">
+      <div class="step">
+        <span class="k mono">DEFINE</span>
+        <h4>Architecture &amp; acceptance criteria</h4>
+        <p>Operating model, workflows, agent roles, data flows, integration behaviour — and what "correct" means before anything is built.</p>
+      </div>
+      <div class="step">
+        <span class="k mono">DIRECT</span>
+        <h4>Agent-directed delivery</h4>
+        <p>I direct AI coding agents through implementation and testing, reviewing against the acceptance criteria I set.</p>
+      </div>
+      <div class="step">
+        <span class="k mono">GATE</span>
+        <h4>Guardrails that hold</h4>
+        <p>Human-in-the-loop approval, scope allowlists, brand-QA checks. Autonomy is only useful if it can't do damage.</p>
+      </div>
+      <div class="step">
+        <span class="k mono">MEASURE</span>
+        <h4>Attribution, not vibes</h4>
+        <p>Outcomes tracked back to the action that caused them — 7/14/28-day attribution windows, conversion-weighted priorities.</p>
+      </div>
+    </div>
+    <p class="callout">Fourteen years diagnosing growth constraints and turning them into working marketing, revenue and AI systems. Now focused on long-horizon ownership inside one embedded team.</p>
+  </section>
+
+  <footer>
+    <h2 class="serif" style="font-size:1.35rem; margin:0">Get in touch</h2>
+    <p class="contact">
+      <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
+      <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
+      <span style="color:var(--ink-3)">Vancouver, BC · Canadian citizen</span>
+    </p>
+  </footer>
+
+</div>
+</body>
+</html>
