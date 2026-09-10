@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Side was a pre-construction sales platform for real-estate agents. Its conversation layer went through three technology generations: a rule-based workflow, in-house NLU models trained on 8,000 annotated turns, then LLM agents.">
+<meta name="author" content="Soroush Seif">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Side.io: three generations of one conversation layer">
+<meta property="og:description" content="Rule-based workflow first, in-house NLU models next, LLM agents now. Shipped in 2020-21, before generative AI.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+<title>Side.io · Soroush Seif</title>
+<style>
+  :root{
+    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#6E7A69;
+    --rule:#DCE0D6; --accent:#0F7F62; --gate:#9A6F1E; --spine:#C9D2C4;
+    --shadow:0 1px 2px rgba(18,24,15,.05), 0 8px 24px -12px rgba(18,24,15,.14);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+      --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+    --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--ground); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Palladio,Georgia,ui-serif,serif}
+  .mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
+  .wrap{max-width:60rem; margin:0 auto; padding:0 1.5rem}
+  a{color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px}
+  a:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+
+  .back{font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); margin:0; padding:1.8rem 0 0}
+  .back a{color:inherit; text-decoration:none}
+  .back a:hover{text-decoration:underline}
+
+  header{padding:2.4rem 0 3rem; border-bottom:1px solid var(--rule)}
+  .eyebrow{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); margin:0 0 1.4rem}
+  h1{font-size:clamp(2.1rem,5.4vw,3.4rem); line-height:1.05; margin:0 0 1.2rem; font-weight:600; letter-spacing:-.02em; text-wrap:balance}
+  h1 em{font-style:italic; color:var(--accent)}
+  .lede{font-size:clamp(1.03rem,2.1vw,1.15rem); color:var(--ink-2); margin:0; max-width:40rem}
+  .prose{max-width:40rem}
+  .prose p{margin:0 0 1rem}
+
+  section{padding:3.4rem 0; border-bottom:1px solid var(--rule)}
+  .sec-head{display:flex; align-items:baseline; gap:1rem; margin:0 0 .5rem}
+  .sec-num{font-size:.72rem; letter-spacing:.14em; color:var(--ink-3)}
+  h2{font-size:clamp(1.4rem,3.3vw,1.85rem); margin:0; font-weight:600; letter-spacing:-.01em; text-wrap:balance}
+  h3{font-size:1.05rem; margin:1.9rem 0 .5rem; font-weight:600}
+  .sec-sub{color:var(--ink-2); margin:0 0 1.6rem; max-width:40rem}
+
+  .metrics{display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:1px;
+    background:var(--rule); border:1px solid var(--rule); border-radius:2px; overflow:hidden; margin:2.2rem 0 0}
+  .metric{background:var(--raise); padding:.9rem 1rem}
+  .metric b{display:block; font-size:1.5rem; line-height:1.1; font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .metric span{display:block; font-size:.75rem; color:var(--ink-3); margin-top:.28rem; line-height:1.35}
+
+  .run{display:flex; gap:0; overflow-x:auto; padding-bottom:.5rem; margin:1.4rem 0 0}
+  .stage{flex:0 0 auto; display:flex; align-items:center; gap:.6rem; font-size:.76rem; color:var(--ink-2); white-space:nowrap}
+  .stage .dot{width:6px; height:6px; border-radius:50%; background:var(--spine); flex:0 0 auto}
+  .stage.is-gate{color:var(--gate); font-weight:600}
+  .stage.is-gate .dot{background:var(--gate); box-shadow:0 0 0 3px color-mix(in srgb, var(--gate) 22%, transparent)}
+  .arrow{flex:0 0 auto; width:1.75rem; height:1px; background:var(--spine); margin:0 .7rem; align-self:center}
+
+  figure{margin:1.6rem 0 0; background:var(--raise); border:1px solid var(--rule); border-radius:3px; box-shadow:var(--shadow); overflow:hidden}
+  figure img{display:block; width:100%; height:auto}
+  figcaption{padding:.8rem 1rem .9rem; font-size:.86rem; color:var(--ink-2); border-top:1px solid var(--rule); line-height:1.5}
+  figcaption b{color:var(--ink)}
+
+  .callout{border-left:2px solid var(--accent); padding:.2rem 0 .2rem 1.25rem; margin:1.6rem 0 0; color:var(--ink-2); font-size:.95rem; max-width:38rem}
+  .callout.gate{border-left-color:var(--gate)}
+  .stack{font-size:.78rem; color:var(--ink-3); margin:.7rem 0 0}
+
+  ul.plain{padding-left:1.2rem; margin:.5rem 0 0; max-width:40rem}
+  ul.plain li{margin:0 0 .5rem}
+  .links{display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; margin:.8rem 0 0; font-size:.95rem}
+
+  footer{padding:3rem 0 5rem}
+  .entity{color:var(--ink-3); font-size:.86rem; max-width:44rem; margin:.9rem 0 0}
+  .ident{font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin:0 0 .6rem}
+
+  @media (max-width:34rem){ body{font-size:16px} header{padding:2rem 0 2rem} section{padding:2.6rem 0} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+  @media print{
+    @page{size:Letter; margin:.45in}
+    :root{--ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
+      --rule:#c0c0c0; --accent:#0b5a45; --gate:#7a5714; --spine:#b5b5b5; --shadow:none}
+    body{background:#fff; font-size:8.2pt; line-height:1.27; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .wrap{max-width:none; padding:0}
+    .back{display:none}
+    header{padding:0 0 .4rem}
+    .eyebrow{font-size:6.6pt; margin:0 0 .3rem}
+    h1{font-size:14pt; line-height:1.08; margin:0 0 .3rem}
+    .lede{font-size:8.6pt; max-width:none; margin:0}
+    .prose{max-width:none}
+    .prose p{margin:0 0 .3rem}
+    section{padding:.4rem 0; break-inside:auto}
+    .sec-head{margin:0 0 .25rem}
+    h2{font-size:9.8pt}
+    h3{font-size:8.6pt; margin:.45rem 0 .18rem}
+    .sec-sub{margin:0 0 .4rem; max-width:none}
+    .metrics,.facts{margin:.5rem 0 0; break-inside:avoid}
+    .metric,.fact{padding:.28rem .4rem}
+    .metric b,.fact b{font-size:9.8pt}
+    .metric span,.fact span{font-size:6.4pt; margin-top:.1rem; line-height:1.25}
+    .run{margin:.45rem 0 0; flex-wrap:wrap; overflow:visible; break-inside:avoid}
+    .stage{font-size:6.8pt; white-space:normal}
+    .arrow{width:.9rem; margin:0 .35rem}
+    figure{margin:.5rem 0 0; box-shadow:none; break-inside:avoid}
+    figure img{max-height:1.35in; width:auto; max-width:100%; margin:0 auto}
+    figcaption{padding:.3rem .45rem .35rem; font-size:7pt; line-height:1.3}
+    .callout{margin:.45rem 0 0; font-size:8.2pt; max-width:none; padding-left:.7rem; break-inside:avoid}
+    .role{margin:.45rem 0 0; padding-top:.35rem; font-size:8.2pt; max-width:none; break-inside:avoid}
+    .stack{font-size:6.8pt; margin:.35rem 0 0}
+    table{font-size:7.2pt; margin:.4rem 0 0; break-inside:avoid}
+    th,td{padding:.24rem .35rem}
+    ul.plain,ol.steps{margin:.3rem 0 0; max-width:none; padding-left:.9rem}
+    ul.plain li,ol.steps li{margin:0 0 .2rem}
+    .links{margin:.35rem 0 0; font-size:7.6pt; gap:.25rem .9rem}
+    footer{padding:.5rem 0 0}
+    .ident{font-size:6.6pt; margin:0 0 .25rem}
+    .entity{font-size:7.2pt; max-width:none; margin:.35rem 0 0}
+    a{color:inherit; text-decoration:none}
+    .links a[href^="http"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<p class="back mono"><a href="../">&larr; Soroush Seif · portfolio</a></p>
+
+<header>
+  <p class="eyebrow mono">Product · pre-construction real estate · 2020-21</p>
+  <h1 class="serif">Side: one conversation layer, <em>three</em> technology generations.</h1>
+  <p class="lede">The human at the far end was someone looking at a presale tower at eleven at night, wanting to know whether the parking stall was included and whether they could assign the contract before completion. Those are not questions a brochure answers, and they are not questions an agent answers at eleven at night. The product answered them in seconds, worked out from the reply whether this was a buyer or a browser, and woke the agent only when it was worth waking him. Getting that to work took us three goes, over three different technologies.</p>
+  <div class="metrics">
+    <div class="metric"><b>50 &rarr; 120+</b><span>branches in the rule-based workflow before it stopped being maintainable</span></div>
+    <div class="metric"><b>8,000</b><span>annotated SMS and web-chat turns behind the in-house models</span></div>
+    <div class="metric"><b>374</b><span>presale projects in the data base behind the answers, across 17 linked tables</span></div>
+  </div>
+</header>
+
+<section id="what">
+  <div class="sec-head"><span class="sec-num mono">01</span><h2 class="serif">What it is</h2></div>
+  <div class="prose">
+    <p>Side was a pre-construction sales platform an individual real-estate agent could buy. It shipped in 2020-21, before generative AI. The revenue system it sat inside is <a href="acquisition-to-close.html">a separate page</a>. This one is about the product and the three attempts at its hardest part.</p>
+    <p>Before any of that there was a data problem. Presale inventory has no MLS. There is no single source of truth for what is selling, at what price, with what deposit structure or completion date, so the first build was a data layer: an Airtable and Postgres pair fed by automated extraction against developer and listing portals, with a timestamp on every extracted row. The production base carried 17 linked tables and 374 projects, covering pricing, developer, completion dates, amenities and architect.</p>
+    <p>Everything the conversation layer could say, it said out of that base.</p>
+    <p class="callout" style="margin-left:0">One naming note, because it confuses people. Side.io was this product. The intelligence platform my firm operates for clients today carries the same domain name and is a different system, built years later. There is a map of the names at the bottom of the page.</p>
+  </div>
+</section>
+
+<section id="generations">
+  <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">Three generations</h2></div>
+  <div class="run" aria-label="Three technology generations">
+    <span class="stage"><span class="dot"></span>Rule-based workflow</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>In-house NLU models</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>LLM agents</span>
+  </div>
+
+  <h3>Generation one: a rule-based workflow, and the wall it hit</h3>
+  <div class="prose">
+    <p>The first version had no model in it at all. It was a conditional workflow in GoHighLevel, triggered by form and paid-social lead submissions, branching on tagged intent into stage moves, tags and an agent handoff. It began at around 50 branching nodes and grew past 120.</p>
+    <p>Over a six-week window covering more than 2,000 unique engagements it held about a 1% conversion rate, which was the industry baseline. So it worked, and it did not win. What killed it was maintenance: past a certain branch count nobody could reason about the tree, and the company's own record of the period says translating the expanding conditional framework into code had become unmanageable.</p>
+    <p>I keep the screenshots because they are the honest picture of what generation one actually was. A reviewer who assumes the early system was an LLM is going to ask which model produced the result, and the answer is that there was no model. The result came from the operating design.</p>
+  </div>
+  <figure>
+    <img src="../earlier-work/img/decision-tree-01.png" width="2400" height="1430" alt="Screenshot of the GoHighLevel conversation workflow: a branching decision tree of conditional nodes, tags and stage moves." loading="lazy">
+    <figcaption><b>Generation one, as it stood in 2021-22.</b> Every diamond is a condition somebody had to write down and later maintain. This is the artifact people mean when they say a system was rule-based, and it is worth looking at before believing any claim about early conversational AI.</figcaption>
+  </figure>
+  <figure>
+    <img src="../earlier-work/img/decision-tree-02.png" width="2400" height="1554" alt="Second screenshot of the same GoHighLevel workflow showing further branches of the conditional tree." loading="lazy">
+    <figcaption><b>The other half of the same tree.</b> Growth from 50 branches to more than 120 is what a rules engine looks like when the domain is richer than the tool. The branch count is the reason for generation two, and the reason I stopped defending the first design.</figcaption>
+  </figure>
+
+  <h3>Generation two: in-house models on our own transcripts</h3>
+  <div class="prose">
+    <p>The replacement was a set of in-house natural-language understanding models, trained on 8,000 annotated SMS and web-chat turns collected between May 2021 and August 2022 from real buyer conversations. The annotation ran under a written process with a spot-check on a sample, and new examples fed a nightly retrain. Recordings had a retention limit and the store was encrypted.</p>
+    <p>The models were built by our internal engineering team, with a collaboration with a University of British Columbia master's of data science capstone team. The team ran three deliberately different pipelines against the same problem so we could compare, with an entity extractor and a confidence threshold below which the system handed the conversation to a human.</p>
+    <p>That generation is where the funnel numbers moved. Conversion went from about 1% to over 3%, and the layer handled more than 1,000 buyer conversations a day.</p>
+    <p>The part I would want a technical reviewer to hear is the piece that did not work. The capstone collaboration also produced transformer-based lead-warmth classifiers, and they reached 0.55 to 0.59 accuracy with 0.33 recall on the hot class. The team's own written verdict was that this was not promising. We did not put them in the funnel. Two years of hindsight says the labels were the problem and we should have spent that quarter on the annotation guide.</p>
+  </div>
+  <p class="callout"><b>The data layer both generations answered out of:</b> an Airtable and Postgres hybrid with 17 linked tables (pricing, developer, completion dates, amenities, architect) and 374 project records, ingested by scheduled extraction tasks against developer and listing portals, with a per-row extract timestamp so a stale answer could be identified as stale. The conversation layer got most of the attention. This is the thing that made its answers true.</p>
+
+  <h3>Generation three: LLM agents</h3>
+  <div class="prose">
+    <p>The third generation replaced the in-house classifiers with LLM-based conversational agents once those became reliable and affordable enough to put in front of buyers. It is the shortest section here because it is the least interesting engineering decision I made on this product. By then the hard work was done: we knew the intents, we had the transcripts, and we knew what a good handoff looked like.</p>
+  </div>
+</section>
+
+<section id="role">
+  <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">My role</h2></div>
+  <div class="prose">
+    <p>I founded and directed the programme. I identified the segment, defined the product and the customer journey, set what the conversation layer had to deliver, chose when to make each generational transition, and led a small team through it. The applied research ran as a federally supported project with a filed description, objectives and deliverables, and I wrote those.</p>
+    <p>What I did not do: I did not build the models. Our CTO and the engineering team built the natural-language work, and the capstone team built the classifiers that did not make it. That division is recorded in what the company wrote at the time to a federal agency, in several separate documents, and I would rather be the person who states it plainly than the one who lets a resume imply otherwise.</p>
+    <p>What I take from it is narrower than a resume line. Three generations of the same problem taught me that the model is rarely the constraint. The constraint was the labels, the data layer underneath, and whether the handoff carried enough context for a commissioned salesperson to trust it.</p>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">Proof</h2></div>
+  <p class="sec-sub">Contemporaneous documents, redacted. Amounts, named officials, client names and personal data are removed.</p>
+  <p class="links">
+    <a href="../earlier-work/Side-Pitch-Deck-2023-excerpt.pdf">Pitch deck, 2023 (product-story slides only)</a>
+    <a href="../earlier-work/IRAP-Project-Description-2023.pdf">Project description filed with NRC IRAP, 2023</a>
+  </p>
+  <p class="callout">The IRAP filing is the one I would read first. It was written in 2023 for a federal funding application, so it had to be specific about objectives and deliverables, and its phase order is the same acquisition-to-close sequence I still design around.</p>
+</section>
+
+<footer>
+  <p class="ident mono">Soroush Seif · AI Systems Lead · Agentic Platforms &amp; Revenue Automation</p>
+  <p class="links">
+    <a href="../">Portfolio</a>
+    <a href="intelligence-platform.html">Intelligence Platform</a>
+    <a href="nightshift.html">Nightshift</a>
+    <a href="acquisition-to-close.html">Acquisition to close</a>
+    <a href="cdap.html">CDAP</a>
+    <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
+    <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
+  </p>
+  <p class="entity">Side Studios (theside.studio) is my firm; theSide.io is the intelligence platform we built for our clients; Nightshift is the console for our autonomous SEO and AI-visibility engine. Vancouver, BC · Canadian citizen.</p>
+</footer>
+
+</div>
+</body>
+</html>

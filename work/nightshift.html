@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Nightshift is the console for an autonomous engine that runs nightly on theside.studio: a 19-node LangGraph state graph, a decision layer that dispatches coding agents, trust classes A/B/C, hard budget caps, and a founder veto.">
+<meta name="author" content="Soroush Seif">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nightshift">
+<meta property="og:description" content="An engine that finds its own work, writes the code and lands it by trust class. 58 runs across 48 nights. 1,559 tests passing. Veto and revert, no approval inbox.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>">
+<title>Nightshift · Soroush Seif</title>
+<style>
+  :root{
+    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#6E7A69;
+    --rule:#DCE0D6; --accent:#0F7F62; --gate:#9A6F1E; --spine:#C9D2C4;
+    --shadow:0 1px 2px rgba(18,24,15,.05), 0 8px 24px -12px rgba(18,24,15,.14);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+      --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+    --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--ground); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Palladio,Georgia,ui-serif,serif}
+  .mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
+  .wrap{max-width:60rem; margin:0 auto; padding:0 1.5rem}
+  a{color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px}
+  a:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+
+  .back{font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); margin:0; padding:1.8rem 0 0}
+  .back a{color:inherit; text-decoration:none}
+  .back a:hover{text-decoration:underline}
+
+  header{padding:2.4rem 0 3rem; border-bottom:1px solid var(--rule)}
+  .eyebrow{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); margin:0 0 1.4rem}
+  h1{font-size:clamp(2.1rem,5.4vw,3.4rem); line-height:1.05; margin:0 0 1.2rem; font-weight:600; letter-spacing:-.02em; text-wrap:balance}
+  h1 em{font-style:italic; color:var(--accent)}
+  .lede{font-size:clamp(1.03rem,2.1vw,1.15rem); color:var(--ink-2); margin:0; max-width:40rem}
+  .prose{max-width:40rem}
+  .prose p{margin:0 0 1rem}
+
+  section{padding:3.4rem 0; border-bottom:1px solid var(--rule)}
+  .sec-head{display:flex; align-items:baseline; gap:1rem; margin:0 0 .5rem}
+  .sec-num{font-size:.72rem; letter-spacing:.14em; color:var(--ink-3)}
+  h2{font-size:clamp(1.4rem,3.3vw,1.85rem); margin:0; font-weight:600; letter-spacing:-.01em; text-wrap:balance}
+  h3{font-size:1.05rem; margin:1.8rem 0 .5rem; font-weight:600}
+  .sec-sub{color:var(--ink-2); margin:0 0 1.6rem; max-width:40rem}
+
+  .metrics{display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:1px;
+    background:var(--rule); border:1px solid var(--rule); border-radius:2px; overflow:hidden; margin:2.2rem 0 0}
+  .metric{background:var(--raise); padding:.9rem 1rem}
+  .metric b{display:block; font-size:1.5rem; line-height:1.1; font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .metric span{display:block; font-size:.75rem; color:var(--ink-3); margin-top:.28rem; line-height:1.35}
+  .facts{display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:1px;
+    background:var(--rule); border:1px solid var(--rule); border-radius:2px; overflow:hidden; margin:.8rem 0 0}
+  .fact{background:var(--raise); padding:.85rem 1rem}
+  .fact b{display:block; font-size:1.3rem; line-height:1.1; font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .fact span{display:block; font-size:.74rem; color:var(--ink-3); margin-top:.3rem; line-height:1.35}
+
+  .run{display:flex; gap:0; overflow-x:auto; padding-bottom:.5rem; margin:1.4rem 0 0}
+  .stage{flex:0 0 auto; display:flex; align-items:center; gap:.6rem; font-size:.76rem; color:var(--ink-2); white-space:nowrap}
+  .stage .dot{width:6px; height:6px; border-radius:50%; background:var(--spine); flex:0 0 auto}
+  .stage.is-gate{color:var(--gate); font-weight:600}
+  .stage.is-gate .dot{background:var(--gate); box-shadow:0 0 0 3px color-mix(in srgb, var(--gate) 22%, transparent)}
+  .arrow{flex:0 0 auto; width:1.75rem; height:1px; background:var(--spine); margin:0 .7rem; align-self:center}
+
+  figure{margin:1.6rem 0 0; background:var(--raise); border:1px solid var(--rule); border-radius:3px; box-shadow:var(--shadow); overflow:hidden}
+  figure img{display:block; width:100%; height:auto}
+  figcaption{padding:.8rem 1rem .9rem; font-size:.86rem; color:var(--ink-2); border-top:1px solid var(--rule); line-height:1.5}
+  figcaption b{color:var(--ink)}
+
+  table{border-collapse:collapse; width:100%; font-size:.9rem; margin:1.2rem 0 0; background:var(--raise); border:1px solid var(--rule)}
+  th,td{text-align:left; vertical-align:top; padding:.6rem .8rem; border-top:1px solid var(--rule)}
+  th{font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); border-top:0}
+  .tbl{overflow-x:auto}
+  .chip{display:inline-block; font-size:.72rem; letter-spacing:.06em; padding:.1rem .5rem; border:1px solid var(--rule); border-radius:999px; color:var(--ink-2)}
+  .chip.a{border-color:var(--accent); color:var(--accent)}
+  .chip.c{border-color:var(--gate); color:var(--gate)}
+
+  .callout{border-left:2px solid var(--accent); padding:.2rem 0 .2rem 1.25rem; margin:1.6rem 0 0; color:var(--ink-2); font-size:.95rem; max-width:38rem}
+  .callout.gate{border-left-color:var(--gate)}
+  .stack{font-size:.78rem; color:var(--ink-3); margin:.7rem 0 0}
+
+  ul.plain{padding-left:1.2rem; margin:.5rem 0 0; max-width:40rem}
+  ul.plain li{margin:0 0 .5rem}
+  .links{display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; margin:.8rem 0 0; font-size:.95rem}
+
+  footer{padding:3rem 0 5rem}
+  .entity{color:var(--ink-3); font-size:.86rem; max-width:44rem; margin:.9rem 0 0}
+  .ident{font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin:0 0 .6rem}
+
+  @media (max-width:34rem){ body{font-size:16px} header{padding:2rem 0 2rem} section{padding:2.6rem 0} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+  @media print{
+    @page{size:Letter; margin:.45in}
+    :root{--ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
+      --rule:#c0c0c0; --accent:#0b5a45; --gate:#7a5714; --spine:#b5b5b5; --shadow:none}
+    body{background:#fff; font-size:8.2pt; line-height:1.27; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .wrap{max-width:none; padding:0}
+    .back{display:none}
+    header{padding:0 0 .4rem}
+    .eyebrow{font-size:6.6pt; margin:0 0 .3rem}
+    h1{font-size:14pt; line-height:1.08; margin:0 0 .3rem}
+    .lede{font-size:8.6pt; max-width:none; margin:0}
+    .prose{max-width:none}
+    .prose p{margin:0 0 .3rem}
+    section{padding:.4rem 0; break-inside:auto}
+    .sec-head{margin:0 0 .25rem}
+    h2{font-size:9.8pt}
+    h3{font-size:8.6pt; margin:.45rem 0 .18rem}
+    .sec-sub{margin:0 0 .4rem; max-width:none}
+    .metrics,.facts{margin:.5rem 0 0; break-inside:avoid}
+    .metric,.fact{padding:.28rem .4rem}
+    .metric b,.fact b{font-size:9.8pt}
+    .metric span,.fact span{font-size:6.4pt; margin-top:.1rem; line-height:1.25}
+    .run{margin:.45rem 0 0; flex-wrap:wrap; overflow:visible; break-inside:avoid}
+    .stage{font-size:6.8pt; white-space:normal}
+    .arrow{width:.9rem; margin:0 .35rem}
+    figure{margin:.5rem 0 0; box-shadow:none; break-inside:avoid}
+    figure img{max-height:1.35in; width:auto; max-width:100%; margin:0 auto}
+    #proof{display:grid; grid-template-columns:1fr 1fr; column-gap:.24in; align-items:start}
+    #proof > .sec-head, #proof > .sec-sub, #proof > .links{grid-column:1 / -1}
+    figcaption{padding:.3rem .45rem .35rem; font-size:7pt; line-height:1.3}
+    .callout{margin:.45rem 0 0; font-size:8.2pt; max-width:none; padding-left:.7rem; break-inside:avoid}
+    .role{margin:.45rem 0 0; padding-top:.35rem; font-size:8.2pt; max-width:none; break-inside:avoid}
+    .stack{font-size:6.8pt; margin:.35rem 0 0}
+    table{font-size:7.2pt; margin:.4rem 0 0; break-inside:avoid}
+    th,td{padding:.24rem .35rem}
+    ul.plain,ol.steps{margin:.3rem 0 0; max-width:none; padding-left:.9rem}
+    ul.plain li,ol.steps li{margin:0 0 .2rem}
+    .links{margin:.35rem 0 0; font-size:7.6pt; gap:.25rem .9rem}
+    footer{padding:.5rem 0 0}
+    .ident{font-size:6.6pt; margin:0 0 .25rem}
+    .entity{font-size:7.2pt; max-width:none; margin:.35rem 0 0}
+    a{color:inherit; text-decoration:none}
+    .links a[href^="http"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<p class="back mono"><a href="../">&larr; Soroush Seif · portfolio</a></p>
+
+<header>
+  <p class="eyebrow mono">Autonomous engine · writes and lands its own code</p>
+  <h1 class="serif">Nightshift: an engine that finds its own work, and the rules it works <em>under</em>.</h1>
+  <p class="lede">The human in this one is me. The run starts at 08:23 UTC, which is twenty past one in the morning where I live. By the time I am up it has crawled our site, measured where we stand in search and in AI answers, picked up to three missions, dispatched coding agents to do them, run the gates and either landed the work or left it for me. I read a digest with coffee. If I disagree with something it landed, I press Revert, and it opens the revert on the next run and records what it honoured.</p>
+  <div class="metrics">
+    <div class="metric"><b>58</b><span>runs across 48 nights since 11 July 2026</span></div>
+    <div class="metric"><b>1,559</b><span>tests passing: 1,100 pytest, 459 node</span></div>
+    <div class="metric"><b>0 of 20</b><span>answer-engine queries that named us, last three nights</span></div>
+  </div>
+</header>
+
+<section id="what">
+  <div class="sec-head"><span class="sec-num mono">01</span><h2 class="serif">What it is</h2></div>
+  <div class="prose">
+    <p>Two layers. The first is a <b>19-node LangGraph state graph with a bounded revision loop</b>, written in Python and run by GitHub Actions. Seven of the nodes call a model or a paid API; twelve are deterministic. It is not a strict DAG, because brand QA can send a draft back to the writer with the violations attached, at most twice, and then it ships nothing.</p>
+    <p>The graph crawls the site and runs nine analyzer categories over what it finds. It refreshes Search Console, reads GA4 and sweeps 20 positioning queries against an answer engine. Then it scores two grades. The business grade covers the things a client pays for. The hygiene grade covers the site's own upkeep. They are never averaged into one number, because averaging them is how a site with perfect metadata and no customers gets a good report.</p>
+    <p>The second layer is a decision loop. It reads the night's snapshots, the open experiments and the council's directives. Then it picks at most three missions, using a weighted score over search demand, gap severity and the mission-type weights the retro tunes. Each mission goes to a coding agent working in its own worktree with a written acceptance list, and a verifier re-runs the gates on the result.</p>
+    <p>Then the work lands by trust class, or it waits. Class A goes in the same night once link validation, brand QA, pytest, ruff, lint, typecheck, build and the two required CI workflows are all green. Class B opens a pull request and waits one night of canary. Class C is staged for me with a diff and a risk note.</p>
+    <p>There is no approval control anywhere in the console. Landed work carries a Revert affordance, and class C items wait in a queue with their age and the cost of leaving them alone.</p>
+  </div>
+  <div class="run" aria-label="How a night runs">
+    <span class="stage"><span class="dot"></span>Sense: crawl, analyze, sweep, score</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Decide: up to 3 missions</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Do: coding agents in worktrees</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Verify: gates re-run</span><span class="arrow"></span>
+    <span class="stage is-gate"><span class="dot"></span>Land by class, or stage for me</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Retro: lessons, experiments, digest</span>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>Class</th><th>What happens</th><th>What is in it</th></tr>
+    <tr><td><span class="chip a">A</span></td><td>Lands the same night once every gate is green.</td><td>Content pages drafted from sourced research, engine code with green tests, additive structured data, title and meta fixes</td></tr>
+    <tr><td><span class="chip">B</span></td><td>Opens a PR, waits one night of canary, lands the next night if the sensors show no regression.</td><td>Edits to existing routes, new non-content routes, components, performance work, the console itself, per-site engine config</td></tr>
+    <tr><td><span class="chip c">C</span></td><td>Staged with a diff and a risk note. A human lands it or does not.</td><td>Workflows, policy, the orchestrator and land scripts, the console's contract, anything that sends, spends or deletes</td></tr>
+  </table></div>
+  <h3>The limits it cannot move</h3>
+  <div class="facts">
+    <div class="fact"><b>$45</b><span>hard cap per night, read from policy the engine may not edit</span></div>
+    <div class="fact"><b>$250</b><span>hard cap per week</span></div>
+    <div class="fact"><b>3 / 1</b><span>missions and pages a night, maximum</span></div>
+    <div class="fact"><b>31 Dec</b><span>dead-man switch: the schedule disables itself unless a human renews it</span></div>
+  </div>
+  <p class="callout">The engine cannot widen its own scope, raise its own caps or edit its own gates. Those live in a policy file that sits in class C, so a change to any of them stops in front of me. The in-graph agents cannot edit the engine's own source at all. The engineer agents the decision layer dispatches can, and every change they make goes through the same CI the site uses.</p>
+  <p class="stack mono">Python · LangGraph · GitHub Actions · Claude and Codex as the coding agents · Next.js console · no database, a build-time projection from git</p>
+</section>
+
+<section id="geo">
+  <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">The number I would rather show you</h2></div>
+  <div class="prose">
+    <p>Once a night the engine puts 20 positioning queries to a single answer-engine surface, a ChatGPT-class model with web search, through DataForSEO. A query counts as a mention if the brand appears in the prose or our domain appears in a cited link. There is no rank recorded, because the surface returns prose and inventing a position would be a lie about what was measured.</p>
+    <p>On the last three nights the answer was zero of twenty.</p>
+    <p>I show it because it is the number the engine's own kill gate is set against. If it cannot produce ten non-branded clicks by 15 December 2026, it stops. A metric that can only go up is decoration, and an engine that gets to grade itself on a metric it chose is worth nothing to a client.</p>
+    <p>The same instinct runs through the measurement code. If the answer-engine credentials are missing in CI, the run emits a loud line saying the measurement was unavailable rather than recording twenty misses, because a missing measurement is not a zero. An empty or unparseable answer raises an error instead of quietly counting as a miss, since that would bias the whole series toward zero and nobody would ever see it happen.</p>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">Proof</h2></div>
+  <p class="sec-sub">The console is behind a login on a live site, so these are two screens from it. There is a full screen-by-screen walkthrough on the next page.</p>
+  <figure>
+    <img src="../nightshift/img/brief-top.png" width="1440" height="1350" alt="Morning Brief: sensor health, run status, cost tonight $30.33 of $45, self-checks 4 failing and 2 unknown, business grade 50, hygiene grade 100, AI citations 0 of 20, kill gate 96 days left." loading="lazy">
+    <figcaption><b>The first screen of the morning, on 10 September.</b> Cost of the night against the cap. Two grades side by side and never averaged. Citations drawn as zero of twenty rather than as a percentage, because the query pack has changed size before and a share would have hidden that. The self-check pill reads four failing and two unknown, which is what was true that morning.</figcaption>
+  </figure>
+  <figure>
+    <img src="../nightshift/img/veto-confirm.png" width="1440" height="900" alt="Confirm veto screen: Take this back, tonight. Nothing is written until you confirm. Record the veto or Cancel." loading="lazy">
+    <figcaption><b>The only control in the console that writes anything.</b> Confirming appends one line to a decisions file in git. The engine reads it at the start of the next run, opens the revert pull request and echoes what it honoured into the next retro. Nothing deploys on the click, and there is no button anywhere that says approve.</figcaption>
+  </figure>
+  <p class="links">
+    <a href="../nightshift/">Nightshift walkthrough: all eleven operator sections, screen by screen</a>
+  </p>
+</section>
+
+<section id="state">
+  <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">Honest state</h2></div>
+  <p class="sec-sub">Read this the way the console would report it.</p>
+  <ul class="plain">
+    <li><b>Tenancy:</b> it runs nightly on our own site today. Two client sites are registered with connectors and the engine has not been enabled against either. That is a deliberate gate, one client at a time, because the first time this thing writes to somebody else's repository I want to be watching.</li>
+    <li><b>Outcomes:</b> business grade 50 out of 100 and answer-engine citations at 0 of 20 on 10 September. Hygiene grade 100. Non-branded clicks are small. The kill gate is armed for 15 December 2026.</li>
+    <li><b>Self-checks failing on 10 September:</b> cost was not recorded on two runs, no red-team report in the last seven days, no human audit report this month, and GA4 is not wired for outcome measurement. Two more are unknown rather than failing: digest delivery and schedule drift are not yet evidenced in git, and the console says unknown instead of guessing.</li>
+    <li><b>The veto surface is built and tested, and no decision has been recorded through it yet.</b> Every time I have disagreed with something the engine landed I have reverted it in git directly. The console path works in tests and has not been used in anger.</li>
+    <li><b>Known gaps:</b> the verifier does not yet run the console's own test suite, and the retro does not record what each waiting human item is blocking. A stale-marker bug in the decision layer was found and fixed by the engine itself on 9 September.</li>
+  </ul>
+  <p class="callout gate">If your team wants to see it live rather than in screenshots, I can add one address to the operator allowlist for a week, or walk the repository with you on a call.</p>
+</section>
+
+<section id="role">
+  <div class="sec-head"><span class="sec-num mono">05</span><h2 class="serif">My role</h2></div>
+  <div class="prose">
+    <p>I wrote the specification: two audiences with three questions each, four principles, and phase-gated acceptance criteria with a byte budget per route. Each principle is in there because a recorded failure earned it, and the spec names the failure beside the rule. The trust classes, the budgets, the projection schema and the locked metrics contract are mine.</p>
+    <p>Coding agents implemented it under those constraints, in their own worktrees, against the same gates the engine uses at night. I read the diffs, ran the suites and rejected what missed the spec. I do not hand-write most of the application code. I own what it must do, what it is allowed to do without asking, and whether it did.</p>
+    <p>The part I would defend hardest is the decision to remove the human merge gate rather than keep it. The first version was an article factory behind a human review step, and between 1 August and 3 September it produced 34 nights, zero published pages and 37 open pull requests, while its own kill gate counted the freeze against it. The gate was not protecting anything. It was the reason nothing shipped. So I replaced it with a change taxonomy, a set of deterministic gates that hold, and a veto I actually use.</p>
+  </div>
+</section>
+
+<footer>
+  <p class="ident mono">Soroush Seif · AI Systems Lead · Agentic Platforms &amp; Revenue Automation</p>
+  <p class="links">
+    <a href="../">Portfolio</a>
+    <a href="intelligence-platform.html">Intelligence Platform</a>
+    <a href="acquisition-to-close.html">Acquisition to close</a>
+    <a href="side-io.html">Side.io</a>
+    <a href="cdap.html">CDAP</a>
+    <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
+    <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
+  </p>
+  <p class="entity">Side Studios (theside.studio) is my firm; theSide.io is the intelligence platform we built for our clients; Nightshift is the console for our autonomous SEO and AI-visibility engine. Vancouver, BC · Canadian citizen.</p>
+</footer>
+
+</div>
+</body>
+</html>

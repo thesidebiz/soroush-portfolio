@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Seven systems from the client side of Side Studios: AI receptionists, a guarded voice agent, an orchestration state machine, two external-system bridges, closed-loop attribution, and an LLM lineage from 2022 to 2026, all on one white-label GoHighLevel platform.">
+<meta name="author" content="Soroush Seif">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Seven client systems on one platform">
+<meta property="og:description" content="What is actually built, in a client book of about 85 sub-accounts, and what survives a technical reviewer's questions.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☎️</text></svg>">
+<title>Seven client systems on one platform</title>
+<style>
+  :root{
+    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#6E7A69;
+    --rule:#DCE0D6; --accent:#0F7F62; --gate:#9A6F1E; --spine:#C9D2C4;
+    --shadow:0 1px 2px rgba(18,24,15,.05), 0 8px 24px -12px rgba(18,24,15,.14);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+      --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+    --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--ground); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Palladio,Georgia,ui-serif,serif}
+  .mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
+  .wrap{max-width:60rem; margin:0 auto; padding:0 1.5rem}
+  a{color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px}
+  header{padding:4.5rem 0 3rem; border-bottom:1px solid var(--rule)}
+  .eyebrow{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); margin:0 0 1.4rem}
+  .eyebrow a{color:inherit}
+  h1{font-size:clamp(2.2rem,5.5vw,3.4rem); line-height:1.05; margin:0 0 1.2rem; font-weight:600; letter-spacing:-.02em; text-wrap:balance}
+  h1 em{font-style:italic; color:var(--accent)}
+  .lede{font-size:clamp(1.05rem,2.2vw,1.18rem); color:var(--ink-2); margin:0 0 1.2rem; max-width:40rem}
+  .prose{max-width:40rem}
+  .prose p{margin:0 0 1rem}
+  .facts{display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:2px; overflow:hidden; margin:2rem 0 0}
+  .fact{background:var(--raise); padding:.9rem 1rem}
+  .fact b{display:block; font-size:1.4rem; line-height:1.1; font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .fact span{display:block; font-size:.74rem; color:var(--ink-3); margin-top:.3rem; line-height:1.35}
+  section{padding:3.4rem 0; border-bottom:1px solid var(--rule)}
+  .sec-head{display:flex; align-items:baseline; gap:1rem; margin:0 0 .5rem}
+  .sec-num{font-size:.72rem; letter-spacing:.14em; color:var(--ink-3)}
+  h2{font-size:clamp(1.4rem,3.2vw,1.8rem); margin:0; font-weight:600; letter-spacing:-.01em; text-wrap:balance}
+  .sec-sub{color:var(--ink-2); margin:0 0 1.4rem; max-width:40rem}
+  .sys{position:relative; background:var(--raise); border:1px solid var(--rule); border-radius:3px; padding:1.6rem 1.6rem 1.4rem 2rem; margin:0 0 1.2rem; box-shadow:var(--shadow)}
+  .sys::before{content:""; position:absolute; left:0; top:1.3rem; bottom:1.3rem; width:2px; background:linear-gradient(var(--accent), var(--spine)); border-radius:2px}
+  .kind{font-size:.68rem; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-3); margin:0 0 .4rem}
+  .sys h3{font-size:1.15rem; margin:0 0 .5rem; font-weight:600}
+  .sys p{margin:0 0 .8rem; color:var(--ink-2); font-size:.95rem; max-width:44rem}
+  .sys ul{margin:.2rem 0 .8rem; padding-left:1.2rem; color:var(--ink-2); font-size:.92rem; max-width:44rem}
+  .sys li{margin:0 0 .3rem}
+  .why{border-top:1px solid var(--rule); padding-top:.8rem; font-size:.9rem; color:var(--ink-2)}
+  .why b{color:var(--ink)}
+  .callout{border-left:2px solid var(--accent); padding:.2rem 0 .2rem 1.25rem; margin:1.6rem 0 0; color:var(--ink-2); font-size:.95rem; max-width:40rem}
+  .gate{border-left-color:var(--gate)}
+  footer{padding:3rem 0 5rem}
+  .links{display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; margin:.8rem 0 0; font-size:.95rem}
+  @media (max-width:34rem){ body{font-size:16px} header{padding:3rem 0 2rem} section{padding:2.8rem 0} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow mono"><a href="../">Soroush Seif</a> · Side Studios · September 2026</p>
+  <h1 class="serif">Seven client systems on one platform, <em>as built</em>.</h1>
+  <p class="lede">Side Studios runs its clients on a white-label GoHighLevel platform: the CRM, the calendars, the messaging, and increasingly the voice and chat agents. This page is the client-side counterpart to the two flagship systems. I audited the whole estate before writing it, so the counts below are the ones that survive a second look.</p>
+  <div class="prose">
+    <p>The book splits into three eras. Hand-built work from 2021 to 2023, with the first LLM deployments. A productised snapshot era in 2024 and 2025, where one template was installed across the client base. And 2026, where the work shifted from many workflows to a few well-guarded agents that call workflows. The seven systems below are the ones worth a technical reviewer's time; the estate-level numbers are given plainly.</p>
+  </div>
+  <div class="facts">
+    <div class="fact"><b>84</b><span>client sub-accounts audited on one platform</span></div>
+    <div class="fact"><b>11</b><span>purpose-built AI voice agents; a vendor demo agent installed for a 2026 evaluation is not counted</span></div>
+    <div class="fact"><b>~1,200</span></b><span>workflows built across the estate; roughly two in five are published and running</span></div>
+    <div class="fact"><b>2</b><span>external systems bridged by schema: a recreation-management platform and a clinic EMR</span></div>
+    <div class="fact"><b>2023</b><span>first LLM workflows in production, with a human-handoff pattern that still ships</span></div>
+  </div>
+</header>
+
+<section>
+  <div class="sec-head"><span class="sec-num mono">01</span><h2 class="serif">The AI receptionist, three generations</h2></div>
+  <p class="sec-sub">A martial-arts academy with a legacy booking platform. Calls used to go to voicemail.</p>
+  <article class="sys">
+    <p class="kind mono">Voice agent · tool use · productised</p>
+    <h3>From a scripted receptionist to a white-label template</h3>
+    <p>The live agent has twelve configured actions, ten of which are structured in-call extraction into a typed field schema created for it in one batch: caller, child's age, programme of interest, preferred days, consent to text. SMS follow-up is consent-gated inside the call. A post-call workflow trigger hands the structured record to the booking flow. Two earlier generations are kept, drafted, as the record of what changed.</p>
+    <ul>
+      <li>Ten calendars created programmatically from the academy's practice-management system, with a matching field cluster that keeps the raw guardian record as JSON so nothing is lost against a schema we do not control.</li>
+      <li>A 95-question knowledge base that refreshes from the academy's site, and hand-authored structured data for the business.</li>
+      <li>The same agent definition abstracted behind named template variables (business, owner, channels) and re-instantiated for a second brand. One definition, one variable contract, N clients.</li>
+    </ul>
+    <p class="why"><b>What it shows:</b> tool-use design (extract, do not chat), consent as a first-class step, and the move from a project to a product.</p>
+  </article>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">The guarded agent</h2></div>
+  <p class="sec-sub">An industrial laser manufacturer whose inbound calls are technical and whose claims are regulated.</p>
+  <article class="sys">
+    <p class="kind mono">Voice agent · retrieval architecture · guardrails</p>
+    <h3>Five knowledge bases, one of them a claim policy</h3>
+    <p>Retrieval is partitioned by function rather than dumped into one corpus: products, applications, service, company, and a dedicated guardrails and claim-policy corpus. The prompt carries an enumerated list of things the agent must not claim, a named uncertainty protocol ("I do not want to guess on that"), an identity rail so the agent never presents as a human engineer, and a bounded call-transfer trigger. It is live, wired to the inbound line, and maintained; the knowledge base was updated the day I audited it.</p>
+    <p class="why"><b>What it shows:</b> the guardrails live in the knowledge base and its structure, where staff can read and edit them, instead of in one sentence of a prompt.</p>
+  </article>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">Agent as router</h2></div>
+  <p class="sec-sub">A clinic reference build, on demo data, used as the pattern for health and wellness clients.</p>
+  <article class="sys">
+    <p class="kind mono">Voice agent · workflows as effectors</p>
+    <h3>The model decides which branch fires; workflows do the work</h3>
+    <p>After a call the agent chooses one of five post-call handlers by natural-language trigger: confirmation and intake, no-show recovery, review request, cross-sell, or human escalation. Each handler is an ordinary workflow, so the clinic's staff can read and edit what happens next without touching the prompt. The build ships with a structured service catalogue (codes, durations, price bands, per-service prep text interpolated into the confirmation message) and a safety rail that routes emergencies to a human immediately. The clinic data in this account is fictional; the pattern is what is reused.</p>
+    <p class="why"><b>What it shows:</b> keep the model's decision small and legible, and keep the consequences in a system a non-engineer can audit.</p>
+  </article>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">The orchestration state machine</h2></div>
+  <p class="sec-sub">The template every new client account is provisioned from.</p>
+  <article class="sys">
+    <p class="kind mono">Conversation AI · fourteen ordered units</p>
+    <h3>AI.00 to AI.14</h3>
+    <p>Fourteen numbered, dependency-ordered workflow units that cover the four things naive bot builds leave out: a debounce for double messages, a fallback when the model has nothing useful to say, a human kill-switch (one tag stops the bot and alerts a person), and externalised prompt loading so the persona is configuration rather than code. The rest handle channel selection, conversation summarisation into the contact record, and database reactivation. The same unit set, and the same stop-and-alert tags, appear in every account provisioned from the template.</p>
+    <p class="why"><b>What it shows:</b> platform thinking inside a no-code tool.</p>
+  </article>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-num mono">05</span><h2 class="serif">Two external-system bridges</h2></div>
+  <p class="sec-sub">Integration under constraint: the CRM cannot traverse a relation, and the vendor's schema is not ours.</p>
+  <article class="sys">
+    <p class="kind mono">Integration · schema design</p>
+    <h3>A recreation platform and a clinic EMR, flattened on purpose</h3>
+    <p>For the academy, ten calendars and a field cluster are created programmatically from the practice-management system, with the raw record retained as JSON. For a med-spa on a Canadian clinic EMR, bidirectional sync workflows land a flattened appointment schema of about 95 fields on the contact, including the next two appointments side by side and a last-updated watermark. Denormalised because the CRM's workflows cannot walk a relation; raw JSON kept because the vendor's schema changes without notice; watermark kept so a stale sync is visible rather than silent.</p>
+    <p class="why"><b>What it shows:</b> the reasons behind an ugly schema, stated. This is the section that reads as engineering rather than configuration.</p>
+  </article>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-num mono">06</span><h2 class="serif">Closed-loop attribution</h2></div>
+  <p class="sec-sub">The growth-operator half of the profile, evidenced in a schema.</p>
+  <article class="sys">
+    <p class="kind mono">Measurement · ad attribution on the contact</p>
+    <h3>Twenty-two attribution fields next to lifetime revenue</h3>
+    <p>On a med-spa account the contact record carries the click identifiers, the campaign, ad-group and ad ids, the full UTM set including match type, and the lifetime purchase total on the same row, driving a workflow that updates ROI per contact. A second account tracks offline sources (billboard, street sign, referral) alongside the digital ones in one twelve-option field, so paid and unpaid acquisition sit in a single report.</p>
+    <p class="why"><b>What it shows:</b> attribution designed into the data model, so the numbers live where the actions do.</p>
+  </article>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-num mono">07</span><h2 class="serif">The LLM lineage, 2022 to 2026</h2></div>
+  <p class="sec-sub">Being early, and being right about the hard part.</p>
+  <article class="sys">
+    <p class="kind mono">History · what survived</p>
+    <h3>From GPT-3 workflows to a voice agent, one pattern intact</h3>
+    <p>A 2022 training account carries the first status-prediction fields. In May 2023 the studio's own account gained eight GPT-3 conversation workflows separated by channel and source, a parked wait-state, a per-contact token counter, and a workflow named for what mattered most: when the model hands off or falls back, tag the contact and call a webhook so a person takes over. The 2025 snapshot ships the same stop-bot and alert-user tags. The 2026 voice agents route escalations the same way. Three years, two model generations, a full platform change, and the human-handoff pattern is the part that never changed.</p>
+    <p class="why"><b>What it shows:</b> the escalation design was the durable idea; the models were replaceable.</p>
+  </article>
+  <p class="callout gate">On a kitchen-sink measure the estate also holds a vendor's demo voice agent installed across most accounts during a February 2026 evaluation, a large number of drafted-but-unpublished nurture sets from the snapshot era, and provisioned knowledge bases with nothing in them. I would rather say that here than have it found. The seven systems above are the work; the rest is the history of a studio that productised before it had time to prune.</p>
+</section>
+
+<footer>
+  <h2 class="serif" style="font-size:1.3rem; margin:0">More</h2>
+  <p class="links">
+    <a href="../">Back to the portfolio</a>
+    <a href="../atlas/side-intelligence-architecture-atlas.html">Intelligence Platform architecture</a>
+    <a href="../nightshift/">Nightshift walkthrough</a>
+    <a href="https://theside.studio/">theside.studio</a>
+  </p>
+</footer>
+
+</div>
+</body>
+</html>

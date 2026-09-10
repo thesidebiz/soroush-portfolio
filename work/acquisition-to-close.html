@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The acquisition-to-close operating system I designed for pre-construction real-estate agents: acquire, capture, prequalify, nurture, route and close, with CRM orchestration throughout.">
+<meta name="author" content="Soroush Seif">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Acquisition to close">
+<meta property="og:description" content="A revenue operating system for pre-construction agents. 1,000+ buyer conversations a day, lead-to-transaction conversion from 1% to 3%.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
+<title>Acquisition to Close · Soroush Seif</title>
+<style>
+  :root{
+    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#6E7A69;
+    --rule:#DCE0D6; --accent:#0F7F62; --gate:#9A6F1E; --spine:#C9D2C4;
+    --shadow:0 1px 2px rgba(18,24,15,.05), 0 8px 24px -12px rgba(18,24,15,.14);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+      --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+    --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--ground); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Palladio,Georgia,ui-serif,serif}
+  .mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
+  .wrap{max-width:60rem; margin:0 auto; padding:0 1.5rem}
+  a{color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px}
+  a:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+
+  .back{font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); margin:0; padding:1.8rem 0 0}
+  .back a{color:inherit; text-decoration:none}
+  .back a:hover{text-decoration:underline}
+
+  header{padding:2.4rem 0 3rem; border-bottom:1px solid var(--rule)}
+  .eyebrow{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); margin:0 0 1.4rem}
+  h1{font-size:clamp(2.1rem,5.4vw,3.4rem); line-height:1.05; margin:0 0 1.2rem; font-weight:600; letter-spacing:-.02em; text-wrap:balance}
+  h1 em{font-style:italic; color:var(--accent)}
+  .lede{font-size:clamp(1.03rem,2.1vw,1.15rem); color:var(--ink-2); margin:0; max-width:40rem}
+  .prose{max-width:40rem}
+  .prose p{margin:0 0 1rem}
+
+  section{padding:3.4rem 0; border-bottom:1px solid var(--rule)}
+  .sec-head{display:flex; align-items:baseline; gap:1rem; margin:0 0 .5rem}
+  .sec-num{font-size:.72rem; letter-spacing:.14em; color:var(--ink-3)}
+  h2{font-size:clamp(1.4rem,3.3vw,1.85rem); margin:0; font-weight:600; letter-spacing:-.01em; text-wrap:balance}
+  h3{font-size:1.05rem; margin:1.8rem 0 .5rem; font-weight:600}
+  .sec-sub{color:var(--ink-2); margin:0 0 1.6rem; max-width:40rem}
+
+  .metrics{display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:1px;
+    background:var(--rule); border:1px solid var(--rule); border-radius:2px; overflow:hidden; margin:2.2rem 0 0}
+  .metric{background:var(--raise); padding:.9rem 1rem}
+  .metric b{display:block; font-size:1.5rem; line-height:1.1; font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .metric span{display:block; font-size:.75rem; color:var(--ink-3); margin-top:.28rem; line-height:1.35}
+
+  .run{display:flex; gap:0; overflow-x:auto; padding-bottom:.5rem; margin:1.4rem 0 0}
+  .stage{flex:0 0 auto; display:flex; align-items:center; gap:.6rem; font-size:.76rem; color:var(--ink-2); white-space:nowrap}
+  .stage .dot{width:6px; height:6px; border-radius:50%; background:var(--spine); flex:0 0 auto}
+  .stage.is-gate{color:var(--gate); font-weight:600}
+  .stage.is-gate .dot{background:var(--gate); box-shadow:0 0 0 3px color-mix(in srgb, var(--gate) 22%, transparent)}
+  .arrow{flex:0 0 auto; width:1.75rem; height:1px; background:var(--spine); margin:0 .7rem; align-self:center}
+
+  table{border-collapse:collapse; width:100%; font-size:.9rem; margin:1.2rem 0 0; background:var(--raise); border:1px solid var(--rule)}
+  th,td{text-align:left; vertical-align:top; padding:.6rem .8rem; border-top:1px solid var(--rule)}
+  th{font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); border-top:0}
+  .tbl{overflow-x:auto}
+
+  .callout{border-left:2px solid var(--accent); padding:.2rem 0 .2rem 1.25rem; margin:1.6rem 0 0; color:var(--ink-2); font-size:.95rem; max-width:38rem}
+  .callout.gate{border-left-color:var(--gate)}
+  .stack{font-size:.78rem; color:var(--ink-3); margin:.7rem 0 0}
+
+  ul.plain{padding-left:1.2rem; margin:.5rem 0 0; max-width:40rem}
+  ul.plain li{margin:0 0 .5rem}
+  .links{display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; margin:.8rem 0 0; font-size:.95rem}
+
+  footer{padding:3rem 0 5rem}
+  .entity{color:var(--ink-3); font-size:.86rem; max-width:44rem; margin:.9rem 0 0}
+  .ident{font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin:0 0 .6rem}
+
+  @media (max-width:34rem){ body{font-size:16px} header{padding:2rem 0 2rem} section{padding:2.6rem 0} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+  @media print{
+    @page{size:Letter; margin:.45in}
+    :root{--ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
+      --rule:#c0c0c0; --accent:#0b5a45; --gate:#7a5714; --spine:#b5b5b5; --shadow:none}
+    body{background:#fff; font-size:8.2pt; line-height:1.27; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .wrap{max-width:none; padding:0}
+    .back{display:none}
+    header{padding:0 0 .4rem}
+    .eyebrow{font-size:6.6pt; margin:0 0 .3rem}
+    h1{font-size:14pt; line-height:1.08; margin:0 0 .3rem}
+    .lede{font-size:8.6pt; max-width:none; margin:0}
+    .prose{max-width:none}
+    .prose p{margin:0 0 .3rem}
+    section{padding:.4rem 0; break-inside:auto}
+    .sec-head{margin:0 0 .25rem}
+    h2{font-size:9.8pt}
+    h3{font-size:8.6pt; margin:.45rem 0 .18rem}
+    .sec-sub{margin:0 0 .4rem; max-width:none}
+    .metrics,.facts{margin:.5rem 0 0; break-inside:avoid}
+    .metric,.fact{padding:.28rem .4rem}
+    .metric b,.fact b{font-size:9.8pt}
+    .metric span,.fact span{font-size:6.4pt; margin-top:.1rem; line-height:1.25}
+    .run{margin:.45rem 0 0; flex-wrap:wrap; overflow:visible; break-inside:avoid}
+    .stage{font-size:6.8pt; white-space:normal}
+    .arrow{width:.9rem; margin:0 .35rem}
+    figure{margin:.5rem 0 0; box-shadow:none; break-inside:avoid}
+    figure img{max-height:1.35in; width:auto; max-width:100%; margin:0 auto}
+    figcaption{padding:.3rem .45rem .35rem; font-size:7pt; line-height:1.3}
+    .callout{margin:.45rem 0 0; font-size:8.2pt; max-width:none; padding-left:.7rem; break-inside:avoid}
+    .role{margin:.45rem 0 0; padding-top:.35rem; font-size:8.2pt; max-width:none; break-inside:avoid}
+    .stack{font-size:6.8pt; margin:.35rem 0 0}
+    table{font-size:7.2pt; margin:.4rem 0 0; break-inside:avoid}
+    th,td{padding:.24rem .35rem}
+    ul.plain,ol.steps{margin:.3rem 0 0; max-width:none; padding-left:.9rem}
+    ul.plain li,ol.steps li{margin:0 0 .2rem}
+    .links{margin:.35rem 0 0; font-size:7.6pt; gap:.25rem .9rem}
+    footer{padding:.5rem 0 0}
+    .ident{font-size:6.6pt; margin:0 0 .25rem}
+    .entity{font-size:7.2pt; max-width:none; margin:.35rem 0 0}
+    a{color:inherit; text-decoration:none}
+    .links a[href^="http"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<p class="back mono"><a href="../">&larr; Soroush Seif · portfolio</a></p>
+
+<header>
+  <p class="eyebrow mono">Revenue operating system · pre-construction real estate · 2020-21</p>
+  <h1 class="serif">From first touch to transaction: the system that stopped agents <em>chasing</em>.</h1>
+  <p class="lede">The human here is a pre-construction agent working on commission. A lead used to arrive from a form at nine at night and get a phone call on Thursday, by which time the buyer had already spoken to two other people. What changed is that every lead got an answer within a minute, got asked the same questions in the same order, and landed on his phone with the answers attached and a stage already set in the CRM. He stopped chasing and started picking.</p>
+  <div class="metrics">
+    <div class="metric"><b>1,000+</b><span>buyer conversations handled a day</span></div>
+    <div class="metric"><b>1% &rarr; 3%</b><span>lead-to-transaction conversion</span></div>
+    <div class="metric"><b>~$45M</b><span>year-one transaction value: transactions, not revenue</span></div>
+  </div>
+</header>
+
+<section id="what">
+  <div class="sec-head"><span class="sec-num mono">01</span><h2 class="serif">What it is</h2></div>
+  <div class="prose">
+    <p>Pre-construction real estate had a structural gap in it. Project-marketing firms sold to developers, and the developer's marketing ended at the sales centre door. The individual agent bringing buyers to those projects had ad spend, a phone and a spreadsheet.</p>
+    <p>So the product was never a single tool. It was one operating system covering the whole distance from the first ad impression to a signed contract, with the CRM as the spine rather than a filing cabinet at the end of it.</p>
+    <p>Six stages, each with an owner and a definition of done. Acquire brought demand in through paid media and agent-branded project sites, so the lead belonged to the agent. Capture pulled every source into one flow. Prequalify asked a fixed set of questions before anybody spent an hour on a coffee. Nurture held the thread across a buying cycle measured in months. Route handed the agent a person with context. Close and measure fed what actually happened back into the next round of targeting.</p>
+    <p>The part people underrate is Route. Most funnels break at the handoff, where a scored lead becomes a name on a list and the context evaporates. Here the handoff carried the transcript, the qualification answers and the reason the system thought this person was ready, and it moved the CRM stage at the same time so nothing depended on the agent remembering.</p>
+  </div>
+  <div class="run" aria-label="The operating system">
+    <span class="stage"><span class="dot"></span>Acquire</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Capture</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Prequalify</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Nurture</span><span class="arrow"></span>
+    <span class="stage is-gate"><span class="dot"></span>Route to the agent with context</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Close and measure</span>
+  </div>
+  <h3>CRM orchestration</h3>
+  <p class="sec-sub" style="margin-bottom:.6rem">Everything above ran on one CRM instance per agent team. Five mechanisms did the work.</p>
+  <div class="tbl"><table>
+    <tr><th>Mechanism</th><th>What it did</th></tr>
+    <tr><td>Tagging</td><td>Every intent the conversation detected became a tag, and tags were the vocabulary the rest of the system read.</td></tr>
+    <tr><td>Stage movement</td><td>A qualified answer moved the record automatically, so pipeline reflected what buyers actually did and nobody had to remember to update it.</td></tr>
+    <tr><td>Campaign triggers</td><td>Sequences started and stopped on tags and stages, which meant a person who booked stopped being nurtured for the thing they had already done.</td></tr>
+    <tr><td>Notification and routing</td><td>Ownership rules decided who got the alert, and the alert carried the context with it.</td></tr>
+    <tr><td>Attribution</td><td>Source held all the way through to transaction, so ad spend could be judged on closings, which is the only number that pays anybody.</td></tr>
+  </table></div>
+  <p class="callout">The conversation layer at the Capture and Prequalify stages went through three technology generations, starting with rule-based workflows years before generative AI. That story, with the screenshots, is on <a href="side-io.html">the Side.io page</a>.</p>
+  <p class="stack mono">GoHighLevel as the CRM and workflow engine · paid social and search · agent-branded project sites · SMS and email sequencing</p>
+</section>
+
+<section id="role">
+  <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">My role</h2></div>
+  <div class="prose">
+    <p>I found the gap and I designed the system that filled it. That meant the business model and the customer journey first, then the funnel logic, the qualification criteria, the CRM architecture and the handoff contract. I set what each stage had to produce before a record could move to the next one. I directed implementation and I ran the iteration on conversion, which is where most of the real work was.</p>
+    <p>I also converted it from a services engagement into something an agent could buy on a subscription, which changed what we had to build. A service can be held together by an operator paying attention. A product cannot.</p>
+    <p>Here is the boundary. I did not build the machine-learning models that later replaced the rule-based conversation layer. Our CTO and a small engineering team built those, and a University of British Columbia master's capstone team contributed a later piece. I set the requirements, chose when to make each transition and led the team through it. If you ask me to explain the classifier architecture I will tell you what it was for and what it cost us; if you ask me to derive it, I will tell you that was somebody else's chair.</p>
+  </div>
+</section>
+
+<section id="numbers">
+  <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">Where these numbers come from</h2></div>
+  <div class="prose">
+    <p><b>1% to 3%</b> is lead-to-transaction conversion. The first figure is what the funnel held under the rule-based generation, which was roughly the industry baseline, and the second is where it landed once the in-house models were carrying the qualification. Both come from the company's own reporting for that period and appear again in the technical narratives we filed for federal funding programs.</p>
+    <p><b>~$45M</b> is year-one transaction value across the projects the system carried. It is the value of the transactions themselves. It was never company revenue, and I would rather label it plainly here than have somebody assume otherwise and then discount everything else I said.</p>
+    <p><b>1,000+ buyer conversations a day</b> is the volume the conversation layer handled at its peak, counted in the CRM.</p>
+    <p>The honest caveat: these are internal figures with internal reporting and funding filings behind them. There was no independent audit of the funnel. I can show the filings and walk you through how each figure was counted.</p>
+  </div>
+  <p class="links">
+    <a href="side-io.html">Side.io: the product and its three technology generations</a>
+    <a href="../earlier-work/IRAP-Project-Description-2023.pdf">Project description filed with NRC IRAP (redacted excerpt)</a>
+  </p>
+</section>
+
+<footer>
+  <p class="ident mono">Soroush Seif · AI Systems Lead · Agentic Platforms &amp; Revenue Automation</p>
+  <p class="links">
+    <a href="../">Portfolio</a>
+    <a href="intelligence-platform.html">Intelligence Platform</a>
+    <a href="nightshift.html">Nightshift</a>
+    <a href="side-io.html">Side.io</a>
+    <a href="cdap.html">CDAP</a>
+    <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
+    <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
+  </p>
+  <p class="entity">Side Studios (theside.studio) is my firm; theSide.io is the intelligence platform we built for our clients; Nightshift is the console for our autonomous SEO and AI-visibility engine. Vancouver, BC · Canadian citizen.</p>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Government-appointed advisor under the Canada Digital Adoption Program: 800 businesses assessed, 300 roadmaps delivered across sales, marketing, automation and practical AI adoption.">
+<meta name="author" content="Soroush Seif">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CDAP advisory">
+<meta property="og:description" content="800 small businesses assessed, 300 roadmaps delivered. What an engagement looked like, and what it means to make adoption the deliverable.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>">
+<title>CDAP Advisory · Soroush Seif</title>
+<style>
+  :root{
+    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#6E7A69;
+    --rule:#DCE0D6; --accent:#0F7F62; --gate:#9A6F1E; --spine:#C9D2C4;
+    --shadow:0 1px 2px rgba(18,24,15,.05), 0 8px 24px -12px rgba(18,24,15,.14);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+      --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+    --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--ground); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Palladio,Georgia,ui-serif,serif}
+  .mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
+  .wrap{max-width:60rem; margin:0 auto; padding:0 1.5rem}
+  a{color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px}
+  a:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+
+  .back{font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); margin:0; padding:1.8rem 0 0}
+  .back a{color:inherit; text-decoration:none}
+  .back a:hover{text-decoration:underline}
+
+  header{padding:2.4rem 0 3rem; border-bottom:1px solid var(--rule)}
+  .eyebrow{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); margin:0 0 1.4rem}
+  h1{font-size:clamp(2.1rem,5.4vw,3.4rem); line-height:1.05; margin:0 0 1.2rem; font-weight:600; letter-spacing:-.02em; text-wrap:balance}
+  h1 em{font-style:italic; color:var(--accent)}
+  .lede{font-size:clamp(1.03rem,2.1vw,1.15rem); color:var(--ink-2); margin:0; max-width:40rem}
+  .prose{max-width:40rem}
+  .prose p{margin:0 0 1rem}
+
+  section{padding:3.4rem 0; border-bottom:1px solid var(--rule)}
+  .sec-head{display:flex; align-items:baseline; gap:1rem; margin:0 0 .5rem}
+  .sec-num{font-size:.72rem; letter-spacing:.14em; color:var(--ink-3)}
+  h2{font-size:clamp(1.4rem,3.3vw,1.85rem); margin:0; font-weight:600; letter-spacing:-.01em; text-wrap:balance}
+  h3{font-size:1.05rem; margin:1.8rem 0 .5rem; font-weight:600}
+  .sec-sub{color:var(--ink-2); margin:0 0 1.6rem; max-width:40rem}
+
+  .metrics{display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:1px;
+    background:var(--rule); border:1px solid var(--rule); border-radius:2px; overflow:hidden; margin:2.2rem 0 0}
+  .metric{background:var(--raise); padding:.9rem 1rem}
+  .metric b{display:block; font-size:1.5rem; line-height:1.1; font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .metric span{display:block; font-size:.75rem; color:var(--ink-3); margin-top:.28rem; line-height:1.35}
+
+  .run{display:flex; gap:0; overflow-x:auto; padding-bottom:.5rem; margin:1.4rem 0 0}
+  .stage{flex:0 0 auto; display:flex; align-items:center; gap:.6rem; font-size:.76rem; color:var(--ink-2); white-space:nowrap}
+  .stage .dot{width:6px; height:6px; border-radius:50%; background:var(--spine); flex:0 0 auto}
+  .stage.is-gate{color:var(--gate); font-weight:600}
+  .stage.is-gate .dot{background:var(--gate); box-shadow:0 0 0 3px color-mix(in srgb, var(--gate) 22%, transparent)}
+  .arrow{flex:0 0 auto; width:1.75rem; height:1px; background:var(--spine); margin:0 .7rem; align-self:center}
+
+  table{border-collapse:collapse; width:100%; font-size:.9rem; margin:1.2rem 0 0; background:var(--raise); border:1px solid var(--rule)}
+  th,td{text-align:left; vertical-align:top; padding:.6rem .8rem; border-top:1px solid var(--rule)}
+  th{font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); border-top:0}
+  .tbl{overflow-x:auto}
+
+  .callout{border-left:2px solid var(--accent); padding:.2rem 0 .2rem 1.25rem; margin:1.6rem 0 0; color:var(--ink-2); font-size:.95rem; max-width:38rem}
+  .callout.gate{border-left-color:var(--gate)}
+
+  ul.plain{padding-left:1.2rem; margin:.5rem 0 0; max-width:40rem}
+  ul.plain li{margin:0 0 .5rem}
+  .links{display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; margin:.8rem 0 0; font-size:.95rem}
+
+  footer{padding:3rem 0 5rem}
+  .entity{color:var(--ink-3); font-size:.86rem; max-width:44rem; margin:.9rem 0 0}
+  .ident{font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin:0 0 .6rem}
+
+  @media (max-width:34rem){ body{font-size:16px} header{padding:2rem 0 2rem} section{padding:2.6rem 0} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+  @media print{
+    @page{size:Letter; margin:.45in}
+    :root{--ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
+      --rule:#c0c0c0; --accent:#0b5a45; --gate:#7a5714; --spine:#b5b5b5; --shadow:none}
+    body{background:#fff; font-size:8.2pt; line-height:1.27; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .wrap{max-width:none; padding:0}
+    .back{display:none}
+    header{padding:0 0 .4rem}
+    .eyebrow{font-size:6.6pt; margin:0 0 .3rem}
+    h1{font-size:14pt; line-height:1.08; margin:0 0 .3rem}
+    .lede{font-size:8.6pt; max-width:none; margin:0}
+    .prose{max-width:none}
+    .prose p{margin:0 0 .3rem}
+    section{padding:.4rem 0; break-inside:auto}
+    .sec-head{margin:0 0 .25rem}
+    h2{font-size:9.8pt}
+    h3{font-size:8.6pt; margin:.45rem 0 .18rem}
+    .sec-sub{margin:0 0 .4rem; max-width:none}
+    .metrics,.facts{margin:.5rem 0 0; break-inside:avoid}
+    .metric,.fact{padding:.28rem .4rem}
+    .metric b,.fact b{font-size:9.8pt}
+    .metric span,.fact span{font-size:6.4pt; margin-top:.1rem; line-height:1.25}
+    .run{margin:.45rem 0 0; flex-wrap:wrap; overflow:visible; break-inside:avoid}
+    .stage{font-size:6.8pt; white-space:normal}
+    .arrow{width:.9rem; margin:0 .35rem}
+    figure{margin:.5rem 0 0; box-shadow:none; break-inside:avoid}
+    figure img{max-height:1.35in; width:auto; max-width:100%; margin:0 auto}
+    figcaption{padding:.3rem .45rem .35rem; font-size:7pt; line-height:1.3}
+    .callout{margin:.45rem 0 0; font-size:8.2pt; max-width:none; padding-left:.7rem; break-inside:avoid}
+    .role{margin:.45rem 0 0; padding-top:.35rem; font-size:8.2pt; max-width:none; break-inside:avoid}
+    .stack{font-size:6.8pt; margin:.35rem 0 0}
+    table{font-size:7.2pt; margin:.4rem 0 0; break-inside:avoid}
+    th,td{padding:.24rem .35rem}
+    ul.plain,ol.steps{margin:.3rem 0 0; max-width:none; padding-left:.9rem}
+    ul.plain li,ol.steps li{margin:0 0 .2rem}
+    .links{margin:.35rem 0 0; font-size:7.6pt; gap:.25rem .9rem}
+    footer{padding:.5rem 0 0}
+    .ident{font-size:6.6pt; margin:0 0 .25rem}
+    .entity{font-size:7.2pt; max-width:none; margin:.35rem 0 0}
+    a{color:inherit; text-decoration:none}
+    .links a[href^="http"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<p class="back mono"><a href="../">&larr; Soroush Seif · portfolio</a></p>
+
+<header>
+  <p class="eyebrow mono">Advisory · Government of Canada</p>
+  <h1 class="serif">CDAP: what an advisor <em>actually does</em> inside a small business.</h1>
+  <p class="lede">The person across the table was almost always the owner. She had a CRM she had paid for and never populated, a website nobody had touched since before the pandemic, and a bookkeeper who held the only copy of the numbers that mattered. The job was to work out which one of those was actually costing her money, write down a plan she could afford, and get the first piece of it running before I left. That pattern repeated for 800 businesses, and the repetition is the point.</p>
+  <div class="metrics">
+    <div class="metric"><b>800</b><span>businesses assessed</span></div>
+    <div class="metric"><b>300</b><span>custom roadmaps delivered</span></div>
+    <div class="metric"><b>4</b><span>pillars covered in every engagement</span></div>
+  </div>
+</header>
+
+<section id="what">
+  <div class="sec-head"><span class="sec-num mono">01</span><h2 class="serif">What it is</h2></div>
+  <div class="prose">
+    <p>The Canada Digital Adoption Program matched small and mid-sized businesses with approved advisors. A business applied, was matched, and what it was owed at the end was a written digital adoption plan it could act on and take to a lender. I was a government-appointed advisor under that program.</p>
+    <p>An engagement started with an assessment, and the assessment was mostly listening. What does a week look like. Where does an order come in. Who touches it. What breaks when the owner takes a holiday. Then I went and looked at the tools they were actually running, which is usually a different story from the one told in the meeting.</p>
+    <p>The output was a roadmap across four pillars, sequenced, with the sequencing being the part that mattered. Almost every one of these businesses had four good ideas and the capacity for one.</p>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>Pillar</th><th>What it covered</th></tr>
+    <tr><td>Sales</td><td>Pipeline definition, CRM and revenue operations, and the conversion steps where deals were leaking.</td></tr>
+    <tr><td>Marketing</td><td>Demand generation and channel choice, sized to a budget the business could actually sustain.</td></tr>
+    <tr><td>Automation</td><td>Workflow and operations: the repetitive human steps that could be handed to software without anybody losing the thread.</td></tr>
+    <tr><td>AI enablement</td><td>The practical kind. What a small team could adopt this quarter and keep using, with the training to go with it.</td></tr>
+  </table></div>
+  <div class="run" aria-label="What an engagement looked like">
+    <span class="stage"><span class="dot"></span>Assess</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Find the constraint</span><span class="arrow"></span>
+    <span class="stage is-gate"><span class="dot"></span>Cut what they cannot staff</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Sequence the roadmap</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Stand up the first piece</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Check back</span>
+  </div>
+</section>
+
+<section id="adoption">
+  <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">What "adoption was the deliverable" meant in practice</h2></div>
+  <div class="prose">
+    <p>It is easy to write a good plan for a business you will never see again. A plan that gets read once and filed is a failure with a nice cover on it, and the program was full of them.</p>
+    <p>So three things were true of every roadmap I signed.</p>
+    <p><b>Anything the business could not staff got cut.</b> If a recommendation needed a person they did not have and were not going to hire, it came out of the plan even when it was the technically correct answer. That is a hard conversation with an owner who has just read an article about what a competitor is doing.</p>
+    <p><b>The first piece got built with them, in the room.</b> Configured, with their own data in it, with the owner driving the mouse for part of it. The thing that kills adoption is the gap between a written instruction and the first time somebody has to follow it alone.</p>
+    <p><b>The question at the end was not whether the plan was good but whether the thing was still running ninety days later.</b> Sometimes it was not, and the reason was almost never technical. It was that one person who understood it had left, or the owner had gone back to the spreadsheet under pressure because the spreadsheet never asked her to log in.</p>
+  </div>
+  <p class="callout">This is where my instinct about gates comes from. In 800 businesses I never once saw a good plan fail because the technology was too weak. I saw them fail because nobody could see what the system was doing, or because it did something the owner had not expected and she stopped trusting it. That is the same failure mode an autonomous agent has, at a different scale.</p>
+</section>
+
+<section id="role">
+  <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">My role</h2></div>
+  <div class="prose">
+    <p>I was the appointed advisor. I built the assessment method and the roadmap format, and I ran engagements myself alongside the team that delivered the rest. To be exact about it: 800 and 300 are counts for the practice, and they are not a claim that I personally sat in all 800 rooms. I designed how the room was run and I was in a lot of them.</p>
+    <p>The scale is the asset, and I would rather describe it accurately than let a number do work it cannot support. 800 diagnoses is an unusual dataset for one person to have access to. It is why I can walk into an unfamiliar business and find the constraint quickly, and why I am comfortable telling a client that the thing they asked for is the third most important thing on their list.</p>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">Proof</h2></div>
+  <div class="prose">
+    <p>The roadmaps themselves belong to the businesses that paid for them, so nothing here is published. I can walk through a redacted one on a call: the assessment notes, the sequencing, what got cut and why, and what the check-back found.</p>
+    <p>The clearer evidence is downstream. The four pillars are the same four surfaces the platform my firm operates now automates for clients, and the sequencing habit is why that platform proposes a small number of ranked actions instead of a dashboard full of everything it noticed.</p>
+  </div>
+  <p class="links">
+    <a href="intelligence-platform.html">theSide.io Intelligence Platform</a>
+    <a href="acquisition-to-close.html">Acquisition to close</a>
+  </p>
+</section>
+
+<footer>
+  <p class="ident mono">Soroush Seif · AI Systems Lead · Agentic Platforms &amp; Revenue Automation</p>
+  <p class="links">
+    <a href="../">Portfolio</a>
+    <a href="intelligence-platform.html">Intelligence Platform</a>
+    <a href="nightshift.html">Nightshift</a>
+    <a href="acquisition-to-close.html">Acquisition to close</a>
+    <a href="side-io.html">Side.io</a>
+    <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
+    <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
+  </p>
+  <p class="entity">Side Studios (theside.studio) is my firm; theSide.io is the intelligence platform we built for our clients; Nightshift is the console for our autonomous SEO and AI-visibility engine. Vancouver, BC · Canadian citizen.</p>
+</footer>
+
+</div>
+</body>
+</html>

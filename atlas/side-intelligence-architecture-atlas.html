@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>theSide.io Intelligence Platform · Architecture Atlas</title>
+<meta name="author" content="Soroush Seif" />
+<meta name="description" content="Architecture atlas for the theSide.io Intelligence Platform: a multi-tenant agent runtime with a human approval gate, idempotent execution, a signed audit chain and outcome attribution." />
+<style>
+  :root {
+    --bg: #f7f7f4;
+    --ink: #26251e;
+    --ink-2: #26251e99;
+    --ink-3: #26251e66;
+    --card: #f2f1ed;
+    --card-1: #f0efeb;
+    --card-2: #ebeae5;
+    --card-3: #e6e5e0;
+    --rule: #26251e12;
+    --rule-2: #26251e1f;
+    --accent: #f54e00;
+    --green: #1f8a65;
+    --red: #cf2d56;
+    --amber: #9a6a00;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --sans: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background:
+      linear-gradient(90deg, #26251e08 1px, transparent 1px) 0 0 / 46px 46px,
+      linear-gradient(#26251e06 1px, transparent 1px) 0 0 / 46px 46px,
+      var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    letter-spacing: 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .shell {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 24px 20px 72px;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    min-height: 52px;
+    margin: -24px -20px 34px;
+    padding: 0 20px;
+    background: color-mix(in srgb, var(--bg) 94%, transparent);
+    border-bottom: 1px solid var(--rule);
+    backdrop-filter: blur(14px);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 200px;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .mark {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--rule-2);
+    border-radius: 4px;
+    background: var(--card);
+    font: 600 12px/1 var(--mono);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    overflow: auto;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar { display: none; }
+
+  .nav a {
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border-radius: 999px;
+    color: var(--ink-2);
+    font-size: 13px;
+  }
+
+  .nav a:hover {
+    background: var(--card-2);
+    color: var(--ink);
+  }
+
+  .topmeta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-3);
+    font: 12px/1.2 var(--mono);
+    white-space: nowrap;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(360px, .9fr);
+    gap: 18px;
+    align-items: stretch;
+    margin-bottom: 18px;
+  }
+
+  .hero-copy {
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 22px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+  }
+
+  .eyebrow {
+    margin: 0 0 14px;
+    color: var(--accent);
+    font: 12px/1.2 var(--mono);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  h1 {
+    max-width: 880px;
+    margin: 0;
+    font-size: clamp(32px, 4.6vw, 62px);
+    line-height: 1.04;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+
+  .lead {
+    max-width: 870px;
+    margin: 20px 0 0;
+    color: var(--ink-2);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .byline {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 22px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule-2);
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+
+  .byline .who { color: var(--ink); font-weight: 500; }
+
+  .byline a.link {
+    color: var(--accent);
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+
+  .byline a.link:hover { border-bottom-color: var(--accent); }
+
+  .byline .sep { color: var(--ink-3); }
+
+  .hero-side {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 10px;
+  }
+
+  .summary-card {
+    background: #26251e;
+    color: var(--bg);
+    border-radius: 4px;
+    padding: 18px;
+  }
+
+  .summary-card h2 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  .summary-card p {
+    margin: 0;
+    color: #f7f7f4c9;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .summary-card strong { color: #fff; font-weight: 500; }
+
+  .honest {
+    padding: 16px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+  }
+
+  .honest h2,
+  .module h2,
+  .section-head h2 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.2;
+    font-weight: 400;
+  }
+
+  .honest h2 { font-size: 15px; font-weight: 500; }
+
+  .honest p {
+    margin: 10px 0 0;
+    color: var(--ink-2);
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+
+  .mine {
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ink-2);
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+
+  .mine li { margin-bottom: 7px; }
+  .mine li:last-child { margin-bottom: 0; }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin: 10px 0 34px;
+  }
+
+  .stat {
+    min-height: 92px;
+    padding: 12px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+  }
+
+  .stat.span2 { grid-column: span 2; }
+
+  .stat .num {
+    display: block;
+    font: 400 30px/1 var(--sans);
+  }
+
+  .stat .num.small { font-size: 22px; }
+
+  .stat .label {
+    display: block;
+    margin-top: 8px;
+    color: var(--ink-2);
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .module {
+    margin-top: 18px;
+    padding: 18px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 18px;
+    margin-bottom: 16px;
+  }
+
+  .section-head p {
+    max-width: 780px;
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .map {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .map-col {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .map-node,
+  .node {
+    position: relative;
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+  }
+
+  .map-node.core {
+    background: #26251e;
+    color: var(--bg);
+    border-color: #26251e;
+  }
+
+  .map-node.core p,
+  .map-node.core .meta,
+  .map-node.core li {
+    color: #f7f7f4c7;
+  }
+
+  .map-node.core code { background: #ffffff1f; color: #f7f7f4e0; }
+
+  .map-node h3,
+  .node h3 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    line-height: 1.25;
+    font-weight: 500;
+  }
+
+  .map-node p,
+  .node p {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+
+  .node-list {
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .chip,
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 22px;
+    padding: 3px 7px;
+    border: 1px solid var(--rule-2);
+    border-radius: 999px;
+    background: var(--card-1);
+    color: var(--ink-2);
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .chip.live { color: var(--green); border-color: color-mix(in srgb, var(--green) 34%, transparent); background: color-mix(in srgb, var(--green) 9%, var(--card)); }
+  .chip.safe { color: var(--amber); border-color: color-mix(in srgb, var(--amber) 32%, transparent); background: color-mix(in srgb, var(--amber) 8%, var(--card)); }
+  .chip.defer { color: var(--ink-2); border-style: dashed; }
+  .chip.risk { color: var(--red); border-color: color-mix(in srgb, var(--red) 32%, transparent); background: color-mix(in srgb, var(--red) 7%, var(--card)); }
+  .chip.ai { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 30%, transparent); background: color-mix(in srgb, var(--accent) 7%, var(--card)); }
+  .chip.wrap { white-space: normal; }
+
+  code {
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: var(--card-3);
+    color: var(--ink);
+    font: 11.5px/1.4 var(--mono);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .rail {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(9, minmax(120px, 1fr));
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .step {
+    min-width: 128px;
+    padding: 12px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: var(--bg);
+  }
+
+  .step .kicker {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--accent);
+    font: 11px/1 var(--mono);
+  }
+
+  .step h3 {
+    margin: 0 0 6px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .step p {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    display: grid;
+    gap: 10px;
+  }
+
+  .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+  .stack {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .panel-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .panel-title h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .table-wrap { overflow-x: auto; }
+
+  .table th,
+  .table td {
+    padding: 9px 8px;
+    border-top: 1px solid var(--rule);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .table th {
+    color: var(--ink-2);
+    font-weight: 500;
+  }
+
+  .table td {
+    color: var(--ink-2);
+    line-height: 1.4;
+  }
+
+  .table td:first-child,
+  .table th:first-child {
+    color: var(--ink);
+  }
+
+  .cluster {
+    min-height: 100%;
+    padding: 14px;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+  }
+
+  .cluster h3 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .cluster p {
+    margin: 0 0 10px;
+    color: var(--ink-2);
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+
+  .list {
+    margin: 0;
+    padding-left: 17px;
+    color: var(--ink-2);
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+
+  .list li { margin-bottom: 5px; }
+
+  .code {
+    display: block;
+    margin-top: 8px;
+    padding: 10px;
+    background: #26251e;
+    color: #f7f7f4d6;
+    border-radius: 4px;
+    font: 11.5px/1.45 var(--mono);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* ---- Worked example timeline ---- */
+
+  .timeline {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    margin: 0 0 0 9px;
+    padding: 2px 0 0;
+    border-left: 2px solid var(--rule-2);
+  }
+
+  .tl {
+    position: relative;
+    min-width: 0;
+    padding: 0 0 20px 22px;
+  }
+
+  .tl:last-child { padding-bottom: 2px; }
+
+  .tl::before {
+    content: "";
+    position: absolute;
+    left: -8px;
+    top: 4px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--card);
+  }
+
+  .tl-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .tl-step {
+    color: var(--accent);
+    font: 11px/1.3 var(--mono);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  .tl h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .tl-time {
+    margin-left: auto;
+    color: var(--ink-3);
+    font: 11px/1.3 var(--mono);
+    white-space: nowrap;
+  }
+
+  .tl p {
+    margin: 7px 0 0;
+    max-width: 900px;
+    color: var(--ink-2);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .tl .code { max-width: 900px; }
+
+  .note-line {
+    margin: 0 0 14px;
+    padding: 9px 12px;
+    background: var(--card-1);
+    border: 1px solid var(--rule-2);
+    border-left: 3px solid var(--amber);
+    border-radius: 4px;
+    color: var(--ink-2);
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+
+  /* ---- Screenshots ---- */
+
+  .shot { margin: 0; }
+
+  .shot img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--rule-2);
+    border-radius: 4px;
+    background: #fff;
+  }
+
+  .shot figcaption {
+    margin-top: 10px;
+    color: var(--ink-2);
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+
+  .shot figcaption strong { color: var(--ink); font-weight: 500; }
+
+  .shots { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
+
+  .status-grid {
+    display: grid;
+    grid-template-columns: 1.1fr .8fr 2fr;
+    gap: 0;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .status-grid > div {
+    padding: 10px 12px;
+    border-right: 1px solid var(--rule);
+    border-top: 1px solid var(--rule);
+    background: var(--bg);
+    color: var(--ink-2);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .status-grid > div:nth-child(3n) { border-right: 0; }
+  .status-grid > div.head {
+    border-top: 0;
+    background: var(--card-2);
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .searchbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    max-width: 560px;
+    padding: 8px 10px;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+  }
+
+  .searchbar span {
+    color: var(--ink-3);
+    font: 12px/1 var(--mono);
+  }
+
+  .searchbar input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--ink);
+    font: 14px/1.3 var(--sans);
+  }
+
+  .searchbar input::placeholder { color: var(--ink-3); }
+
+  .hidden-by-search { display: none !important; }
+
+  .no-results {
+    margin: 12px 0 0;
+    color: var(--ink-2);
+    font-size: 13px;
+  }
+
+  .foot {
+    margin-top: 22px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule-2);
+    color: var(--ink-3);
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+
+  .foot a { color: var(--accent); }
+
+  @media (max-width: 1120px) {
+    .hero,
+    .map,
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+      grid-template-columns: 1fr;
+    }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat.span2 { grid-column: span 2; }
+    .topmeta { display: none; }
+  }
+
+  @media (max-width: 680px) {
+    .shell { padding: 18px 12px 48px; }
+    .topbar { margin: -18px -12px 22px; padding: 0 12px; }
+    .brand { min-width: auto; }
+    .brand span:last-child { display: none; }
+    .hero-copy { min-height: 0; }
+    .stats { grid-template-columns: 1fr; }
+    .stat.span2 { grid-column: span 1; }
+    .section-head { display: block; }
+    .section-head p { margin-top: 10px; }
+    .status-grid { grid-template-columns: 1fr; }
+    .status-grid > div { border-right: 0; }
+    .tl-time { margin-left: 0; width: 100%; }
+  }
+
+  @media print {
+    body { background: var(--bg); }
+    .topbar, .searchbar { display: none; }
+    .shell { max-width: none; padding: 0; }
+    .module, .hero-copy, .summary-card, .honest, .stat, .cluster, .step, .map-node, .node, .tl, .shot {
+      break-inside: avoid;
+    }
+    .shot img { max-height: 460px; object-fit: contain; object-position: left top; }
+  }
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Architecture Atlas home">
+      <span class="mark">S</span>
+      <span>theSide.io Intelligence Platform</span>
+    </a>
+    <nav class="nav" aria-label="Architecture sections">
+      <a href="#map">Map</a>
+      <a href="#loop">Loop</a>
+      <a href="#example">Worked example</a>
+      <a href="#agents">Agents</a>
+      <a href="#memory">Memory</a>
+      <a href="#connectors">Connectors</a>
+      <a href="#data">Data</a>
+      <a href="#safety">Safety</a>
+      <a href="#ui">Operator surface</a>
+      <a href="#claude">Claude Code</a>
+      <a href="#roadmap">Status honesty</a>
+    </nav>
+    <div class="topmeta">Architecture atlas · September 2026</div>
+  </header>
+
+  <section class="hero" id="top">
+    <div class="hero-copy">
+      <div>
+        <p class="eyebrow">theSide.io Intelligence Platform · architecture atlas</p>
+        <h1>One console, many agents, one approval gate.</h1>
+        <p class="lead">
+          For the person who runs a client account, the clinic owner or the Side operator
+          who manages them, this platform turns that business's own advertising, booking and
+          search data into a short list of proposed actions to approve or reject. Approved
+          actions run against the vendor APIs behind an idempotency claim and a signed audit
+          row. Seven, fourteen and twenty-eight days later the platform records what each one
+          changed and writes that back as memory the next run reads.
+        </p>
+      </div>
+      <div class="byline">
+        <span class="who">Soroush Seif</span>
+        <span class="sep">·</span>
+        <a class="link" href="https://thesidebiz.github.io/soroush-portfolio/" target="_blank" rel="noopener">thesidebiz.github.io/soroush-portfolio</a>
+        <span class="sep">·</span>
+        <span>September 2026</span>
+        <span class="chip safe wrap">Status, Sep 2026: built, tested and audited. The nightly loop proposed for a first tenant in May and is idle until the worker runtime is migrated. It has not executed actions in production. Details under Status honesty.</span>
+      </div>
+    </div>
+    <div class="hero-side">
+      <div class="summary-card">
+        <h2>What the platform does</h2>
+        <p>
+          Each night the platform reviews a client's data and proposes actions. A critic
+          removes the weak and unsafe ones. A ranker orders what survives, with no model
+          call. An operator approves. Approved work executes, the result is measured across
+          three windows, and the measurement becomes durable memory that changes the next run.
+        </p>
+      </div>
+      <div class="honest">
+        <h2>What I personally did</h2>
+        <ul class="mine">
+          <li>I defined the architecture, the agent roles, the data model, the acceptance criteria and the guardrails.</li>
+          <li>I directed AI coding agents, Claude Code and Codex, through the implementation in reviewed increments.</li>
+          <li>I reviewed the diffs, ran the checks and tested the flows against a real database.</li>
+          <li>I do not hand-write most of the application code. I specify it, review it and verify it.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats" aria-label="Platform counters">
+    <div class="stat"><span class="num">32</span><span class="label">tables in the platform schema, every tenant-owned row carrying <code>tenant_id</code></span></div>
+    <div class="stat"><span class="num">9</span><span class="label">connector providers that read or write client data. A tenth registry entry, Slack, carries notifications</span></div>
+    <div class="stat"><span class="num">39</span><span class="label">API route handlers under <code>app/api</code></span></div>
+    <div class="stat"><span class="num">4 + 4</span><span class="label">pipeline roles (proposer, critic, ranker, supervisor) and domain specialists (paid media, sales, SEO, project management), plus one deterministic PM sub-investigator</span></div>
+    <div class="stat"><span class="num">14</span><span class="label">tenant memory kinds, each with its own value schema and half-life</span></div>
+    <div class="stat"><span class="num">9</span><span class="label">hook events across the agent lifecycle, with http, prompt and audit-only runners</span></div>
+    <div class="stat span2"><span class="num small">0 · 0 · 21</span><span class="label">TypeScript errors, ESLint findings across 369 files, and passing test groups. Automated static audit run 17 June 2026 against commit <code>b9f4230</code>. The tooling also flagged a security and correctness backlog, summarised under Status honesty.</span></div>
+  </section>
+
+  <section class="module" id="map">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">01 · System map</p>
+        <h2>The orchestration stack</h2>
+      </div>
+      <p>
+        Read left to right. Inputs and operators enter on the left, the runtime sits in the
+        middle, and decisions flow out to cards, connectors, actions and memory.
+      </p>
+    </div>
+    <div class="map">
+      <div class="map-col">
+        <article class="map-node searchable" data-keywords="operator console tenants team invite connectors services audit cost schedule system prompts playbook">
+          <h3>Operator console</h3>
+          <p>Tenant management, connectors, services, team invites, cost, audit, schedules, playbooks and system prompts. Admin-gated and separate from the client-facing surface.</p>
+          <ul class="node-list">
+            <li class="chip live">/operator</li>
+            <li class="chip live">admin-gated</li>
+          </ul>
+        </article>
+        <article class="map-node searchable" data-keywords="dashboard tenant pulse recommendations chat onboarding embed approval queue">
+          <h3>Client surfaces</h3>
+          <p>Pulse, the recommendation approval queue, the supervisor chat, onboarding and an embeddable tenant route.</p>
+          <ul class="node-list">
+            <li class="chip live">Next.js App Router</li>
+            <li class="chip live">organization-scoped</li>
+          </ul>
+        </article>
+        <article class="map-node searchable" data-keywords="webhooks ghl stripe external events ingress hmac">
+          <h3>External event ingress</h3>
+          <p>Webhooks feed tenant state and audit. Signatures are verified with a constant-time comparison, and events from an unknown tenant are quarantined.</p>
+          <ul class="node-list">
+            <li class="chip live">3 webhook routes</li>
+            <li class="chip safe">HMAC verified</li>
+          </ul>
+        </article>
+        <article class="map-node searchable" data-keywords="cron trigger nightly health attribution materialization scheduler jobs">
+          <h3>Scheduled operations</h3>
+          <p>Eight registered tasks: nightly intelligence at 03:00, outcome attribution at 04:00, weekly memory consolidation, connector health probes, metric materialization and a cron dispatcher.</p>
+          <ul class="node-list">
+            <li class="chip safe">worker migration pending</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="map-col">
+        <article class="map-node core searchable" data-keywords="queryengine engine executor claude code orchestration runtime budget abort">
+          <h3>QueryEngine runtime</h3>
+          <p>Shared lifecycle wrapper for every agent run: start, finish, token usage, budget checks, audit envelopes and an abort tree. Each run declares a mode such as <code>proposer.paid_media</code> or <code>supervisor.chat</code>.</p>
+          <ul class="node-list">
+            <li class="chip ai">kernel pattern</li>
+            <li class="chip live">runWithEngine</li>
+          </ul>
+        </article>
+        <article class="map-node core searchable" data-keywords="service tiers client services managed supported advisory audit only policy">
+          <h3>Service-tier spine</h3>
+          <p>One matrix decides what a client buys from Side and how far the agents may act. Each tier carries its own approval default, cost cap and cadence.</p>
+          <ul class="node-list">
+            <li class="chip live">managed</li>
+            <li class="chip live">supported</li>
+            <li class="chip live">advisory</li>
+            <li class="chip live">audit_only</li>
+          </ul>
+        </article>
+        <article class="map-node core searchable" data-keywords="specialists proposer critic ranker supervisor project manager paid media sales seo forced tool output">
+          <h3>Agent pipeline</h3>
+          <p>Specialists propose structured cards through a forced tool call. The critic downgrades or kills. The ranker scores what survives with arithmetic only.</p>
+          <ul class="node-list">
+            <li class="chip live">submit_recommendations</li>
+            <li class="chip live">critic + ranker</li>
+          </ul>
+        </article>
+        <article class="map-node core searchable" data-keywords="tools registry tool search permissions hooks skills memory extension">
+          <h3>Extension plane</h3>
+          <p>Tools, tool search, the permission rule language, hooks, skills and memory are modular interfaces over the same runtime.</p>
+          <ul class="node-list">
+            <li class="chip live">registry</li>
+            <li class="chip live">hooks</li>
+            <li class="chip live">skills</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="map-col">
+        <article class="map-node searchable" data-keywords="recommendation cards approvals actions outcomes memory green yellow red">
+          <h3>Decision output</h3>
+          <p>Cards land in the approval queue, pass the permission lattice, then become executed actions or work handed back to a human.</p>
+          <ul class="node-list">
+            <li class="chip live">GREEN / YELLOW / RED</li>
+          </ul>
+        </article>
+        <article class="map-node searchable" data-keywords="connectors ghl meta google ads gbp gomarble dataforseo local falcon perfectmind voyage credentials grants">
+          <h3>Connector fabric</h3>
+          <p>Tenant and agency credentials resolve to real vendor clients, health badges, synthetic fallback and per-tenant grants.</p>
+          <ul class="node-list">
+            <li class="chip live">credential resolver</li>
+            <li class="chip live">agency grants</li>
+          </ul>
+        </article>
+        <article class="map-node searchable" data-keywords="postgres database audit log tenant memory outcomes tables vector embeddings substrate">
+          <h3>Postgres</h3>
+          <p>The single durable substrate: tenants, cards, actions, outcomes, the audit chain, connector health, memory, services and comms.</p>
+          <ul class="node-list">
+            <li class="chip live">tenant_id scoped</li>
+            <li class="chip safe">signed audit</li>
+          </ul>
+        </article>
+        <article class="map-node searchable" data-keywords="outcomes attribution memory consolidation learning closed loop windows">
+          <h3>Closed-loop learning</h3>
+          <p>Outcome attribution writes memory. Future prompts retrieve the relevant lessons per tenant and per domain, bucketed by kind.</p>
+          <ul class="node-list">
+            <li class="chip live">tenant_memory</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="module" id="loop">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">02 · Runtime loop</p>
+        <h2>The daily loop</h2>
+      </div>
+      <p>
+        Every nightly run, manual specialist run and supervisor investigation follows the
+        same nine steps: context in, structured cards out, approved execution, measured
+        result, memory update.
+      </p>
+    </div>
+    <div class="rail" aria-label="Daily intelligence loop">
+      <div class="step searchable" data-keywords="trigger cron manual operator run nightly"><span class="kicker">01</span><h3>Trigger</h3><p>Nightly cron, a manual specialist run from the tenant page, supervisor chat, or a webhook.</p></div>
+      <div class="step searchable" data-keywords="tenant organization niche service playbook resolve"><span class="kicker">02</span><h3>Resolve tenant</h3><p>Organization and route context resolve to <code>tenant_id</code>, <code>niche_id</code>, the service matrix and the playbook.</p></div>
+      <div class="step searchable" data-keywords="context metrics memory outcomes service tier connector health"><span class="kicker">03</span><h3>Load context</h3><p>Metrics, recent outcomes, connector status, active services and the memory kinds that domain reads.</p></div>
+      <div class="step searchable" data-keywords="specialist proposer forced tool output submit_recommendations"><span class="kicker">04</span><h3>Propose</h3><p>The specialist makes one model call with <code>submit_recommendations</code> forced as the only allowed output.</p></div>
+      <div class="step searchable" data-keywords="critic policy attribution flops service tier cooldown kill downgrade"><span class="kicker">05</span><h3>Critic</h3><p>A deterministic policy pass and a model pass. The policy can kill; the model can only lower confidence.</p></div>
+      <div class="step searchable" data-keywords="ranker deterministic lift confidence novelty priority arithmetic"><span class="kicker">06</span><h3>Rank</h3><p>Arithmetic on lift, confidence, novelty and business priority. No model call in this step.</p></div>
+      <div class="step searchable" data-keywords="permission approval rules hooks human queue green yellow red service tier"><span class="kicker">07</span><h3>Approve</h3><p>Service tier, operator rules, hook decisions and the human queue settle GREEN, YELLOW or RED.</p></div>
+      <div class="step searchable" data-keywords="executor idempotency audit action deferred vendor claim"><span class="kicker">08</span><h3>Execute</h3><p>An idempotency claim, a vendor call or a deferred hand-back, a signed audit row, then post-action hooks.</p></div>
+      <div class="step searchable" data-keywords="outcome attribution memory consolidation closed loop 7 14 28"><span class="kicker">09</span><h3>Learn</h3><p>Attribution writes an <code>outcomes</code> row per window, emits a hook, and produces tenant memory for future runs.</p></div>
+    </div>
+  </section>
+
+  <section class="module" id="example">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">03 · Worked example</p>
+        <h2>One action, from trigger to memory</h2>
+      </div>
+      <p>
+        A single card, from the cron that woke the run to the memory row it left behind.
+        Every identifier, threshold and table name below is taken from the code. The clock
+        times and the specific numbers are illustrative, and are labelled where they appear.
+      </p>
+    </div>
+
+    <p class="note-line">
+      <strong>Illustrative values.</strong> Timestamps, the ad set identifier, the predicted
+      magnitude and the measured lift are made up for this walkthrough. The field names,
+      enum values, thresholds, table names and control flow are real.
+    </p>
+
+    <div class="timeline">
+      <div class="tl searchable" data-keywords="trigger cron nightly intelligence run task envelope schedule">
+        <div class="tl-head">
+          <span class="tl-step">01 · Trigger</span>
+          <h3>The nightly task starts</h3>
+          <span class="tl-time">03:00 (illustrative)</span>
+        </div>
+        <p>
+          The <code>nightly_intelligence_run</code> task fires on cron <code>0 3 * * *</code>,
+          selects tenants whose status is <code>active</code>, and walks four domains in a
+          fixed order: <code>paid_media</code>, <code>sales</code>, <code>seo</code>,
+          <code>project_management</code>. It opens a task envelope, which writes an audit row
+          with actor <code>task:nightly_intelligence_run</code> and action
+          <code>task.started</code>. The envelope closes as <code>completed</code> or
+          <code>failed</code>, so a run that produced nothing is distinguishable from a run
+          that never happened.
+        </p>
+      </div>
+
+      <div class="tl searchable" data-keywords="resolve tenant niche playbook service matrix tenant_id yaml">
+        <div class="tl-head">
+          <span class="tl-step">02 · Resolve tenant</span>
+          <h3>Tenant, niche and playbook</h3>
+          <span class="tl-time">03:00:04</span>
+        </div>
+        <p>
+          The run resolves <code>tenant_id</code> and <code>niche_id</code>, then loads the
+          playbook: the niche YAML merged with any per-tenant overrides saved in
+          <code>tenant_config</code>. That merged document carries the values the agents obey,
+          including <code>voice_rules.forbidden_phrases</code>,
+          <code>ad_budget_guardrails.max_auto_proposed_reallocation_usd</code>,
+          <code>ad_budget_guardrails.hard_pause_threshold_cpa_increase_pct</code>,
+          <code>reactivation_strategy.cooldown_days_per_contact</code> and
+          <code>business_priority_weights</code>. The Operator surface section below shows this
+          editor.
+        </p>
+      </div>
+
+      <div class="tl searchable" data-keywords="load context metrics outcomes memory retrieval bucketed domain kind map">
+        <div class="tl-head">
+          <span class="tl-step">03 · Load context</span>
+          <h3>Metrics, outcomes and memory</h3>
+          <span class="tl-time">03:00:11</span>
+        </div>
+        <p>
+          The paid-media specialist assembles ad metrics, the tenant's recent
+          <code>outcomes</code>, connector status and the active rows in
+          <code>client_services</code>. Memory is retrieved top-K per kind rather than top-K
+          overall, so a noisy kind cannot crowd out a rare one. For paid media the readable
+          kinds are <code>priority_signal</code>, <code>seasonal_pattern</code>,
+          <code>kill_lesson</code>, <code>success_recipe</code>,
+          <code>monthly_budget_pace</code>, <code>attribution_quality_score</code>,
+          <code>client_objection</code>, <code>audit_fact</code> and
+          <code>compliance_observation</code>. The identifiers of the memories used are kept on
+          the card in <code>memory_refs</code>, so the interface can answer why a card appeared.
+        </p>
+      </div>
+
+      <div class="tl searchable" data-keywords="propose proposer forced structured output submit_recommendations tool_choice anthropic schema">
+        <div class="tl-head">
+          <span class="tl-step">04 · Propose</span>
+          <h3>Forced structured output</h3>
+          <span class="tl-time">03:00:19</span>
+        </div>
+        <p>
+          One model call, with the tool call forced as the only way out. There is no
+          free-text parsing anywhere on this path, and a response without the tool block
+          raises <code>ProposerResponseError</code> instead of being salvaged.
+        </p>
+        <code class="code">tools: [submitRecommendationsTool],
+tool_choice: {
+  type: "tool",
+  name: "submit_recommendations",
+  disable_parallel_tool_use: true,
+}</code>
+        <p>
+          The schema allows one to eight cards; the specialists ask for five. Each card must
+          carry <code>action_type</code> from a fixed enum of 19 values,
+          <code>target_entity</code> (<code>kind</code>, <code>id</code>, and an optional
+          <code>platform</code> of <code>meta</code> or <code>google</code>),
+          <code>predicted_lift</code> (<code>metric</code>, <code>magnitude</code>,
+          <code>window</code>), <code>confidence</code> between 0 and 1,
+          <code>reasoning</code> of at least 20 characters, and
+          <code>required_approval</code> of <code>GREEN</code>, <code>YELLOW</code> or
+          <code>RED</code>. The specialist prompt is explicit that it may not call vendor APIs
+          and may never recommend a delete.
+        </p>
+        <p>
+          <strong>This run's card (illustrative):</strong> <code>action_type: "pause_ad"</code>,
+          <code>target_entity: { kind: "ad_set", id: "…", platform: "meta" }</code>,
+          <code>predicted_lift: { metric: "cost_per_lead", magnitude: -34, window: "14d" }</code>,
+          <code>confidence: 0.78</code>.
+        </p>
+      </div>
+
+      <div class="tl searchable" data-keywords="critic policy cooldown forbidden phrase flop attribution threshold downgrade kill merge">
+        <div class="tl-head">
+          <span class="tl-step">05 · Critic</span>
+          <h3>Deterministic policy first, model second</h3>
+          <span class="tl-time">03:00:31</span>
+        </div>
+        <p>
+          The policy pass runs before any model sees the card. A cooldown collision, where the
+          same <code>action_type</code> against the same target was killed inside the tenant's
+          cooldown window, kills the card outright and sets
+          <code>adjusted_confidence</code> to 0. A phrase drawn from
+          <code>voice_rules.forbidden_phrases</code> costs 0.2. Two or more prior
+          negative-lift outcomes for that action type cost 0.15. If the platform's stored
+          <code>attribution_quality_score</code> is below 0.65 and the card's metric depends on
+          attribution, confidence is capped at 0.65 with a note naming the platform and the
+          score.
+        </p>
+        <p>
+          A model critic then returns <code>decision</code>,
+          <code>adjusted_confidence</code> and <code>critic_notes</code> through its own forced
+          tool call. The merge takes the lower confidence of the two, and a model verdict of
+          <code>killed</code> is demoted to <code>downgraded</code>. Only the deterministic
+          policy can end a card's life.
+        </p>
+        <p>
+          <strong>This run (illustrative):</strong> the stored attribution score for that
+          platform is 0.58, below the 0.65 threshold, and <code>cost_per_lead</code> is
+          attribution-dependent. <code>critic_decision</code> becomes
+          <code>downgraded</code> and <code>adjusted_confidence</code> is capped at
+          <code>0.65</code>. A kill would have been written to the audit log as
+          <code>card.killed_by_critic</code> with actor <code>system:critic</code>.
+        </p>
+      </div>
+
+      <div class="tl searchable" data-keywords="rank ranker deterministic score lift confidence novelty priority weight tanh">
+        <div class="tl-head">
+          <span class="tl-step">06 · Rank</span>
+          <h3>Arithmetic, no model call</h3>
+          <span class="tl-time">03:00:33</span>
+        </div>
+        <p>
+          The ranker is a synchronous pure function. It imports no model client, and its whole
+          scoring surface is four numbers multiplied together.
+        </p>
+        <code class="code">score = lift * confidence * novelty * priority_weight
+
+lift            = sign(magnitude) * tanh(|magnitude| / 100)
+confidence      = critic.adjusted_confidence
+novelty         = 1.0 with no prior kills, 0.7 after one, 0.3 after three
+priority_weight = playbook.business_priority_weights[domain]
+                  defaults: paid_media 1.0, sales 0.9, seo 0.7</code>
+        <p>
+          Killed cards are filtered out before scoring, the survivors are sorted descending,
+          and the top five persist. The row written to <code>recommendation_cards</code>
+          carries <code>ranker_score</code>, <code>critic_decision</code>,
+          <code>critic_notes</code>, <code>adjusted_confidence</code>, <code>memory_refs</code>
+          and <code>status: "pending"</code>. A second audit row records the rank and the
+          breakdown, with actor <code>system:ranker</code>. Keeping this step out of the model
+          is deliberate: card order is the thing an operator sees first, and it should move only
+          when the inputs move.
+        </p>
+      </div>
+
+      <div class="tl searchable" data-keywords="approve approval route service tier rules hooks permission lattice deny ask 409 403">
+        <div class="tl-head">
+          <span class="tl-step">07 · Approve</span>
+          <h3>Service tier, operator rules, hooks, human</h3>
+          <span class="tl-time">09:12 (illustrative)</span>
+        </div>
+        <p>
+          An operator opens the queue and clicks approve. The route refuses any card whose
+          status is already something other than <code>pending</code>, returning 409, so a
+          double click cannot double-execute. Four inputs then settle the decision.
+        </p>
+        <ul class="list">
+          <li><strong>Service tier.</strong> A service code is inferred from the card's action type and domain, and the tier is read from <code>client_services</code>. A tier of <code>audit_only</code> is a structural refusal that returns 403 even after a human click. A tier of <code>advisory</code> forces the human path and blocks auto-execution.</li>
+          <li><strong>Operator rules.</strong> Rules stored in <code>tenant_config</code> under scope <code>approval</code> parse into a small permission language. A deny rule outranks a human click, by design, because the rule is the operator's standing contract.</li>
+          <li><strong>Hooks.</strong> The <code>PreActionExecute</code> event fires and its outcomes are reduced most-restrictive first: deny beats ask, ask beats allow. A hook that allows does not auto-approve on its own; a matching auto-approve rule is also required, and platform auto-approval is off by default.</li>
+          <li><strong>The human.</strong> With no deny anywhere, the operator's click carries the decision.</li>
+        </ul>
+        <p>
+          Before anything executes, the decision itself is written to <code>audit_log</code> as
+          <code>card.approval_decision</code>, with the deciding layer, the reason and the
+          matched rule in <code>meta</code>. A denial is as legible after the fact as an
+          approval.
+        </p>
+      </div>
+
+      <div class="tl searchable" data-keywords="execute idempotency claim token vendor call connector audit chain advisory lock transaction">
+        <div class="tl-head">
+          <span class="tl-step">08 · Execute</span>
+          <h3>Claim, call, sign</h3>
+          <span class="tl-time">09:12:02</span>
+        </div>
+        <p>
+          The executor computes a stable token over canonical JSON, sorting object keys so the
+          same logical action always produces the same token:
+        </p>
+        <code class="code">token = "ix_" + sha256(JSON.stringify({
+  tenant: tenantId,
+  card:   cardId,
+  action: actionType,
+  target: canonicaliseTarget(targetEntity),
+})).slice(0, 32)</code>
+        <p>
+          That token is inserted into <code>agent_action_idempotency_claims</code>, whose
+          primary key is <code>(tenant_id, token)</code>, with
+          <code>ON CONFLICT DO NOTHING</code>. The insert is the contest: exactly one caller
+          wins and proceeds to the vendor. A loser writes
+          <code>card.duplicate_execution_skipped</code> to the audit log with the original
+          claim's status and owner, and returns 409 without touching the connector. Claims are
+          later marked <code>completed</code>, <code>failed</code> or <code>deferred</code>,
+          and a failed claim is never retried automatically.
+        </p>
+        <p>
+          The winner dispatches on domain and then on action type. For
+          <code>pause_ad</code> on Meta the executor resolves the tenant's credential and sets
+          the ad set status to <code>PAUSED</code>; on Google it pauses the campaign. Many
+          action types are deliberately still hand-backs: they raise a deferred error, the card
+          moves to <code>approved</code> instead of <code>executed</code>, and an
+          <code>agent_actions</code> row of type <code>owner_approved_deferred</code> records
+          the reason. The service tier is checked a second time inside the executor, so a card
+          approved through any path still cannot execute under <code>audit_only</code>.
+        </p>
+        <p>
+          On success, one database transaction does three things together: the card moves to
+          <code>executed</code>, an <code>agent_actions</code> row is written with the
+          idempotency token and <code>outcome_pending = true</code>, and
+          <code>card.approved</code> is appended to the tenant's audit chain. Each audit row
+          stores <code>prev_hash</code> and a <code>signature</code> computed as
+          <code>sha256</code> over a fixed-order payload that includes the previous hash, with
+          the first row anchored to <code>genesis</code>. Every signed write takes
+          <code>pg_advisory_xact_lock</code> on a per-tenant key first, which makes two
+          concurrent writers forking the chain structurally impossible. The lock releases at
+          commit.
+        </p>
+      </div>
+
+      <div class="tl searchable" data-keywords="attribute attribution outcomes 7 14 28 window baseline observed lift metric key">
+        <div class="tl-head">
+          <span class="tl-step">09 · Attribute</span>
+          <h3>7, 14 and 28 days</h3>
+          <span class="tl-time">+7d, +14d, +28d</span>
+        </div>
+        <p>
+          A daily job walks actions whose <code>outcome_pending</code> is still true and
+          attributes each of the three windows as it comes due. Each window writes one row to
+          <code>outcomes</code> with <code>action_id</code>, <code>window_days</code>,
+          <code>metric_key</code>, <code>baseline</code>, <code>observed</code> and
+          <code>lift</code>, under a unique index on
+          <code>(action_id, window_days)</code>. The metric key is chosen by action type: a
+          pause is measured as <code>ad_spend_daily_savings_usd</code>, a budget change as
+          <code>roas_change</code>, an outbound message as <code>reply_received</code>. The
+          baseline is the seven days before execution.
+        </p>
+        <p>
+          An action is marked attributed only once all three windows exist. Where there is no
+          data the metric key is <code>unattributable_no_data</code> and the row says so,
+          rather than recording a zero. Each write emits the <code>OutcomeRecorded</code> hook
+          and its own audit row with actor
+          <code>system:outcome_attribution</code>. This is a before-and-after measurement on
+          the tenant's own account. There is no holdout and no control group, which is stated
+          here because it bounds what the number means.
+        </p>
+      </div>
+
+      <div class="tl searchable" data-keywords="learn memory success recipe priority signal decay half life confidence write">
+        <div class="tl-head">
+          <span class="tl-step">10 · Learn</span>
+          <h3>What the run leaves behind</h3>
+          <span class="tl-time">+28d</span>
+        </div>
+        <p>
+          Every attributed action with data writes a <code>priority_signal</code> memory keyed
+          <code>priority_signal:{domain}:{action_type}</code> at confidence 0.55, carrying a
+          weight multiplier derived from the measured lift and clamped between 0.5 and 1.5.
+          That multiplier is exactly what the ranker's <code>priority_weight</code> term reads
+          on a later run, which is how a measured result changes tomorrow's card order.
+        </p>
+        <p>
+          A <code>success_recipe</code> is written only when the measured lift clears 25, keyed
+          <code>success_recipe:{domain}:{action_type}:{action_id_prefix}</code> at confidence
+          0.6, with a replayable summary and a reference back to the source card. Memory
+          confidence then decays as <code>confidence *= 0.5 ^ (staleDays / halflife)</code>,
+          with a half-life set per kind: 28 days for a priority signal, 7 for an objection, 60
+          for voice calibration, and no decay at all for compliance observations and weekly
+          review notes. An operator can retire a memory as wrong, which drops its confidence
+          and records the override.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="module" id="agents">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">04 · Agent orchestration</p>
+        <h2>Specialists, supervisor, critic and ranker</h2>
+      </div>
+      <p>
+        Four specialists generate, a supervisor investigates on request, the critic judges,
+        the ranker orders, and executors translate approved cards into vendor calls.
+      </p>
+    </div>
+    <div class="grid-3">
+      <article class="cluster searchable" data-keywords="paid media meta google attribution budget creative pause reallocation pacing">
+        <h3>Paid media</h3>
+        <p>The largest delivery domain. Reads ad metrics, attribution quality, budget pace, platform context and service tier.</p>
+        <ul class="list">
+          <li>Executing today: pause an ad set or campaign, change a campaign daily budget.</li>
+          <li>Proposal-only today: creative tests, duplicating winners, lookalikes, reallocation within and across platforms, creative rotation.</li>
+          <li>Guarded by a per-card reallocation ceiling and a CPA-increase threshold, both set per tenant in the playbook.</li>
+        </ul>
+      </article>
+      <article class="cluster searchable" data-keywords="sales reactivation ghl sms email book call voice cadence contact memory">
+        <h3>Sales and reactivation</h3>
+        <p>Turns CRM and main-contact signals into outreach cards while respecting voice, cadence and per-contact memory.</p>
+        <ul class="list">
+          <li>Action types: <code>send_sms</code>, <code>send_email</code>, <code>reactivate_member</code>, <code>book_call</code>.</li>
+          <li>The critic enforces a cooldown between successive outreach to the same contact.</li>
+          <li>Reactivation shares the sales memory kinds; the domain collapses to sales for critic and ranker purposes.</li>
+        </ul>
+      </article>
+      <article class="cluster searchable" data-keywords="seo gbp local pack google business profile content schema meta tags reviews">
+        <h3>SEO and local presence</h3>
+        <p>Local visibility, reviews, posts, content drafts, meta tags and structured-data proposals.</p>
+        <ul class="list">
+          <li>Action types: page content, meta tags, blog posts, business-profile posts, review replies.</li>
+          <li>Draft generators produce reviewable text; live content-management writes are deferred.</li>
+          <li>Reads local rank grids, keyword overviews and SERP checks through connectors.</li>
+        </ul>
+      </article>
+      <article class="cluster searchable" data-keywords="project management pm weekly qbr health churn risk escalation backlog">
+        <h3>Project management</h3>
+        <p>Cross-domain synthesis for weekly summaries, escalation, prioritisation, client health and quarterly reviews.</p>
+        <ul class="list">
+          <li>Action types: <code>summarize_week</code>, <code>escalate_to_owner</code>, <code>flag_for_review</code>, <code>prioritize_backlog</code>.</li>
+          <li>Can fork sub-investigators behind a feature flag. Those sub-investigators are deterministic database and memory queries with no model call.</li>
+        </ul>
+      </article>
+      <article class="cluster searchable" data-keywords="supervisor chat tool registry metrics query voice retrieve skill tool search abort budget">
+        <h3>Supervisor chat</h3>
+        <p>The interactive surface, with tenant-scoped tools, a registry, tool search, an abort tree and budget checks. A turn cap bounds every conversation.</p>
+        <ul class="list">
+          <li>Twelve catalogued tools cover metrics, recommendations, voice, SEO reads, CRM reads and drafts.</li>
+          <li>Every tool declares a required approval tier and whether it is read-only, and every call writes an audit row.</li>
+          <li>Rarely used tools are discoverable through tool search instead of sitting in the prompt.</li>
+        </ul>
+      </article>
+      <article class="cluster searchable" data-keywords="critic ranker approval confidence deterministic drift quality gate">
+        <h3>Critic and ranker</h3>
+        <p>The quality gate. The critic sees policy, prior outcomes and attribution quality. The ranker stays arithmetic so card order does not drift with the model.</p>
+        <ul class="list">
+          <li>The critic can kill, downgrade or pass. The model half can only lower confidence.</li>
+          <li>The ranker scores lift, confidence, novelty and priority weight, then keeps the top five.</li>
+          <li>Both write audit rows, so a card's journey is reconstructable from the log alone.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="module" id="memory">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">05 · Memory and learning</p>
+        <h2>The closed-loop substrate</h2>
+      </div>
+      <p>
+        Memory is what separates a recommendation queue from a system that improves. Every
+        row is tenant-scoped, typed against its own schema, confidence-scored, retrievable
+        and traceable back to the outcome that produced it.
+      </p>
+    </div>
+    <div class="grid-2">
+      <article class="cluster searchable" data-keywords="tenant memory kinds voice priority seasonal contact kill success audit objection weekly budget attribution relationship health compliance half life">
+        <div class="panel-title">
+          <h3>Fourteen memory kinds</h3>
+          <span class="chip live">tenant_memory</span>
+        </div>
+        <ul class="node-list">
+          <li class="pill">voice_calibration</li>
+          <li class="pill">priority_signal</li>
+          <li class="pill">seasonal_pattern</li>
+          <li class="pill">contact_preference</li>
+          <li class="pill">kill_lesson</li>
+          <li class="pill">success_recipe</li>
+          <li class="pill">audit_fact</li>
+          <li class="pill">client_objection</li>
+          <li class="pill">weekly_review_note</li>
+          <li class="pill">monthly_budget_pace</li>
+          <li class="pill">attribution_quality_score</li>
+          <li class="pill">relationship_health</li>
+          <li class="pill">client_health_score</li>
+          <li class="pill">compliance_observation</li>
+        </ul>
+        <p style="margin-top:10px">
+          Each kind has a value schema validated on every write, and a half-life used for
+          decay. Compliance observations and weekly review notes never decay, because one is a
+          regulatory trail and the other is source material for a quarterly review. A daily
+          composite such as <code>client_health_score</code> has a one-day half-life.
+        </p>
+      </article>
+      <article class="cluster searchable" data-keywords="retrieval consolidation decay retirement traceability memory refs embeddings bucketed">
+        <h3>Memory lifecycle</h3>
+        <ul class="list">
+          <li><strong>Write:</strong> outcome attribution, the onboarding audit, budget pacing, communications extraction and operator review. Each write records its origin.</li>
+          <li><strong>Consolidate:</strong> a weekly job dedupes, merges and decays, and preserves supersession history rather than deleting.</li>
+          <li><strong>Retrieve:</strong> top-K bucketed per kind, so one signal type cannot drown the others in a prompt.</li>
+          <li><strong>Trace:</strong> cards carry <code>memory_refs</code>, so the interface can show which lessons produced a recommendation.</li>
+          <li><strong>Retire:</strong> an operator can mark a memory wrong. Confidence drops, the row is retained, and the audit log records who overrode it.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="module" id="connectors">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">06 · Connector fabric</p>
+        <h2>Credentials, grants, health and provenance</h2>
+      </div>
+      <p>
+        The connector system is a platform layer of its own: registry metadata, credential
+        schemas, agency grants, health probes and per-tenant badges that tell an operator
+        whether a number came from a real account.
+      </p>
+    </div>
+    <div class="grid-3">
+      <article class="cluster searchable" data-keywords="connector providers ghl meta google ads gbp perfectmind voyage local falcon gomarble dataforseo slack registry">
+        <h3>Provider registry</h3>
+        <ul class="node-list">
+          <li class="pill">GoHighLevel</li>
+          <li class="pill">Meta Ads</li>
+          <li class="pill">Google Ads</li>
+          <li class="pill">Google Business Profile</li>
+          <li class="pill">PerfectMind</li>
+          <li class="pill">Local Falcon</li>
+          <li class="pill">GoMarble</li>
+          <li class="pill">DataForSEO</li>
+          <li class="pill">Voyage AI</li>
+        </ul>
+        <p style="margin-top:10px">
+          Nine providers carry client data. A tenth registry entry, Slack, exists for
+          workspace notifications and does not read a client's marketing account. Each entry
+          declares its auth kind, its editor shape and whether it has a synthetic fallback.
+        </p>
+      </article>
+      <article class="cluster searchable" data-keywords="agency credentials tenant grants provenance badges synthetic live reads writes">
+        <h3>Reads and writes</h3>
+        <ul class="list">
+          <li><strong>Reads today:</strong> ad platforms, business profile, CRM, membership systems, local rank grids, keyword and SERP data.</li>
+          <li><strong>Writes today:</strong> pausing an ad set or campaign, and changing a campaign daily budget, both through the approval gate.</li>
+          <li><strong>Deferred writes:</strong> content-management and pixel installation, agency-level CRM provisioning, and social planner posts. These generate reviewable drafts and hand back to a human.</li>
+          <li>The gap between the read surface and the write surface is intentional and is listed under Status honesty.</li>
+        </ul>
+      </article>
+      <article class="cluster searchable" data-keywords="credential hierarchy tenant agency grants health probe latency error rate expiry">
+        <h3>Credential hierarchy and health</h3>
+        <ul class="list">
+          <li><strong>Tenant credentials:</strong> per-client secrets, validated against a per-provider schema.</li>
+          <li><strong>Agency credentials:</strong> shared provider accounts, exposed to a tenant only through an explicit grant row.</li>
+          <li><strong>Health:</strong> a probe task writes <code>connector_health</code> with last check, last success, last failure, 24-hour error rate, p95 latency and credential expiry.</li>
+          <li><strong>Synthetic fallback:</strong> some providers return a stand-in client when no credential is present. The badge is how an operator tells the difference.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="module" id="data">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">07 · Data architecture</p>
+        <h2>The system of record</h2>
+      </div>
+      <p>
+        Thirty-two tables. Everything that matters becomes a typed row: decisions,
+        credentials, health, memory, actions, attribution, services and operator work.
+      </p>
+    </div>
+    <div class="grid-4">
+      <article class="cluster searchable" data-keywords="tenant credentials config history users services schedules identity">
+        <h3>Identity and configuration</h3>
+        <ul class="list">
+          <li>tenants</li>
+          <li>tenant_credentials</li>
+          <li>tenant_config, tenant_config_history</li>
+          <li>operator_users</li>
+          <li>client_services, client_services_history</li>
+          <li>task_schedules</li>
+        </ul>
+      </article>
+      <article class="cluster searchable" data-keywords="cards agent actions outcomes audit idempotency metrics snapshot ad metrics decision loop">
+        <h3>Decision loop</h3>
+        <ul class="list">
+          <li>recommendation_cards</li>
+          <li>agent_actions</li>
+          <li>agent_action_idempotency_claims</li>
+          <li>outcomes</li>
+          <li>audit_log</li>
+          <li>metrics_snapshot, ad_metrics, ad_metrics_quarantine</li>
+        </ul>
+      </article>
+      <article class="cluster searchable" data-keywords="memory embeddings hooks skills onboarding system prompts agent knowledge">
+        <h3>Agent knowledge</h3>
+        <ul class="list">
+          <li>tenant_memory</li>
+          <li>embeddings</li>
+          <li>tenant_hooks</li>
+          <li>tenant_skills</li>
+          <li>system_prompts</li>
+          <li>onboarding_audits</li>
+        </ul>
+      </article>
+      <article class="cluster searchable" data-keywords="connector health agency grants pixels attribution budgets contacts action items oauth events">
+        <h3>Operations</h3>
+        <ul class="list">
+          <li>connector_health</li>
+          <li>agency_credentials, tenant_credential_grants</li>
+          <li>connector_oauth_states</li>
+          <li>pixel_installations</li>
+          <li>attribution_audits, ad_budgets</li>
+          <li>tenant_main_contacts, operator_action_items</li>
+          <li>ghl_events</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="module" id="safety">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">08 · Safety and control</p>
+        <h2>Safety and control</h2>
+      </div>
+      <p>
+        Every automation layer has a counterweight. The gaps in this table are listed
+        honestly in the last section rather than smoothed over here.
+      </p>
+    </div>
+    <div class="status-grid">
+      <div class="head">Layer</div><div class="head">Status</div><div class="head">What it protects</div>
+
+      <div class="searchable" data-keywords="tenant scoping isolation tenant_id predicate query rls backstop">Tenant scoping</div>
+      <div class="searchable" data-keywords="tenant scoping isolation tenant_id predicate query rls backstop"><span class="chip live">Live</span></div>
+      <div class="searchable" data-keywords="tenant scoping isolation tenant_id predicate query rls backstop">Every query and tool is constrained by <code>tenant_id</code>. This is an application-level invariant with no database-level backstop today, which is the first known gap below.</div>
+
+      <div class="searchable" data-keywords="forced structured output submit_recommendations tool choice no free text parsing">Forced structured output</div>
+      <div class="searchable" data-keywords="forced structured output submit_recommendations tool choice no free text parsing"><span class="chip live">Live</span></div>
+      <div class="searchable" data-keywords="forced structured output submit_recommendations tool choice no free text parsing">Proposers and the model critic must answer through a named tool call. A response without the tool block raises an error instead of being parsed out of prose.</div>
+
+      <div class="searchable" data-keywords="critic ranker deterministic policy kill downgrade model drift">Critic and ranker</div>
+      <div class="searchable" data-keywords="critic ranker deterministic policy kill downgrade model drift"><span class="chip live">Live</span></div>
+      <div class="searchable" data-keywords="critic ranker deterministic policy kill downgrade model drift">The deterministic policy is the only thing that can kill a card. The ranker performs arithmetic only, so ordering stays stable across model changes.</div>
+
+      <div class="searchable" data-keywords="permission rules lattice hooks human queue auto approval deny ask">Permission lattice</div>
+      <div class="searchable" data-keywords="permission rules lattice hooks human queue auto approval deny ask"><span class="chip live">Live</span></div>
+      <div class="searchable" data-keywords="permission rules lattice hooks human queue auto approval deny ask">Operator rules, hook decisions and the human queue compose most-restrictive first. Auto-approval is off by default and needs a matching rule even when a hook allows.</div>
+
+      <div class="searchable" data-keywords="service tier gate audit only advisory managed supported structural refusal">Service-tier gate</div>
+      <div class="searchable" data-keywords="service tier gate audit only advisory managed supported structural refusal"><span class="chip live">Live</span></div>
+      <div class="searchable" data-keywords="service tier gate audit only advisory managed supported structural refusal">An <code>audit_only</code> tier refuses execution even after a human approval, and the check is repeated inside the executor so no path bypasses it.</div>
+
+      <div class="searchable" data-keywords="signed audit chain sha256 prev hash advisory lock fork genesis">Signed audit chain</div>
+      <div class="searchable" data-keywords="signed audit chain sha256 prev hash advisory lock fork genesis"><span class="chip safe">Detects, does not prevent</span></div>
+      <div class="searchable" data-keywords="signed audit chain sha256 prev hash advisory lock fork genesis">Rows carry <code>prev_hash</code> and a SHA-256 <code>signature</code>; a per-tenant advisory lock rules out chain forks. The hash is unkeyed, so it detects tampering rather than preventing it.</div>
+
+      <div class="searchable" data-keywords="idempotency claim atomic duplicate vendor call primary key conflict">Idempotency claims</div>
+      <div class="searchable" data-keywords="idempotency claim atomic duplicate vendor call primary key conflict"><span class="chip live">Live</span></div>
+      <div class="searchable" data-keywords="idempotency claim atomic duplicate vendor call primary key conflict">An atomic single-winner insert keyed on <code>(tenant_id, token)</code> stops a repeated approval or a retry storm from producing a second vendor call.</div>
+
+      <div class="searchable" data-keywords="budget abort tree cost ceiling cancellation flag token usage">Budget and abort tree</div>
+      <div class="searchable" data-keywords="budget abort tree cost ceiling cancellation flag token usage"><span class="chip safe">Behind flags</span></div>
+      <div class="searchable" data-keywords="budget abort tree cost ceiling cancellation flag token usage">Per-tier cost ceilings, token accounting and a cancellation tree are wired through the engine, with enforcement gated by feature flags rather than on everywhere.</div>
+
+      <div class="searchable" data-keywords="webhook verification hmac constant time quarantine unknown tenant">Webhook verification</div>
+      <div class="searchable" data-keywords="webhook verification hmac constant time quarantine unknown tenant"><span class="chip live">Live</span></div>
+      <div class="searchable" data-keywords="webhook verification hmac constant time quarantine unknown tenant">Inbound webhooks are HMAC-verified with a constant-time comparison, and events for an unrecognised tenant are quarantined instead of dropped.</div>
+    </div>
+  </section>
+
+  <section class="module" id="ui">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">09 · Operator surface</p>
+        <h2>Operator surface</h2>
+      </div>
+      <p>
+        Two screens from the operator console. Both are redacted: the tenant is shown as
+        Tenant A. They are here because the two claims that matter most on this page are
+        visible in them, that guardrails are configuration rather than code, and that
+        connector health is measured.
+      </p>
+    </div>
+
+    <div class="shots">
+      <figure class="shot searchable" data-keywords="playbook guardrails yaml overridable keys voice rules forbidden phrases cooldown budget ceiling cpa threshold tenant config editor">
+        <img src="screen-playbook-guardrails.png" width="1300" height="1258" alt="The per-tenant Playbook editor. The left column lists overridable keys with descriptions and empty override fields. The right column shows the resolved YAML for the tenant, including voice rules, ad budget guardrails and SEO priorities." />
+        <figcaption>
+          <strong>Per-tenant playbook editor.</strong> On the left, the keys an operator may
+          override, each with what it controls. On the right, the resolved document for that
+          tenant: the niche default merged with saved overrides. This is the point of the
+          screen. The values the agents obey are rows in a database, so changing a tone rule or
+          a spend ceiling is an operator action rather than a code change and a release.
+          Visible here: a hard ceiling on per-card paid-media reallocation, set to 500; a
+          CPA-increase percentage that triggers a pause recommendation, set to 40; the phrases
+          the critic downgrades a card for using; the signature block every outbound message
+          must include; and the cooldown the critic enforces between successive outreach to the
+          same contact. The tabs across the top are the per-tenant surfaces: connectors,
+          services, playbook, system prompts, schedule, activity and audit.
+        </figcaption>
+      </figure>
+
+      <figure class="shot searchable" data-keywords="connectors matrix health probe synthetic failing unconfigured connected badges cross tenant provenance">
+        <img src="screen-connectors-matrix.png" width="1290" height="360" alt="The cross-tenant connector health matrix. Rows are tenants, columns are the nine client-data providers, and each cell holds a status pill reading Connected, Failing, Synthetic or Unconfigured." />
+        <figcaption>
+          <strong>Cross-tenant connector health.</strong> Rows are tenants, columns are the nine
+          client-data providers, and each cell is the result of a probe, not a stored flag. The
+          probe writes last check time, last success, 24-hour error rate and p95 latency, and
+          the summary line reports how many cells were checked. The honest state is the reason
+          this screen is worth showing: one provider connected, two failing, twelve on synthetic
+          fallback and three unconfigured. Synthetic means the factory returned a stand-in
+          client because no credential was present, so a chart built on that provider is
+          illustrative. An operator can see that at a glance, which is the difference between a
+          dashboard that is trustworthy and one that is merely populated.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="module" id="claude">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">10 · Engineering patterns</p>
+        <h2>Patterns adapted from Claude Code</h2>
+      </div>
+      <p>
+        Four patterns came from studying how Claude Code is built: a single engine kernel, a
+        tool registry, permission rules, and hooks. Each was rebuilt for multi-tenant use,
+        where the hard part is that one process serves many clients whose data must never meet.
+      </p>
+    </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr><th>Pattern</th><th>Adaptation here</th><th>What it bought</th></tr>
+        </thead>
+        <tbody>
+          <tr class="searchable" data-keywords="engine kernel queryengine lifecycle audit usage budget"><td>Single engine kernel</td><td>QueryEngine plus a run wrapper, with a declared mode per run</td><td>Shared audit, usage, budget and state handling for every agent run.</td></tr>
+          <tr class="searchable" data-keywords="subagent isolation fork context tenant safe prompt cache"><td>Subagent isolation</td><td>A subagent context with an explicit tool, budget, abort and prompt-cache policy</td><td>A fork model that cannot widen tenant scope or exceed the parent's budget.</td></tr>
+          <tr class="searchable" data-keywords="tool registry discovery tool search deferred skills"><td>Tool registry and discovery</td><td>A builder, a per-run registry, tool search, and deferred skill invocation</td><td>Tools are catalogued and discoverable instead of pasted into prompts.</td></tr>
+          <tr class="searchable" data-keywords="permission race rules lattice hook decisions human queue trust"><td>Permission composition</td><td>A rule language, a decision lattice, hook participation and a human queue</td><td>Trust can mature one tenant at a time without opening execution globally.</td></tr>
+          <tr class="searchable" data-keywords="hooks lifecycle events http prompt audit only runners"><td>Hooks</td><td>Nine lifecycle events with http, prompt and audit-only runners</td><td>Operators extend behaviour at lifecycle boundaries without touching agent code.</td></tr>
+          <tr class="searchable" data-keywords="skills runbooks tenant bundled inline fork approval tiers"><td>Skills</td><td>Tenant and bundled skills with inline and fork modes</td><td>Runbooks become invokable procedures tied to allowed actions and approval tiers.</td></tr>
+          <tr class="searchable" data-keywords="memory tiers tenant memory consolidation decay retirement refs"><td>Memory tiers</td><td>Typed tenant memory with consolidation, per-kind decay, retirement and references</td><td>Outcomes and client conversations become durable inputs to later decisions.</td></tr>
+          <tr class="searchable" data-keywords="compaction cost discipline tool result budget token abort"><td>Compaction and cost discipline</td><td>Tool-result budgets, token accounting, cost config and an abort tree</td><td>Long agent interactions stay bounded and accountable.</td></tr>
+          <tr class="searchable" data-keywords="failure safe execution idempotency claim signed audit synthetic fallback"><td>Failure-safe execution</td><td>The idempotency claim table, the signed audit chain and synthetic fallback</td><td>The system can retry and recover without duplicate or silent writes.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="module" id="roadmap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">11 · Status honesty</p>
+        <h2>What is live, what is wired, what is deferred</h2>
+      </div>
+      <p>
+        Counts on this page describe the system in the repository as of September 2026. They
+        are not traffic figures. The most recent review of the operated environment found the
+        nightly loop idle, because the worker runtime it was written against has been retired
+        and the migration is not done, and the outcome ledger empty as a result. That is the
+        third gap listed below.
+      </p>
+    </div>
+    <div class="grid-3">
+      <article class="cluster searchable" data-keywords="live status shipped working today proposer critic ranker approval queue audit idempotency connectors pause budget">
+        <h3><span class="chip live">Live</span></h3>
+        <ul class="list">
+          <li>Tenant creation, custom niches, operator team invites and the admin gate.</li>
+          <li>Proposer, critic, ranker and the approval queue, with forced structured output.</li>
+          <li>The engine lifecycle, hooks, memory injection and the service matrix.</li>
+          <li>Connector credentials, agency grants, health probes and provenance badges.</li>
+          <li>The signed audit chain, idempotency claims, the tool registry and permission rules.</li>
+          <li>Executing writes: pausing an ad set or campaign, changing a campaign daily budget.</li>
+        </ul>
+      </article>
+      <article class="cluster searchable" data-keywords="wired foundation attribution pixel budget pace hook main contact drafts qbr cost ceiling abort tree flags">
+        <h3><span class="chip safe">Wired foundation</span></h3>
+        <ul class="list">
+          <li>Attribution scoring and the attribution-quality memory that feeds the critic.</li>
+          <li>The pixel desired-state model and its host seams.</li>
+          <li>Budget-pace memory and the pacing alert hook.</li>
+          <li>Main-contact extraction and the operator action-item model.</li>
+          <li>Draft generators for quarterly reviews, client health, creative, SEO and business-profile content.</li>
+          <li>Cost ceilings and the abort tree, enforced behind feature flags.</li>
+        </ul>
+      </article>
+      <article class="cluster searchable" data-keywords="deferred by design cms content management pixel writes transcript translation provisioning social planner managed agents subprocess executor">
+        <h3><span class="chip defer">Deferred by design</span></h3>
+        <ul class="list">
+          <li>Live content-management and pixel writes for hosted sites.</li>
+          <li>Real transcript ingestion and a supported translation path.</li>
+          <li>Agency-level CRM provisioning and social planner writes.</li>
+          <li>The managed-agent and subprocess executors.</li>
+          <li>Operator interface tabs for the newest surfaces, which today are reachable through the console rather than a dedicated tab.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="cluster searchable" style="margin-top:10px" data-keywords="known gaps risks rls row level security tenant isolation backstop credentials encryption envelope scheduler worker runtime migration audit chain unkeyed revoke insert only gateway">
+      <h3>Known gaps</h3>
+      <p>
+        These are the four findings I would raise first if I were reviewing this system, taken
+        from the September 2026 audit and the target-architecture proposal that answers it.
+      </p>
+      <ul class="list">
+        <li><strong>No database-level tenant isolation.</strong> All 32 tables have row-level security disabled and no policies, and the application role can bypass it. Isolation rests entirely on a <code>tenant_id</code> predicate applied by hand at every query site. The current code holds that invariant; there is no backstop if a future query forgets it. The fix is designed and not shipped: policies bound to a transaction-local tenant setting, a non-owner application role, and a continuous-integration check that fails any tenant-table query without a predicate.</li>
+        <li><strong>Connector credentials are stored unencrypted.</strong> Credential payloads sit in the database as plain JSON, so a read-only database leak or a backup exposure is a credential leak for every tenant. Envelope encryption at the resolver boundary is specified and not built, and it needs to land before the tenant count or the value of the stored tokens grows.</li>
+        <li><strong>The scheduler is not running on a supported worker runtime.</strong> The worker package is pinned to a version whose shutdown is complete, the stored schedules are reference rows rather than execution receipts, and the dispatcher reads them without triggering jobs. Until that migration lands and one full run is observed with receipts, the nightly loop is code that has run rather than code that is running.</li>
+        <li><strong>The audit chain detects tampering without preventing it.</strong> The hash is unkeyed and the application role retains update and delete rights on the audit table, so a sufficiently privileged database role could rewrite history and re-sign it. Revoking those rights and adding insert-only policies is a small change that has not been made, and until it is, the chain is strong evidence rather than non-repudiation.</li>
+      </ul>
+      <p style="margin:10px 0 0">
+        The proposed answer to all four is one architecture: keep this console as the tenant
+        and policy plane, move effect execution behind a gateway that is the only service able
+        to resolve write credentials, and give every step a durable receipt. That proposal is a
+        reviewable document today, and it is deliberately still a proposal.
+      </p>
+    </div>
+  </section>
+
+  <section class="module">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Searchable atlas</p>
+        <h2>Find a layer quickly</h2>
+      </div>
+      <label class="searchbar" for="atlas-search">
+        <span>&#8981;</span>
+        <input id="atlas-search" type="search" placeholder="Search: memory, idempotency, audit, paid media, service tier, hooks..." />
+      </label>
+    </div>
+    <p class="no-results" id="atlas-no-results" hidden>No section matches that term.</p>
+    <p class="foot">
+      Soroush Seif ·
+      <a href="https://thesidebiz.github.io/soroush-portfolio/" target="_blank" rel="noopener">thesidebiz.github.io/soroush-portfolio</a>
+      ·
+      <a href="https://theside.studio" target="_blank" rel="noopener">theside.studio</a>
+      · September 2026. Client identifiers are redacted throughout. Counts are taken from the
+      repository and the schema, and are dated where they came from an audit.
+    </p>
+  </section>
+</main>
+
+<script>
+  (function () {
+    var input = document.getElementById("atlas-search");
+    var empty = document.getElementById("atlas-no-results");
+    if (!input) return;
+
+    var searchable = Array.from(document.querySelectorAll(".searchable"));
+    var modules = Array.from(document.querySelectorAll(".module"));
+
+    function apply() {
+      var q = input.value.trim().toLowerCase();
+      var active = q.length > 0;
+      var anyMatch = false;
+
+      for (var i = 0; i < searchable.length; i++) {
+        var node = searchable[i];
+        var haystack = (
+          (node.textContent || "") + " " + (node.getAttribute("data-keywords") || "")
+        ).toLowerCase();
+        var hit = haystack.indexOf(q) !== -1;
+        node.classList.toggle("hidden-by-search", active && !hit);
+        if (hit) anyMatch = true;
+      }
+
+      // Hide a module whose searchable children are all filtered out, so a
+      // search never leaves a page of empty section headings behind.
+      for (var m = 0; m < modules.length; m++) {
+        var mod = modules[m];
+        var items = mod.querySelectorAll(".searchable");
+        if (items.length === 0) continue;
+        var visible = false;
+        for (var k = 0; k < items.length; k++) {
+          if (!items[k].classList.contains("hidden-by-search")) { visible = true; break; }
+        }
+        mod.classList.toggle("hidden-by-search", active && !visible);
+      }
+
+      if (empty) empty.hidden = !active || anyMatch;
+    }
+
+    input.addEventListener("input", apply);
+  })();
+</script>
+</body>
+</html>
