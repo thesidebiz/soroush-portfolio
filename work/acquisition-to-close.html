@@ -8,12 +8,12 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Acquisition to close">
 <meta property="og:description" content="A revenue operating system for pre-construction agents. 1,000+ buyer conversations a day, lead-to-transaction conversion from 1% to 3%.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 <title>Acquisition to Close · Soroush Seif</title>
 <style>
   :root{
-    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#6E7A69;
-    --rule:#DCE0D6; --accent:#0F7F62; --gate:#9A6F1E; --spine:#C9D2C4;
+    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#667162;
+    --rule:#DCE0D6; --accent:#0F7F62; --gate:#8F671C; --spine:#C9D2C4;
     --shadow:0 1px 2px rgba(18,24,15,.05), 0 8px 24px -12px rgba(18,24,15,.14);
   }
   @media (prefers-color-scheme:dark){
@@ -91,6 +91,26 @@
   @media (max-width:34rem){ body{font-size:16px} header{padding:2rem 0 2rem} section{padding:2.6rem 0} }
   @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
 
+
+  /* ---------- reading comfort + mobile behaviour ---------- */
+  .prose,.sec-sub,ul.plain,ol.steps,.role,.callout,.entity,.sys .what,.sys p,.sys ul,figcaption{max-width:64ch}
+  figcaption{font-size:.88rem}
+  .run{flex-wrap:wrap; row-gap:.55rem}
+  .tbl table{min-width:34rem}
+  .tbl{-webkit-overflow-scrolling:touch}
+  td{font-variant-numeric:tabular-nums}
+  .links a,.contact a,nav.toc a,.docs a{display:inline-flex; align-items:center; min-height:40px}
+  .docs li{margin:0 0 .2rem}
+  @media (max-width:34rem){
+    .metrics,.facts{grid-template-columns:1fr}
+    .callout{padding-left:1rem}
+    figcaption{padding:.75rem .9rem .85rem}
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]) figure{border-color:#45584E}
+  }
+  :root[data-theme="dark"] figure{border-color:#45584E}
+  .contact{align-items:center}
   @media print{
     @page{size:Letter; margin:.45in}
     :root{--ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
@@ -133,12 +153,63 @@
     a{color:inherit; text-decoration:none}
     .links a[href^="http"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666}
   }
+
+  /* ---------- shared chrome: skip link, top bar, focus, measure ---------- */
+  .skip{position:absolute; left:1rem; top:-6rem; z-index:60; padding:.7rem 1.1rem; background:var(--raise);
+    color:var(--ink); border:1px solid var(--rule); border-radius:3px; font-size:.9rem;
+    text-decoration:none; box-shadow:var(--shadow)}
+  .skip:focus{top:.7rem}
+  a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{
+    outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+  .sitebar{position:sticky; top:0; z-index:40; border-bottom:1px solid var(--rule);
+    background:color-mix(in srgb, var(--ground) 88%, transparent);
+    -webkit-backdrop-filter:saturate(150%) blur(12px); backdrop-filter:saturate(150%) blur(12px)}
+  .sitebar-in{display:flex; align-items:center; justify-content:space-between; gap:.1rem 1.5rem;
+    flex-wrap:wrap; min-height:48px}
+  .sitebar a{display:inline-flex; align-items:center; min-height:40px; text-decoration:none}
+  .sitebar a:hover{text-decoration:underline; text-underline-offset:3px}
+  .sitebar .home{color:var(--ink); font-weight:600; font-size:.86rem}
+  .sitebar nav{display:flex; flex-wrap:wrap; gap:0 1.15rem}
+  .sitebar nav a{color:var(--ink-3); font-size:.7rem; letter-spacing:.14em; text-transform:uppercase}
+  .sitebar nav a:hover{color:var(--ink)}
+  main{display:block}
+  [id]{scroll-margin-top:4.5rem}
+  @media (max-width:34rem){
+    .sitebar-in{min-height:44px; padding:.15rem 0 .35rem}
+    .sitebar nav{gap:0 .9rem}
+    .sitebar nav a{font-size:.66rem; letter-spacing:.1em}
+  }
+  @media print{ .skip,.sitebar{display:none!important} }
+
+  @media print{
+      :root,:root:not([data-theme="light"]),:root[data-theme="dark"]{
+      --ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
+      --rule:#c0c0c0; --accent:#0b5a45; --gate:#7a5714; --spine:#b5b5b5; --shadow:none}
+    body{background:#fff; color:#111}
+    .skip,.sitebar{display:none!important}
+    .links a,.docs a,.contact a{min-height:0}
+    a[href^="http"]::after,a[href^="mailto"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666;
+      word-break:break-all}
+  }
+  @media print{ figure{border-color:var(--rule)} }
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="sitebar">
+  <div class="wrap sitebar-in">
+    <a class="home serif" href="../">Soroush Seif</a>
+    <nav class="mono" aria-label="Portfolio sections">
+      <a href="../#systems">Systems</a>
+      <a href="../nightshift/">Nightshift</a>
+      <a href="../atlas/side-intelligence-architecture-atlas.html">Atlas</a>
+      <a href="../agency/">Clients</a>
+      <a href="../#documents">Documents</a>
+    </nav>
+  </div>
+</div>
 <div class="wrap">
-
-<p class="back mono"><a href="../">&larr; Soroush Seif · portfolio</a></p>
+<main id="main">
 
 <header>
   <p class="eyebrow mono">Revenue operating system · pre-construction real estate · 2020-21</p>
@@ -205,7 +276,6 @@
 </section>
 
 <footer>
-  <p class="ident mono">Soroush Seif · AI Systems Lead · Agentic Platforms &amp; Revenue Automation</p>
   <p class="links">
     <a href="../">Portfolio</a>
     <a href="intelligence-platform.html">Intelligence Platform</a>
@@ -215,9 +285,11 @@
     <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
     <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
   </p>
+  <p class="ident mono">Soroush Seif · AI Systems Lead · Agentic Platforms &amp; Revenue Automation</p>
   <p class="entity">Side is the company I co-founded in Vancouver in 2021. Side Studios, its studio subsidiary, designs and runs client sites and agents (theside.studio). theSide.io is the intelligence platform we built for those clients. Nightshift is the console for our autonomous SEO and AI-visibility engine. Canadian citizen.</p>
 </footer>
 
+</main>
 </div>
 </body>
 </html>

@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="How Side documented its conversation-AI research under Canada's SR&amp;ED program from 2022 to 2024: the uncertainties it wrote down, the human-in-the-loop data-capture SOP, three Rasa pipelines run against one task, and what the record says happened.">
+<meta name="author" content="Soroush Seif">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NLU program · Soroush Seif">
+<meta property="og:description" content="The applied-research record behind the real-estate product: uncertainties, the capture SOP, three pipelines, and an honest outcome.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+<title>NLU program · Soroush Seif</title>
+<style>
+  :root{
+    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#667162;
+    --rule:#DCE0D6; --accent:#0F7F62; --gate:#8F671C; --spine:#C9D2C4;
+    --shadow:0 1px 2px rgba(18,24,15,.05), 0 8px 24px -12px rgba(18,24,15,.14);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+      --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+    --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--ground); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Palladio,Georgia,ui-serif,serif}
+  .mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
+  .wrap{max-width:60rem; margin:0 auto; padding:0 1.5rem}
+  a{color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px}
+  a:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+
+  .back{font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); margin:0; padding:1.8rem 0 0}
+  .back a{color:inherit; text-decoration:none}
+  .back a:hover{text-decoration:underline}
+
+  header{padding:2.4rem 0 3rem; border-bottom:1px solid var(--rule)}
+  .eyebrow{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); margin:0 0 1.4rem}
+  h1{font-size:clamp(2.1rem,5.4vw,3.4rem); line-height:1.05; margin:0 0 1.2rem; font-weight:600; letter-spacing:-.02em; text-wrap:balance}
+  h1 em{font-style:italic; color:var(--accent)}
+  .lede{font-size:clamp(1.03rem,2.1vw,1.15rem); color:var(--ink-2); margin:0; max-width:40rem}
+  .prose{max-width:40rem}
+  .prose p{margin:0 0 1rem}
+
+  section{padding:3.4rem 0; border-bottom:1px solid var(--rule)}
+  .sec-head{display:flex; align-items:baseline; gap:1rem; margin:0 0 .5rem}
+  .sec-num{font-size:.72rem; letter-spacing:.14em; color:var(--ink-3)}
+  h2{font-size:clamp(1.4rem,3.3vw,1.85rem); margin:0; font-weight:600; letter-spacing:-.01em; text-wrap:balance}
+  h3{font-size:1.05rem; margin:1.9rem 0 .5rem; font-weight:600}
+  .sec-sub{color:var(--ink-2); margin:0 0 1.6rem; max-width:40rem}
+
+  .metrics{display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:1px;
+    background:var(--rule); border:1px solid var(--rule); border-radius:2px; overflow:hidden; margin:2.2rem 0 0}
+  .metric{background:var(--raise); padding:.9rem 1rem}
+  .metric b{display:block; font-size:1.5rem; line-height:1.1; font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .metric span{display:block; font-size:.75rem; color:var(--ink-3); margin-top:.28rem; line-height:1.35}
+
+  .run{display:flex; gap:0; overflow-x:auto; padding-bottom:.5rem; margin:1.4rem 0 0}
+  .stage{flex:0 0 auto; display:flex; align-items:center; gap:.6rem; font-size:.76rem; color:var(--ink-2); white-space:nowrap}
+  .stage .dot{width:6px; height:6px; border-radius:50%; background:var(--spine); flex:0 0 auto}
+  .stage.is-gate{color:var(--gate); font-weight:600}
+  .stage.is-gate .dot{background:var(--gate); box-shadow:0 0 0 3px color-mix(in srgb, var(--gate) 22%, transparent)}
+  .arrow{flex:0 0 auto; width:1.75rem; height:1px; background:var(--spine); margin:0 .7rem; align-self:center}
+
+  figure{margin:1.6rem 0 0; background:var(--raise); border:1px solid var(--rule); border-radius:3px; box-shadow:var(--shadow); overflow:hidden}
+  figure img{display:block; width:100%; height:auto}
+  figcaption{padding:.8rem 1rem .9rem; font-size:.86rem; color:var(--ink-2); border-top:1px solid var(--rule); line-height:1.5}
+  figcaption b{color:var(--ink)}
+
+  .callout{border-left:2px solid var(--accent); padding:.2rem 0 .2rem 1.25rem; margin:1.6rem 0 0; color:var(--ink-2); font-size:.95rem; max-width:38rem}
+  .callout.gate{border-left-color:var(--gate)}
+  .stack{font-size:.78rem; color:var(--ink-3); margin:.7rem 0 0}
+
+  ul.plain{padding-left:1.2rem; margin:.5rem 0 0; max-width:40rem}
+  ul.plain li{margin:0 0 .5rem}
+  .links{display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; margin:.8rem 0 0; font-size:.95rem}
+
+  footer{padding:3rem 0 5rem}
+  .entity{color:var(--ink-3); font-size:.86rem; max-width:44rem; margin:.9rem 0 0}
+  .ident{font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin:0 0 .6rem}
+
+  @media (max-width:34rem){ body{font-size:16px} header{padding:2rem 0 2rem} section{padding:2.6rem 0} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+
+  /* ---------- reading comfort + mobile behaviour ---------- */
+  .prose,.sec-sub,ul.plain,ol.steps,.role,.callout,.entity,.sys .what,.sys p,.sys ul,figcaption{max-width:64ch}
+  figcaption{font-size:.88rem}
+  .run{flex-wrap:wrap; row-gap:.55rem}
+  .tbl table{min-width:34rem}
+  .tbl{-webkit-overflow-scrolling:touch}
+  td{font-variant-numeric:tabular-nums}
+  .links a,.contact a,nav.toc a,.docs a{display:inline-flex; align-items:center; min-height:40px}
+  .docs li{margin:0 0 .2rem}
+  @media (max-width:34rem){
+    .metrics,.facts{grid-template-columns:1fr}
+    .callout{padding-left:1rem}
+    figcaption{padding:.75rem .9rem .85rem}
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]) figure{border-color:#45584E}
+  }
+  :root[data-theme="dark"] figure{border-color:#45584E}
+  .contact{align-items:center}
+  @media print{
+    @page{size:Letter; margin:.45in}
+    :root{--ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
+      --rule:#c0c0c0; --accent:#0b5a45; --gate:#7a5714; --spine:#b5b5b5; --shadow:none}
+    body{background:#fff; font-size:8.2pt; line-height:1.27; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .wrap{max-width:none; padding:0}
+    .back{display:none}
+    header{padding:0 0 .4rem}
+    .eyebrow{font-size:6.6pt; margin:0 0 .3rem}
+    h1{font-size:14pt; line-height:1.08; margin:0 0 .3rem}
+    .lede{font-size:8.6pt; max-width:none; margin:0}
+    .prose{max-width:none}
+    .prose p{margin:0 0 .3rem}
+    section{padding:.4rem 0; break-inside:auto}
+    .sec-head{margin:0 0 .25rem}
+    h2{font-size:9.8pt}
+    h3{font-size:8.6pt; margin:.45rem 0 .18rem}
+    .sec-sub{margin:0 0 .4rem; max-width:none}
+    .metrics,.facts{margin:.5rem 0 0; break-inside:avoid}
+    .metric,.fact{padding:.28rem .4rem}
+    .metric b,.fact b{font-size:9.8pt}
+    .metric span,.fact span{font-size:6.4pt; margin-top:.1rem; line-height:1.25}
+    .run{margin:.45rem 0 0; flex-wrap:wrap; overflow:visible; break-inside:avoid}
+    .stage{font-size:6.8pt; white-space:normal}
+    .arrow{width:.9rem; margin:0 .35rem}
+    figure{margin:.5rem 0 0; box-shadow:none; break-inside:avoid}
+    figure img{max-height:1.35in; width:auto; max-width:100%; margin:0 auto}
+    figcaption{padding:.3rem .45rem .35rem; font-size:7pt; line-height:1.3}
+    .callout{margin:.45rem 0 0; font-size:8.2pt; max-width:none; padding-left:.7rem; break-inside:avoid}
+    .role{margin:.45rem 0 0; padding-top:.35rem; font-size:8.2pt; max-width:none; break-inside:avoid}
+    .stack{font-size:6.8pt; margin:.35rem 0 0}
+    table{font-size:7.2pt; margin:.4rem 0 0; break-inside:avoid}
+    th,td{padding:.24rem .35rem}
+    ul.plain,ol.steps{margin:.3rem 0 0; max-width:none; padding-left:.9rem}
+    ul.plain li,ol.steps li{margin:0 0 .2rem}
+    .links{margin:.35rem 0 0; font-size:7.6pt; gap:.25rem .9rem}
+    footer{padding:.5rem 0 0}
+    .ident{font-size:6.6pt; margin:0 0 .25rem}
+    .entity{font-size:7.2pt; max-width:none; margin:.35rem 0 0}
+    a{color:inherit; text-decoration:none}
+    .links a[href^="http"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666}
+  }
+
+  /* ---------- shared chrome: skip link, top bar, focus, measure ---------- */
+  .skip{position:absolute; left:1rem; top:-6rem; z-index:60; padding:.7rem 1.1rem; background:var(--raise);
+    color:var(--ink); border:1px solid var(--rule); border-radius:3px; font-size:.9rem;
+    text-decoration:none; box-shadow:var(--shadow)}
+  .skip:focus{top:.7rem}
+  a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{
+    outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+  .sitebar{position:sticky; top:0; z-index:40; border-bottom:1px solid var(--rule);
+    background:color-mix(in srgb, var(--ground) 88%, transparent);
+    -webkit-backdrop-filter:saturate(150%) blur(12px); backdrop-filter:saturate(150%) blur(12px)}
+  .sitebar-in{display:flex; align-items:center; justify-content:space-between; gap:.1rem 1.5rem;
+    flex-wrap:wrap; min-height:48px}
+  .sitebar a{display:inline-flex; align-items:center; min-height:40px; text-decoration:none}
+  .sitebar a:hover{text-decoration:underline; text-underline-offset:3px}
+  .sitebar .home{color:var(--ink); font-weight:600; font-size:.86rem}
+  .sitebar nav{display:flex; flex-wrap:wrap; gap:0 1.15rem}
+  .sitebar nav a{color:var(--ink-3); font-size:.7rem; letter-spacing:.14em; text-transform:uppercase}
+  .sitebar nav a:hover{color:var(--ink)}
+  main{display:block}
+  [id]{scroll-margin-top:4.5rem}
+  @media (max-width:34rem){
+    .sitebar-in{min-height:44px; padding:.15rem 0 .35rem}
+    .sitebar nav{gap:0 .9rem}
+    .sitebar nav a{font-size:.66rem; letter-spacing:.1em}
+  }
+  @media print{ .skip,.sitebar{display:none!important} }
+
+  @media print{
+      :root,:root:not([data-theme="light"]),:root[data-theme="dark"]{
+      --ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
+      --rule:#c0c0c0; --accent:#0b5a45; --gate:#7a5714; --spine:#b5b5b5; --shadow:none}
+    body{background:#fff; color:#111}
+    .skip,.sitebar{display:none!important}
+    .links a,.docs a,.contact a{min-height:0}
+    a[href^="http"]::after,a[href^="mailto"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666;
+      word-break:break-all}
+  }
+  @media print{ figure{border-color:var(--rule)} }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="sitebar">
+  <div class="wrap sitebar-in">
+    <a class="home serif" href="../">Soroush Seif</a>
+    <nav class="mono" aria-label="Portfolio sections">
+      <a href="../#systems">Systems</a>
+      <a href="../nightshift/">Nightshift</a>
+      <a href="../atlas/side-intelligence-architecture-atlas.html">Atlas</a>
+      <a href="../agency/">Clients</a>
+      <a href="../#documents">Documents</a>
+    </nav>
+  </div>
+</div>
+<div class="wrap">
+<main id="main">
+
+<header>
+  <p class="eyebrow mono">Applied research · documented under SR&amp;ED · 2022 to 2024</p>
+  <h1 class="serif">The NLU program, as it was <em>written down</em>.</h1>
+  <p class="lede">SR&amp;ED is Canada's federal program for scientific research and experimental development. A company files after its fiscal year closes and answers the Canada Revenue Agency's three questions: what technological uncertainty it faced, what systematic work it did to resolve it, and what it learned. There is no proposal stage, so a filing is only as good as the record behind it. Side documented its conversation-AI work under SR&amp;ED for fiscal 2022 through 2024. This page is the engineering in that record: the uncertainties as written at the time, the data-capture process that produced the corpus, the model configurations that ran, and what happened. It says nothing about amounts or the status of any filing.</p>
+  <div class="metrics">
+    <div class="metric"><b>5</b><span>technological uncertainties written down before the work began</span></div>
+    <div class="metric"><b>3</b><span>Rasa pipelines run against one task, one taxonomy, one corpus</span></div>
+    <div class="metric"><b>45 / 34</b><span>intents and entity types in the production domain, up from 18 and 12</span></div>
+  </div>
+</header>
+
+<section id="uncertainties">
+  <div class="sec-head"><span class="sec-num mono">01</span><h2 class="serif">The uncertainties we wrote down</h2></div>
+  <p class="sec-sub">Five appear across the 2022 scientific report and the fiscal 2023 technical report. The quotations are the language of the time.</p>
+  <ul class="plain">
+    <li><b>No source of truth for the presale market.</b> "No such data sources exist for the preconstruction market." The data was disjoint, uncurated, inconsistent across sources and changed weekly, so standard scraping and aggregation could not produce one record per project. The team had to invent both the normalization rules and the way to validate them.</li>
+    <li><b>No architecture to copy for autonomous workflow navigation.</b> "There are no standardized system architectures that can be applied in this domain to automatically navigate prospective clients through personalized workflows all the way to finalizing transactions." The 2022 answer was a CRM workflow builder, and the team had already run one until it stopped scaling.</li>
+    <li><b>Latency and combinatorics pulled against each other.</b> The platform had to "handle 1000s of unique interactions autonomously and respond to engagements in less than 1 second" against a combinatorial input space. Desk analysis cannot settle that. It has to be built far enough to be measured.</li>
+    <li><b>No prior intent schema for this domain.</b> The objective was "a minimal yet complete intent / slot taxonomy" that could map at least 95 percent of inbound queries, and the recorded uncertainty was that no schema existed for British Columbia presale real estate. A taxonomy that missed a class of buyer question would waste every hour of labelling after it.</li>
+    <li><b>Unknown sample size and annotation budget.</b> "Unknown sample size required for convergence", "Unclear annotation budget", and "Lack of explainability hampers iteration" are recorded as uncertainties about the research process itself. Annotation was done by hand by one or two people, so sample efficiency per intent set the cost and the calendar.</li>
+  </ul>
+</section>
+
+<section id="capture">
+  <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">The data-capture workflow</h2></div>
+  <p class="sec-sub">A written SOP, "Real-Time Conversational Data Capture and AI-Training Workflow", took effect on October 1, 2022. It defines a human-in-the-loop capture loop with owners, service levels, a sampling rate and a retention policy. Individuals are named in the original; they appear here as roles.</p>
+  <ol class="steps">
+    <li><b>Scope and consent.</b> Inbound and outbound calls, SMS and web chat with prospective buyers, British Columbia presale projects only. Excluded by rule: internal meetings, non-real-estate enquiries, and "interactions without explicit recording consent". A consent script sat beside the taxonomy and the transcript schema.</li>
+    <li><b>Mandatory capture.</b> Five items had to come out of every conversation, each mapped to a named entity: target area (<span class="mono">city</span>), bedrooms (<span class="mono">bdrm</span>), budget (<span class="mono">budget</span> or <span class="mono">around_budget</span>), desired completion, and callback details. The SOP designates five of these as critical entities.</li>
+    <li><b>Dynamic prompting.</b> "If model confidence &lt; 0.75 for any critical entity, ask a clarifier." A phrase like "around six hundred" was tagged <span class="mono">around_budget</span> and confirmed as a numeric range on the call, which is why the domain carries three budget slots.</li>
+    <li><b>Objections and escalation, written as a map.</b> "Just looking" routes to <span class="mono">warm_give_info</span>; "prices too high" to <span class="mono">user_budget_too_high</span>; "call me later" to <span class="mono">give_call_meeting_info</span>. Legal and compliance questions were warm-transferred and tagged <span class="mono">handoff_broker</span>. Abusive language was tagged <span class="mono">mood_unhappy</span> and capture stopped.</li>
+    <li><b>Live tagging.</b> Hot-keys wrote timestamped markers into a sidecar file during the call: city, bedrooms, budget.</li>
+    <li><b>Post-call pipeline with a service level on every step.</b> Speech to text within 15 minutes; transcript clean-up at 30 minutes per hour of audio; same-day labelling in Rasa X; QA review within 24 hours against a diff; a nightly ETL job.</li>
+    <li><b>QA sampling.</b> The annotation lead spot-checked 10 percent of the specialist's labels, computed inter-rater agreement on the overlap, and returned corrections. Validators and slot-tag consistency scripts ran over each batch as a separate check.</li>
+    <li><b>Nightly retraining.</b> A nightly job built <span class="mono">new_examples.parquet</span> and fine-tuned the DIET classifier for 200 epochs. Training metrics posted to a channel automatically; misclassifications went back to the specialist for next-day correction. A bad prediction became a corrected label inside 24 hours.</li>
+    <li><b>Retention and encryption.</b> "Recordings stored encrypted (AES-256), deleted after 180 days; transcripts kept 3 years." One read-only access role. Consent logs kept with transcript metadata so any transcript traces back to the consent that permitted it.</li>
+    <li><b>Ownership.</b> The CTO owned the taxonomy, the annotation guidelines and the retraining trigger. A conversational data specialist ran the SOP in real time and delivered daily labelled batches. Dev-ops owned storage, the nightly ETL and pipeline health. Changes were logged against a tracked component.</li>
+  </ol>
+  <p class="callout">The SOP set two operating targets for the capture work: critical entities captured on at least 95 percent of calls, and objections resolved into a scheduled call at least 70 percent of the time. Both are written as targets. The record on this page does not say whether either was met, so neither is claimed.</p>
+</section>
+
+<section id="pipelines">
+  <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">Three pipelines, one task</h2></div>
+  <p class="sec-sub">The production Rasa system carried three layers, each with its own configuration, all dated February 2023, all aimed at the same problem: classify a presale buyer's intent and pull the slot values out of the message. The task, the taxonomy and the training data were held fixed. The model family and the featurization varied.</p>
+  <div class="tbl"><table>
+    <tr><th></th><th>Basic layer</th><th>Secretary layer</th><th>End-to-end layer</th></tr>
+    <tr><td>Intent classifier</td><td>DIET, 100 epochs, embedding 100</td><td>Logistic regression, lbfgs, 400 iterations, ranking length 4</td><td>DIET, 200 epochs, entity recognition off</td></tr>
+    <tr><td>Featurizers</td><td>Regex, lexical-syntactic, two count-vector featurizers</td><td>Same as basic</td><td>Same, plus a lexical window of three positions and a pretrained language-model featurizer (openai-gpt weights)</td></tr>
+    <tr><td>Character n-grams</td><td>char_wb 1 to 4</td><td>char_wb 2 to 6, char 2 to 7</td><td>char_wb 2 to 6, char 2 to 7</td></tr>
+    <tr><td>Entity extractor</td><td>CRF, BILOU, 50 iterations, L1 0.1, L2 0.1</td><td>Identical to basic</td><td>CRF, BILOU, 150 iterations, L1 0.2, L2 0.1, one extra suffix feature; the CRF owns entities alone</td></tr>
+    <tr><td>Fallback</td><td>Custom intent filter, threshold 0.9</td><td>Custom intent filter, threshold 0.9</td><td>None</td></tr>
+    <tr><td>Dialogue policies</td><td>Augmented memoization, TED (history 50, 60 epochs), rules</td><td>Augmented memoization, TED (history 50, 120 epochs), rules</td><td>Memoization, TED (history 50, 5 epochs)</td></tr>
+    <tr><td>GPU</td><td>No</td><td>No</td><td>Yes</td></tr>
+  </table></div>
+  <p class="callout">Two axes were under test. One was the model family: a neural joint intent-and-entity model, a linear classifier over character n-grams, and a pretrained transformer featurizer feeding a larger DIET run with entities pushed onto a more regularized CRF. The other was the cost of being wrong: the two layers that talk to buyers carry a 0.9 fallback and a rule policy, so a low-confidence turn becomes a clarifying question; the end-to-end layer drops both and lets the learned policy run.</p>
+</section>
+
+<section id="domain">
+  <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">The domain, in the model's own vocabulary</h2></div>
+  <p class="sec-sub">The production domain file carries 45 intents and 34 entity types, grown from the 18 and 12 the 2022 taxonomy started with. The names show where the modelling went. Twelve of them:</p>
+  <ul class="plain">
+    <li><span class="mono">warm_give_info</span>: the buyer volunteers preferences in free text, usually bedrooms, city and budget in one message.</li>
+    <li><span class="mono">lead_ask_completion_date</span>: when the building completes, which in presale can be years after the contract.</li>
+    <li><span class="mono">lead_ask_payment_structure</span>: the deposit schedule, paid in instalments over construction.</li>
+    <li><span class="mono">lead_ask_assignment_fee</span>: what the developer charges to assign the contract to someone else.</li>
+    <li><span class="mono">lead_ask_assign_before_completion</span>: whether assignment is permitted at all before completion.</li>
+    <li><span class="mono">lead_ask_flip_before_completion</span>: whether the unit can be resold before completion, the speculative case, a different question from assignment.</li>
+    <li><span class="mono">lead_ask_price_Sq</span>: price per square foot, the comparison unit between projects.</li>
+    <li><span class="mono">lead_ask_maintenance_fee</span>: the monthly strata charge.</li>
+    <li><span class="mono">lead_ask_concrete_building</span>: concrete or wood frame, which drives cost, insurance and resale.</li>
+    <li><span class="mono">lead_ask_ev_parking</span>: whether the stall supports electric-vehicle charging.</li>
+    <li><span class="mono">lead_ask_airbnb_allowed_yn</span>: whether short-stay rental is permitted under the bylaws.</li>
+    <li><span class="mono">multi_questions</span>: several of the above in one message, given its own class so a stacked question is something the model can hit.</li>
+  </ul>
+  <p class="callout">Two naming patterns carry design decisions. The <span class="mono">_yn</span> suffix marks the same question asked back as a yes-or-no confirmation after the assistant has answered once, a different dialogue state that needed its own class. And <span class="mono">budget</span>, <span class="mono">around_budget</span> and <span class="mono">max_budget</span> are three slots, one per way buyers state affordability, one of which the SOP required the operator to resolve on the call.</p>
+</section>
+
+<section id="record">
+  <div class="sec-head"><span class="sec-num mono">05</span><h2 class="serif">What the record says happened</h2></div>
+  <div class="prose">
+    <p><b>Generation one, rule-based.</b> A hierarchical conditional workflow in the CRM's workflow builder, beginning "by mapping over 50 branching nodes representing common queries and parameters, which later grew to 120+ nodes". Over six weeks and 2,000-plus unique engagements it held a 1 percent conversion rate, the industry baseline, against a 5 percent target. What ended it was maintenance: "Translating the rapidly expanding conditional framework into code became unmanageable."</p>
+    <p><b>Generation two, in-house NLU.</b> Each level of the decision tree was treated as a conversational turn and learned. Training data came from 8,000 SMS and web-chat turns captured between May 2021 and August 2022, de-identified and segmented before annotation; the SOP above formalized the loop from October 2022. The Rasa system ran the three pipelines against a domain that had grown to 45 intents. Side reported conversion rising to "over 3% while maintaining 80% workflow autonomy", with the system handling more than 1,000 conversations a day. The same record is explicit about what was still wrong: divergent or irrelevant replies, and unreliable classification of the granular specifications a buyer gives when close to a decision.</p>
+    <p><b>A separate workstream, transformer lead scoring, that did not work.</b> In 2024 a UBC Master of Data Science capstone team trained three models to score a conversation's warmth: a zero-shot DeBERTa-v3 classifier, a DistilBERT transfer-learning model, and a fine-tuned DistilBERT. Test accuracy came in at 0.57, 0.55 and 0.59, with recall on the hot class at 0.33 for all three. The team wrote the reasons plainly: too few hot conversations to learn from, a warm label whose definition had drifted over the life of the CRM, and phone conversations they never had. Their conclusion was that the end goals were not reached with the data available. That is the honest end of the thread. The generation after it was rebuilt on large language models.</p>
+  </div>
+</section>
+
+<section id="role">
+  <div class="sec-head"><span class="sec-num mono">06</span><h2 class="serif">My role</h2></div>
+  <div class="prose">
+    <p>I was the program director. I specified the problem and the targets, funded the work, set up and directed the capstone collaboration, ran the commercial side that produced the conversations the models learned from, and made the calls about what to build next when a generation ran out.</p>
+    <p>The Rasa system, the domain model, the annotation taxonomy and the retraining pipeline were built by the internal team, led by the CTO. The warmth classifiers were built by the capstone team. I did not write the model code, and the record says so: Side's own documents from the period credit the conversational-AI development to the CTO and the supervised warmth model to the capstone collaboration.</p>
+  </div>
+</section>
+
+<section id="omitted">
+  <div class="sec-head"><span class="sec-num mono">07</span><h2 class="serif">What this page leaves out, on purpose</h2></div>
+  <ul class="plain">
+    <li><b>Amounts.</b> No claim values, expenditures, salaries or funding figures.</li>
+    <li><b>Claim status.</b> The program is described; the tax matter is not.</li>
+    <li><b>Personal information.</b> Roles instead of names. No transcript, phone number, email or CRM record.</li>
+    <li><b>The reports themselves.</b> The technical reports were prepared by an external consultancy in the company's voice and are tax filings. What is quoted here is quoted and attributed; the documents are not offered.</li>
+    <li><b>Numbers the record cannot support.</b> Several accuracy and attribution figures circulate in third-party write-ups of this work without an evaluation artifact behind them. They are excluded. The figures above appear in more than one contemporaneous document or can be read directly off the model configuration.</li>
+  </ul>
+  <p class="links">
+    <a href="side-io.html">The product, three generations</a>
+    <a href="acquisition-to-close.html">The revenue system it sat inside</a>
+    <a href="../earlier-work/IRAP-Project-Description-2023.pdf">Project description filed with NRC IRAP, 2023</a>
+  </p>
+</section>
+
+<footer>
+  <p class="links">
+    <a href="../">Portfolio</a>
+    <a href="intelligence-platform.html">Intelligence Platform</a>
+    <a href="nightshift.html">Nightshift</a>
+    <a href="acquisition-to-close.html">Acquisition to close</a>
+    <a href="cdap.html">CDAP</a>
+    <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
+    <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
+  </p>
+  <p class="ident mono">Soroush Seif · AI Systems Lead · Agentic Platforms &amp; Revenue Automation</p>
+  <p class="entity">Side is the company I co-founded in Vancouver in 2021. Side Studios, its studio subsidiary, designs and runs client sites and agents (theside.studio). theSide.io is the intelligence platform we built for those clients. Nightshift is the console for our autonomous SEO and AI-visibility engine. Canadian citizen.</p>
+</footer>
+
+</main>
+</div>
+</body>
+</html>
