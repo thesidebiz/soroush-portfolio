@@ -222,7 +222,7 @@
     <figcaption><b>The only control in the console that writes anything.</b> Confirming appends one line to a decisions file in git. The engine reads it at the start of the next run, opens the revert pull request and echoes what it honoured into the next retro. Nothing deploys on the click, and there is no button anywhere that says approve.</figcaption>
   </figure>
   <p class="links">
-    <a href="../nightshift/">Nightshift walkthrough: all eleven operator sections, screen by screen</a>
+    <a href="../nightshift/">Nightshift walkthrough: the console's eleven sections, eight of them screen by screen</a>
   </p>
 </section>
 
@@ -231,7 +231,7 @@
   <p class="sec-sub">Read this the way the console would report it.</p>
   <ul class="plain">
     <li><b>Tenancy:</b> it runs nightly on our own site today. Two client sites are registered with connectors and the engine has not been enabled against either. That is a deliberate gate, one client at a time, because the first time this thing writes to somebody else's repository I want to be watching.</li>
-    <li><b>Outcomes:</b> business grade 50 out of 100 and answer-engine citations at 0 of 20 on 10 September. Hygiene grade 100. Non-branded clicks are small. The kill gate is armed for 15 December 2026.</li>
+    <li><b>Outcomes:</b> business grade 50 out of 100 and answer-engine citations at 0 of 20 on 10 September. Hygiene grade 100. Non-branded clicks are small. The kill gate is set for 15 December 2026: ten non-branded clicks by then, or it stops.</li>
     <li><b>Self-checks failing on 10 September:</b> cost was not recorded on two runs, no red-team report in the last seven days, no human audit report this month, and GA4 is not wired for outcome measurement. Two more are unknown rather than failing: digest delivery and schedule drift are not yet evidenced in git, and the console says unknown instead of guessing.</li>
     <li><b>The veto surface is built and tested, and no decision has been recorded through it yet.</b> Every time I have disagreed with something the engine landed I have reverted it in git directly. The console path works in tests and has not been used in anger.</li>
     <li><b>Known gaps:</b> the verifier does not yet run the console's own test suite, and the retro does not record what each waiting human item is blocking. A stale-marker bug in the decision layer was found and fixed by the engine itself on 9 September.</li>

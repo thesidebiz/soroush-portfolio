@@ -124,11 +124,15 @@
   <p class="sec-sub">The Morning Brief answers the operator's three questions in order: did the engine run and what did it cost, where does the site stand, and what landed that I might want to take back.</p>
   <figure>
     <img src="img/brief-top.png" alt="Morning Brief: sensor health, run status, cost tonight $30.33 of $45, self-checks 4 failing and 2 unknown, business grade 50, hygiene grade 100, AI citations 0 of 20, kill gate 96 days left." loading="lazy">
-    <figcaption><b>Health is derived from the run's own artifacts, never from the workflow's exit code.</b> Two grades, never averaged: the business grade (AI citations and search outcomes, the thing a client pays for) and the hygiene grade (the site's own upkeep). When something could not be measured the panel says so and names the file that would unlock it. The self-checks pill reads 4 failing and 2 unknown because that is what was true on Sep 10; the Health page lists each one.</figcaption>
+    <figcaption><b>Health is derived from the run's own artifacts, never from the workflow's exit code.</b> Two grades, never averaged: the business grade (AI citations and search outcomes, the thing a client pays for) and the hygiene grade (the site's own upkeep). When something could not be measured the panel says so and names the file that would unlock it. The self-checks pill reads 4 failing and 2 unknown because that is what was true on Sep 10; the Health page lists each one. The 24 items "waiting on you" are class-C decisions (resolve elsewhere, note to brain, defer, veto), never approvals; the Queue below lists them.</figcaption>
   </figure>
   <figure>
     <img src="img/brief-missions.png" alt="Tonight's missions table: two class A missions landed as PR #215 and PR #216, each with a Revert link." loading="lazy">
     <figcaption><b>The last column is Revert.</b> Both missions landed unattended overnight as pull requests #215 and #216. Landed work is reverted, never approved: pressing Revert opens a confirm step, the engine opens the revert PR the next night and records the veto in git.</figcaption>
+  </figure>
+  <figure>
+    <img src="img/queue.png" alt="Queue page: 24 open class-C items the newest retro still carries, oldest first, each opening to a decision: Resolved elsewhere, Note to brain, Defer to date, or Veto." loading="lazy">
+    <figcaption><b>What "waiting on you" means.</b> Nothing in the queue waits on approval; it waits on a decision. Each item opens to its reason, its retros and its receipts, and to one of four records: resolved elsewhere, note to brain, defer to a date, or veto.</figcaption>
   </figure>
 </section>
 
@@ -250,7 +254,7 @@
   <ul class="plain">
     <li><b>Live:</b> the nightly sensor DAG, the decision layer, class A unattended landing, the verifier gates, the veto path, budgets and caps, the weekly council with two external reviewers, the Telegram digest, and the console itself.</li>
     <li><b>Tenancy:</b> the engine runs nightly on one site today, our own. Two client sites are registered in the ledger with connectors but the engine has not been enabled against them; that is a deliberate gate, one client at a time.</li>
-    <li><b>Outcomes so far:</b> business grade 50 of 100 and AI citations 0 of 20 on Sep 10. Hygiene grade 100. Non-branded clicks are small. A kill gate is armed for Dec 15, 2026: if the engine cannot show ten non-branded clicks by then, it stops. I would rather show you that number than hide it.</li>
+    <li><b>Outcomes so far:</b> business grade 50 of 100 and AI citations 0 of 20 on Sep 10. Hygiene grade 100. Non-branded clicks are small. A kill gate is set for Dec 15, 2026: if the engine cannot show ten non-branded clicks by then, it stops. I would rather show you that number than hide it.</li>
     <li><b>Self-checks failing on Sep 10:</b> cost not recorded on two runs, no red-team report in the last seven days, no human audit report this month, GA4 not wired for outcome measurement. Two unknowns: digest delivery and schedule drift are not yet evidenced in git.</li>
     <li><b>Known gaps:</b> the verifier does not yet run the console's own test suite; the retro does not record what each open human item blocks; a stale-marker bug in the brain wrapper was found and fixed by the engine itself on Sep 9.</li>
   </ul>

@@ -81,8 +81,8 @@
     <p>The book splits into three eras. Hand-built work from 2021 to 2023, with the first LLM deployments. A productised snapshot era in 2024 and 2025, where one template was installed across the client base. And 2026, where the work shifted from many workflows to a few well-guarded agents that call workflows. The seven systems below are the ones worth a technical reviewer's time; the estate-level numbers are given plainly.</p>
   </div>
   <div class="facts">
-    <div class="fact"><b>84</b><span>client sub-accounts audited on one platform</span></div>
-    <div class="fact"><b>11</b><span>purpose-built AI voice agents; a vendor demo agent installed for a 2026 evaluation is not counted</span></div>
+    <div class="fact"><b>84</b><span>sub-accounts audited on one platform; about 45 are active clients, the rest past clients, templates and internal accounts</span></div>
+    <div class="fact"><b>11</b><span>purpose-built AI voice agents, 6 of them on live inbound lines; a vendor demo agent installed for a 2026 evaluation is not counted</span></div>
     <div class="fact"><b>~1,200</span></b><span>workflows built across the estate; roughly two in five are published and running</span></div>
     <div class="fact"><b>2</b><span>external systems bridged by schema: a recreation-management platform and a clinic EMR</span></div>
     <div class="fact"><b>2023</b><span>first LLM workflows in production, with a human-handoff pattern that still ships</span></div>
@@ -131,9 +131,9 @@
   <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">The orchestration state machine</h2></div>
   <p class="sec-sub">The template every new client account is provisioned from.</p>
   <article class="sys">
-    <p class="kind mono">Conversation AI · fourteen ordered units</p>
+    <p class="kind mono">Conversation AI · numbered, ordered units</p>
     <h3>AI.00 to AI.14</h3>
-    <p>Fourteen numbered, dependency-ordered workflow units that cover the four things naive bot builds leave out: a debounce for double messages, a fallback when the model has nothing useful to say, a human kill-switch (one tag stops the bot and alerts a person), and externalised prompt loading so the persona is configuration rather than code. The rest handle channel selection, conversation summarisation into the contact record, and database reactivation. The same unit set, and the same stop-and-alert tags, appear in every account provisioned from the template.</p>
+    <p>A numbered, dependency-ordered series of workflow units (AI.00 to AI.14) that covers the four things naive bot builds leave out: a debounce for double messages, a fallback when the model has nothing useful to say, a human kill-switch (one tag stops the bot and alerts a person), and externalised prompt loading so the persona is configuration rather than code. The rest handle channel selection, conversation summarisation into the contact record, and database reactivation. The same unit set, and the same stop-and-alert tags, appear in every account provisioned from the template.</p>
     <p class="why"><b>What it shows:</b> platform thinking inside a no-code tool.</p>
   </article>
 </section>
