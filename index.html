@@ -78,7 +78,7 @@
   .stack{font-size:.78rem; color:var(--ink-3); margin:.7rem 0 0}
   .links{display:flex; flex-wrap:wrap; gap:.4rem 1.2rem; font-size:.88rem; margin:1rem 0 0}
   .method{display:grid; grid-template-columns:repeat(auto-fit,minmax(13rem,1fr)); gap:1.5rem}
-  .step h4{margin:0 0 .4rem; font-size:.95rem; font-weight:600}
+  .step h3{margin:0 0 .4rem; font-size:.95rem; font-weight:600}
   .step p{margin:0; font-size:.9rem; color:var(--ink-2)}
   .step .k{font-size:.7rem; letter-spacing:.14em; color:var(--accent); display:block; margin-bottom:.5rem}
   .callout{border-left:2px solid var(--accent); padding:.2rem 0 .2rem 1.25rem; margin:2rem 0 0; color:var(--ink-2); font-size:.95rem; max-width:38rem}
@@ -91,10 +91,10 @@
   @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
 
   /* ---------- shared chrome: skip link, top bar, focus, measure ---------- */
-  .skip{position:absolute; left:-9999px; top:0; z-index:60; padding:.7rem 1.1rem; background:var(--raise);
+  .skip{position:absolute; left:1rem; top:-6rem; z-index:60; padding:.7rem 1.1rem; background:var(--raise);
     color:var(--ink); border:1px solid var(--rule); border-radius:3px; font-size:.9rem;
     text-decoration:none; box-shadow:var(--shadow)}
-  .skip:focus{left:1rem; top:.7rem}
+  .skip:focus{top:.7rem}
   a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{
     outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
   .sitebar{position:sticky; top:0; z-index:40; border-bottom:1px solid var(--rule);
@@ -130,6 +130,11 @@
     .callout{padding-left:1rem}
     figcaption{padding:.75rem .9rem .85rem}
   }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]) figure{border-color:#45584E}
+  }
+  :root[data-theme="dark"] figure{border-color:#45584E}
+  .contact{align-items:center}
   @media print{ .skip,.sitebar{display:none!important} }
 
   @media print{
@@ -142,6 +147,7 @@
     a[href^="http"]::after,a[href^="mailto"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666;
       word-break:break-all}
   }
+  @media print{ figure{border-color:var(--rule)} }
 </style>
 </head>
 <body>
@@ -298,10 +304,10 @@
     <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">How I work</h2></div>
     <p class="sec-sub">Outcome first. I own the system and the result; AI coding agents are how the implementation gets done.</p>
     <div class="method">
-      <div class="step"><span class="k mono">DEFINE</span><h4>Architecture and acceptance criteria</h4><p>Operating model, workflows, agent roles, data flows, integration behaviour, and what "correct" means before anything is built.</p></div>
-      <div class="step"><span class="k mono">DIRECT</span><h4>Agent-directed delivery</h4><p>I direct Claude Code and Codex through implementation and testing, in worktrees, against the criteria I set. I read the diffs and run the tests.</p></div>
-      <div class="step"><span class="k mono">GATE</span><h4>Guardrails that hold</h4><p>Human approval where money moves, trust classes where it does not, scope allowlists, brand checks, budgets in files the agents cannot edit.</p></div>
-      <div class="step"><span class="k mono">MEASURE</span><h4>Outcome attribution</h4><p>Every approved action is checked against what happened 7, 14 and 28 days later. Numbers that could not be measured are shown as gaps.</p></div>
+      <div class="step"><span class="k mono">DEFINE</span><h3>Architecture and acceptance criteria</h3><p>Operating model, workflows, agent roles, data flows, integration behaviour, and what "correct" means before anything is built.</p></div>
+      <div class="step"><span class="k mono">DIRECT</span><h3>Agent-directed delivery</h3><p>I direct Claude Code and Codex through implementation and testing, in worktrees, against the criteria I set. I read the diffs and run the tests.</p></div>
+      <div class="step"><span class="k mono">GATE</span><h3>Guardrails that hold</h3><p>Human approval where money moves, trust classes where it does not, scope allowlists, brand checks, budgets in files the agents cannot edit.</p></div>
+      <div class="step"><span class="k mono">MEASURE</span><h3>Outcome attribution</h3><p>Every approved action is checked against what happened 7, 14 and 28 days later. Numbers that could not be measured are shown as gaps.</p></div>
     </div>
     <p class="callout">Building revenue and AI systems since 2012, as a founder and as an advisor. Now looking for long-horizon ownership inside one embedded team.</p>
   </section>

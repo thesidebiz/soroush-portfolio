@@ -70,10 +70,10 @@
   @media (max-width:34rem){ body{font-size:16px} header{padding:3rem 0 2rem} section{padding:2.8rem 0} }
 
   /* ---------- shared chrome: skip link, top bar, focus, measure ---------- */
-  .skip{position:absolute; left:-9999px; top:0; z-index:60; padding:.7rem 1.1rem; background:var(--raise);
+  .skip{position:absolute; left:1rem; top:-6rem; z-index:60; padding:.7rem 1.1rem; background:var(--raise);
     color:var(--ink); border:1px solid var(--rule); border-radius:3px; font-size:.9rem;
     text-decoration:none; box-shadow:var(--shadow)}
-  .skip:focus{left:1rem; top:.7rem}
+  .skip:focus{top:.7rem}
   a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{
     outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
   .sitebar{position:sticky; top:0; z-index:40; border-bottom:1px solid var(--rule);
@@ -109,6 +109,11 @@
     .callout{padding-left:1rem}
     figcaption{padding:.75rem .9rem .85rem}
   }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]) figure{border-color:#45584E}
+  }
+  :root[data-theme="dark"] figure{border-color:#45584E}
+  .contact{align-items:center}
   @media print{ .skip,.sitebar{display:none!important} }
   .ident{font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin:1.6rem 0 0}
   .entity{color:var(--ink-3); font-size:.86rem; max-width:64ch; margin:.7rem 0 0}
@@ -155,6 +160,7 @@
     .kind{font-size:6.4pt; margin:0 0 .2rem}
     .why{padding-top:.3rem; font-size:8pt}
   }
+  @media print{ figure{border-color:var(--rule)} }
 </style>
 </head>
 <body>
