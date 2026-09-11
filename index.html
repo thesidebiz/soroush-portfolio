@@ -201,7 +201,7 @@
 
   <section id="systems">
     <div class="sec-head"><span class="sec-num mono">01</span><h2 class="serif">Systems I've built</h2></div>
-    <p class="sec-sub">I define the architecture, the agent roles, the acceptance criteria and the gates, then direct AI coding agents through implementation and testing. I review the diffs, run the tests and reject what misses the spec. I do not hand-write most of the application code.</p>
+    <p class="sec-sub">I define the architecture, the agent roles, the acceptance criteria and the gates, then direct AI coding agents through implementation and testing. I do not hand-write most of the application code. I review the diffs, run the tests and reject what misses the spec.</p>
 
     <article class="sys">
       <p class="sys-kind mono">Agent runtime · multi-tenant · built and audited</p>
@@ -219,7 +219,7 @@
         <span class="stage is-gate"><span class="dot"></span>Supervisor → human approves</span><span class="arrow"></span>
         <span class="stage"><span class="dot"></span>Execute with an idempotency claim, signed audit row</span>
       </div>
-      <p class="role"><b>My role:</b> I defined the product, the agent roles, the data model, the approval and service-tier model, and the acceptance criteria. I directed the build, reviewed the diffs and tested the flows. I did not hand-write most of the code. <b>Status, September 2026:</b> the runtime, schema, connectors, approval and audit paths are implemented and tested (0 TypeScript errors, 0 ESLint findings across 369 files, 21 test groups). The nightly loop proposed recommendations for a first tenant in May 2026. It has not executed actions in production, and it is idle until the worker runtime it was pinned to is replaced. The September audit and the plan to restart it are in the Atlas.</p>
+      <p class="role"><b>My role:</b> I defined the product, the agent roles, the data model, the approval and service-tier model, and the acceptance criteria. I directed the build, reviewed the diffs and tested the flows. I did not hand-write most of the code. <b>Status, September 2026:</b> the runtime, schema, connectors, approval and audit paths are implemented and tested (0 TypeScript errors, 0 ESLint findings across 369 files, 21 test groups, June 2026). The nightly loop proposed recommendations for a first tenant in May 2026. It has not executed actions in production, and it is idle until the worker runtime it was pinned to is replaced. The September audit and the plan to restart it are in the Atlas.</p>
       <p class="stack mono">Next.js · Anthropic SDK (tiered models) · Neon Postgres + pgvector · Trigger.dev · Clerk</p>
       <p class="links"><a href="atlas/side-intelligence-architecture-atlas.html">Architecture Atlas</a> <a href="work/intelligence-platform.html">Case study</a></p>
     </article>
