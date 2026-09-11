@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Nightshift: the operator console for an autonomous SEO and AI-visibility engine that runs at night on theside.studio, opens its own pull requests, and can be vetoed but never approved.">
+<meta name="description" content="Nightshift: the operator console for an autonomous SEO and AI-visibility engine that runs at night on theside.studio, opens its own pull requests, and carries no approval control.">
 <meta name="author" content="Soroush Seif">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Nightshift, a walkthrough">
-<meta property="og:description" content="What the operator sees behind theside.studio/engine: trust classes, budgets, receipts, a council, and a veto button.">
+<meta property="og:title" content="Nightshift walkthrough · Soroush Seif">
+<meta property="og:description" content="What the operator sees behind theside.studio/engine: trust classes, budgets, receipts, a weekly council, and a Revert button.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>">
-<title>Nightshift, a walkthrough</title>
+<title>Nightshift walkthrough · Soroush Seif</title>
 <style>
   :root{
     --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#6E7A69;
@@ -84,11 +84,11 @@
 <div class="wrap">
 
 <header>
-  <p class="eyebrow mono"><a href="../">Soroush Seif</a> · Side Studios · September 2026</p>
+  <p class="eyebrow mono"><a href="../">Soroush Seif</a> · Side · September 2026</p>
   <h1 class="serif">Nightshift: the console for an engine that works <em>while I sleep</em>.</h1>
-  <p class="lede">At night an autonomous engine crawls theside.studio, measures where the site stands in search and in AI answers, picks up to three missions, writes the code, and lands it. Nightshift is what I read in the morning. It is behind a login, so this page shows what an operator sees and explains the rules the engine runs under.</p>
+  <p class="lede">At night an autonomous engine crawls theside.studio, measures where the site stands in search and in AI answers, picks up to three missions, writes the code, and lands it. Nightshift is what I read in the morning. It is behind a login, so this page shows what an operator sees and states the rules the engine runs under. Side is the company I co-founded in Vancouver in 2021. Side Studios, its studio subsidiary, designs and runs client sites and agents (theside.studio). theSide.io is the intelligence platform we built for those clients. Nightshift is the console for our autonomous SEO and AI-visibility engine.</p>
   <div class="prose">
-    <p>Three things about it matter more than the features. It cannot be approved, only vetoed. Every number on every screen links to the file in git it was read from, and a number nobody measured is drawn as a gap, never as a zero. And its budget, its trust classes and its own policy are files the engine is not allowed to edit.</p>
+    <p>Three things about it matter more than the features. The console has no approval control; the operator vetoes and reverts. Every number on every screen links to the file in git it was read from, and a number nobody measured is drawn as a gap. Its budget, its trust classes and its own policy are files the engine is not allowed to edit.</p>
   </div>
   <div class="facts">
     <div class="fact"><b>58</b><span>runs across 48 nights since Jul 11, 2026</span></div>
@@ -105,7 +105,7 @@
     <a href="#receipts">04 Receipts</a>
     <a href="#council">05 Council</a>
     <a href="#memory">06 Memory and steering</a>
-    <a href="#status">07 Where it actually stands</a>
+    <a href="#status">07 Where it stands</a>
     <a href="#built">08 How it was built</a>
   </nav>
 </header>
@@ -115,7 +115,7 @@
   <p class="sec-sub">If you open <a href="https://theside.studio/engine">theside.studio/engine</a> you get this and nothing else. There are no passwords. An address on the operator allowlist gets a one-time link that expires in fifteen minutes; any other address gets the same neutral message and no link, so the form does not reveal who is on the list.</p>
   <figure>
     <img src="img/visitor-login-wall.png" alt="Nightshift sign-in wall: Operator access only. Enter the address on the allowlist and Nightshift emails you a one-time link." loading="lazy">
-    <figcaption><b>The door.</b> The console sits on a live site with a real budget and a real merge path, so it is closed by default. If your team wants to click around the live console, I can add one address to the allowlist for a week.</figcaption>
+    <figcaption><b>The door, and nothing behind it.</b> The console sits on a live site with a real budget and a real merge path, so it is closed by default. The form gives the same neutral response to every address, so it never reveals who is on the list.</figcaption>
   </figure>
 </section>
 
@@ -124,15 +124,15 @@
   <p class="sec-sub">The Morning Brief answers the operator's three questions in order: did the engine run and what did it cost, where does the site stand, and what landed that I might want to take back.</p>
   <figure>
     <img src="img/brief-top.png" alt="Morning Brief: sensor health, run status, cost tonight $30.33 of $45, self-checks 4 failing and 2 unknown, business grade 50, hygiene grade 100, AI citations 0 of 20, kill gate 96 days left." loading="lazy">
-    <figcaption><b>Health is derived from the run's own artifacts, never from the workflow's exit code.</b> Two grades, never averaged: the business grade (AI citations and search outcomes, the thing a client pays for) and the hygiene grade (the site's own upkeep). When something could not be measured the panel says so and names the file that would unlock it. The self-checks pill reads 4 failing and 2 unknown because that is what was true on Sep 10; the Health page lists each one. The 24 items "waiting on you" are class-C decisions (resolve elsewhere, note to brain, defer, veto), never approvals; the Queue below lists them.</figcaption>
+    <figcaption><b>The cost of the night, two grades, and the failing self-checks, on one screen.</b> Health is derived from the run's own artifacts. The workflow's exit code is ignored: it holds a non-zero on purpose. The two grades are kept apart, the business grade (answer-engine citations and search outcomes, the thing a client pays for) and the hygiene grade (the site's own upkeep). When something could not be measured the panel says so and names the file that would settle it. The self-checks pill reads 4 failing and 2 unknown. That is what was true on Sep 10, and the Health page lists each one. The 24 items "waiting on you" are class-C decisions: resolve elsewhere, note to brain, defer, or veto. The Queue below lists them.</figcaption>
   </figure>
   <figure>
     <img src="img/brief-missions.png" alt="Tonight's missions table: two class A missions landed as PR #215 and PR #216, each with a Revert link." loading="lazy">
-    <figcaption><b>The last column is Revert.</b> Both missions landed unattended overnight as pull requests #215 and #216. Landed work is reverted, never approved: pressing Revert opens a confirm step, the engine opens the revert PR the next night and records the veto in git.</figcaption>
+    <figcaption><b>The last column is Revert.</b> Both missions landed unattended overnight as pull requests #215 and #216. There is nothing here to approve. Pressing Revert opens a confirm step, the engine opens the revert pull request on its next run, and the veto is recorded in git.</figcaption>
   </figure>
   <figure>
     <img src="img/queue.png" alt="Queue page: 24 open class-C items the newest retro still carries, oldest first, each opening to a decision: Resolved elsewhere, Note to brain, Defer to date, or Veto." loading="lazy">
-    <figcaption><b>What "waiting on you" means.</b> Nothing in the queue waits on approval; it waits on a decision. Each item opens to its reason, its retros and its receipts, and to one of four records: resolved elsewhere, note to brain, defer to a date, or veto.</figcaption>
+    <figcaption><b>Twenty-four class-C items are waiting on me.</b> Each one waits on a decision, and nothing in the loop blocks on it. That is the design, and the accumulation is the cost of it. An item opens to its reason, its retros and its receipts, and closes as one of four records: resolved elsewhere, note to brain, defer to a date, or veto.</figcaption>
   </figure>
 </section>
 
@@ -149,7 +149,7 @@
     <tr><td>4</td><td class="mono">analyzer</td><td>Run nine analyzer categories against the crawl</td><td></td></tr>
     <tr><td>5</td><td class="mono">standings</td><td>Compute the scorecard: hygiene grade, business grade, kill gate</td><td></td></tr>
     <tr><td>6</td><td class="mono">geo_scout</td><td>Sweep 20 positioning queries against a ChatGPT-class answer engine and record who it cites</td><td>DataForSEO</td></tr>
-    <tr><td>7</td><td class="mono">keyword</td><td>Opportunity-gap analysis from DataForSEO and Search Console</td><td>APIs</td></tr>
+    <tr><td>7</td><td class="mono">keyword</td><td>Opportunity-gap analysis from DataForSEO and Search Console</td><td></td></tr>
     <tr><td>8</td><td class="mono">strategist</td><td>Pick the next page from inventory, findings, keywords and GEO evidence</td><td>Claude</td></tr>
     <tr><td>9</td><td class="mono">writer</td><td>Draft the page against the site's brand guide and sourced research</td><td>Claude</td></tr>
     <tr><td>10</td><td class="mono">designer</td><td>Turn the draft into Next.js TSX inside the architecture inventory</td><td>Claude</td></tr>
@@ -163,7 +163,7 @@
     <tr><td>18</td><td class="mono">reporter</td><td>Write the daily digest, persist snapshots, honour dry-run</td><td></td></tr>
     <tr><td>19</td><td class="mono">notifier</td><td>Post the digest to Telegram and raise critical alerts</td><td></td></tr>
   </table></div>
-  <p class="callout">Routing is capability-gated: with no answer-engine credentials the GEO node emits no mentions and a loud digest line rather than a zero, because a missing measurement is not a zero. The writer path closes in one decision for any site without a brand guide or a platform the engine may write to. A scope contract forbids the in-graph agents from touching layout, components, shared libraries, workflows, package files, and the engine's own source.</p>
+  <p class="callout">Routing is capability-gated. With no answer-engine credentials the GEO node emits no mentions and a loud digest line. A missing measurement is never recorded as a zero. The writer path closes in one decision for any site without a brand guide or a platform the engine may write to. A scope contract forbids the in-graph agents from touching layout, components, shared libraries, workflows, package files, and the engine's own source.</p>
   <h3>By the numbers</h3>
   <div class="facts" style="margin-top:.6rem">
     <div class="fact"><b>1,559</b><span>tests passing: 1,100 pytest, 459 node</span></div>
@@ -201,7 +201,7 @@
   </figure>
   <figure>
     <img src="img/steering-budgets.png" alt="Budgets: nightly cap $45, weekly cap $250, missions a night 3 max, pages a night 1 max, all read from policy.json." loading="lazy">
-    <figcaption><b>Budgets are read-only here and everywhere.</b> When a run hits the nightly cap the wrapper kills it and records the cap as a charge, not a measurement, and the charts say so per night.</figcaption>
+    <figcaption><b>Budgets are read-only here and everywhere.</b> When a run hits the nightly cap the wrapper kills it and records the cap as the charge, labelled as such. The real cost of that night is unknown, and the charts say so per night.</figcaption>
   </figure>
 </section>
 
@@ -210,7 +210,7 @@
   <p class="sec-sub">Every figure on every page carries a source chip that opens the file it came from. A night nobody measured is drawn as a gap. The console refuses to call a check a pass when the evidence is not committed.</p>
   <figure>
     <img src="img/outcomes.png" alt="Outcomes page: business score and hygiene score drawn as separate charts, AI answers that cited us and AI answers checked drawn separately, PR hairlines on the nights the engine landed work." loading="lazy">
-    <figcaption><b>One metric per chart.</b> The business score and the hygiene score never share an axis. AI citations are drawn as a numerator and a denominator because the query pack has changed size, and a share would hide that. A dashed hairline marks each night the engine landed a pull request, so cause and effect sit on the same chart.</figcaption>
+    <figcaption><b>One metric per chart.</b> The business score and the hygiene score never share an axis. Answer-engine citations are drawn as a numerator and a denominator. The query pack has changed size before, and a share would have hidden that. A dashed hairline marks each night the engine landed a pull request, so cause and effect sit on the same chart.</figcaption>
   </figure>
   <figure>
     <img src="img/health.png" alt="Health page: 12 checks, 4 fail, 2 unknown, 6 pass, each with what the projection saw, a fix class and the files it read." loading="lazy">
@@ -227,7 +227,7 @@
   <p class="sec-sub">Strategy is not left to the nightly loop. Once a week a council session writes memos, two independent reviewers (Codex and Grok) attack them, every high finding is answered in writing, and only then can a memo become a directive the engine reads before it picks anything.</p>
   <figure>
     <img src="img/council.png" alt="Council page: two active directives with metric, check-back date, nights honoured, and roundtable reviewers Codex and Grok, plus held memos kept with their reason." loading="lazy">
-    <figcaption><b>Directives carry a metric, a window and a check-back date.</b> Held memos stay on the page with the reason they were held, because a memo that vanishes is a decision nobody can audit. A tick beside a reviewer means the review parsed, not that it agreed; the verdict beside it is what it said.</figcaption>
+    <figcaption><b>Directives carry a metric, a window and a check-back date.</b> Held memos stay on the page with the reason they were held, because a memo that vanishes is a decision nobody can audit. A tick beside a reviewer means the review parsed. The verdict beside it is what the reviewer said.</figcaption>
   </figure>
 </section>
 
@@ -249,12 +249,12 @@
 </section>
 
 <section id="status">
-  <div class="sec-head"><span class="sec-num mono">07</span><h2 class="serif">Where it actually stands</h2></div>
+  <div class="sec-head"><span class="sec-num mono">07</span><h2 class="serif">Where it stands</h2></div>
   <p class="sec-sub">Read this the way the console would report it.</p>
   <ul class="plain">
-    <li><b>Live:</b> the nightly sensor DAG, the decision layer, class A unattended landing, the verifier gates, the veto path, budgets and caps, the weekly council with two external reviewers, the Telegram digest, and the console itself.</li>
+    <li><b>Running:</b> the nightly sensor graph, the decision layer, class A unattended landing, the verifier gates, budgets and caps, the weekly council with two external reviewers, the Telegram digest, and the console itself. The veto path is built and tested, and no decision has been recorded through it yet.</li>
     <li><b>Tenancy:</b> the engine runs nightly on one site today, our own. Two client sites are registered in the ledger with connectors but the engine has not been enabled against them; that is a deliberate gate, one client at a time.</li>
-    <li><b>Outcomes so far:</b> business grade 50 of 100 and AI citations 0 of 20 on Sep 10. Hygiene grade 100. Non-branded clicks are small. A kill gate is set for Dec 15, 2026: if the engine cannot show ten non-branded clicks by then, it stops. I would rather show you that number than hide it.</li>
+    <li><b>Outcomes so far:</b> business grade 50 of 100 and answer-engine citations 0 of 20 on September 10. Hygiene grade 100. Non-branded clicks have not reached the ten the gate needs. A kill gate is set for December 15, 2026: if the engine cannot show ten non-branded clicks by then, it stops. I would rather show you that number than hide it.</li>
     <li><b>Self-checks failing on Sep 10:</b> cost not recorded on two runs, no red-team report in the last seven days, no human audit report this month, GA4 not wired for outcome measurement. Two unknowns: digest delivery and schedule drift are not yet evidenced in git.</li>
     <li><b>Known gaps:</b> the verifier does not yet run the console's own test suite; the retro does not record what each open human item blocks; a stale-marker bug in the brain wrapper was found and fixed by the engine itself on Sep 9.</li>
   </ul>
@@ -263,9 +263,9 @@
 <section id="built">
   <div class="sec-head"><span class="sec-num mono">08</span><h2 class="serif">How it was built, and what I did</h2></div>
   <div class="prose">
-    <p>I wrote the specification: two audiences, three questions each, and four principles. Veto, not approve. Receipts, not logs. Two grades, never one. Outcomes over activity. Each principle is there because a recorded failure earned it, and the spec says which failure.</p>
-    <p>I defined the trust classes, the budgets, the acceptance criteria per phase, the projection schema and the locked metrics contract. AI coding agents (Claude Code and Codex) implemented it under those constraints, in their own worktrees, with the same gates the engine uses at night. I reviewed the diffs, ran the tests, and vetoed what did not meet the spec. I do not hand-write most of the application code; I own what it must do, how it is allowed to do it, and whether it did.</p>
-    <p>The engine that Nightshift reads was built the same way, over the summer of 2026. It has run 58 times across 48 of the 61 nights since July 11; the Nights page lists every run and every gap.</p>
+    <p>I wrote the specification: two audiences, three questions each, and four principles. The spec states them as "Veto, not approve. Receipts, not logs. Two grades, never one. Outcomes over activity." Each one is in there because a recorded failure earned it, and the spec names the failure beside the rule.</p>
+    <p>I defined the trust classes, the budgets, the acceptance criteria per phase, the projection schema and the locked metrics contract. AI coding agents (Claude Code and Codex) implemented it under those constraints, in their own worktrees, with the same gates the engine uses at night. I reviewed the diffs, ran the tests, and vetoed what did not meet the spec. I do not hand-write most of the application code. I own what it must do, how it is allowed to do it, and whether it did.</p>
+    <p>The engine that Nightshift reads was built the same way, over the summer of 2026. It has run 58 times across 48 of the 61 nights since July 11, and the Nights page lists every run and every gap. I also still merge my own pull requests by hand. What runs without me is the class A path, and the Memory page records both, including the morning I merged three of them between run one and run two.</p>
   </div>
   <p class="callout gate">If you want the primary sources: I can walk your team through the repository live, or add one address to the operator allowlist for a week.</p>
 </section>
