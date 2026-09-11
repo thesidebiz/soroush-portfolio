@@ -51,6 +51,8 @@
   h2{font-size:clamp(1.45rem,3.4vw,1.95rem); margin:0; font-weight:600; letter-spacing:-.01em; text-wrap:balance}
   .sec-sub{color:var(--ink-2); margin:0 0 2.4rem; max-width:38rem}
   .start{display:grid; grid-template-columns:repeat(auto-fit,minmax(15rem,1fr)); gap:1rem}
+  .start-4{grid-template-columns:repeat(2,1fr)}
+  @media (max-width:40rem){ .start-4{grid-template-columns:1fr} }
   .card{background:var(--raise); border:1px solid var(--rule); border-radius:3px; padding:1.4rem 1.4rem 1.2rem; box-shadow:var(--shadow); display:flex; flex-direction:column}
   .card h3{font-size:1.05rem; margin:0 0 .4rem; font-weight:600}
   .card p{margin:0 0 .9rem; font-size:.92rem; color:var(--ink-2); flex:1}
@@ -107,8 +109,8 @@
 
   <section>
     <div class="sec-head"><span class="sec-num mono">00</span><h2 class="serif">Start here</h2></div>
-    <p class="sec-sub">If you have fifteen minutes, these three answer most questions.</p>
-    <div class="start">
+    <p class="sec-sub">If you have fifteen minutes, these four answer most questions.</p>
+    <div class="start start-4">
       <div class="card">
         <p class="k mono">Architecture</p>
         <h3>Intelligence Platform, the architecture</h3>
@@ -120,6 +122,12 @@
         <h3>Nightshift, behind the login</h3>
         <p>What the operator of an autonomous engine reads in the morning: trust classes, budgets, receipts, a council, and the only button, which is Revert.</p>
         <a class="go" href="nightshift/">See the console →</a>
+      </div>
+      <div class="card">
+        <p class="k mono">Product story</p>
+        <h3>The real-estate platform, three generations</h3>
+        <p>The product I'm known for: an acquisition-to-close system for pre-construction agents, built before generative AI. A rule-based conversation layer, then in-house NLU, then LLM agents; 1,000+ buyer conversations a day; conversion from 1% to 3%. Including the generation that did not work.</p>
+        <a class="go" href="work/side-io.html">Read the product story →</a>
       </div>
       <div class="card">
         <p class="k mono">A receipt</p>
