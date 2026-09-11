@@ -1795,14 +1795,10 @@ priority_weight = playbook.business_priority_weights[domain]
     </p>
 
     <div class="cluster searchable" style="margin-top:10px" data-keywords="what i would change first next steps ranker metric direction sign convention lower is better audit chain insert only tamper evident tamper proof">
-      <h3>What I would change first</h3>
+      <h3>The ranker's convention</h3>
       <p>
-        Two design next steps, in the order I would take them.
+        <code>normalizedLift</code> reads <code>predicted_lift.magnitude</code> as improvement: a positive magnitude ranks higher, and the proposer's schema types it as a bare number. A metric where lower is better must arrive as a positive improvement figure for the ordering to hold. The worked example above uses a metric where up is good.
       </p>
-      <ul class="list">
-        <li><strong>Give the ranker a metric-direction convention.</strong> <code>normalizedLift</code> takes <code>predicted_lift.magnitude</code> at face value, and the proposer's schema types it as a bare number. A metric where lower is better needs a sign map before the ranker sees it: a direction field on the metric, or magnitude defined as improvement. The worked example above uses a metric where up is good.</li>
-        <li><strong>Make the audit chain tamper-proof.</strong> Today it is tamper-evident: rows carry <code>prev_hash</code> and a SHA-256 signature written under a per-tenant advisory lock, so a rewrite of history breaks the chain and shows up on verification. The next step is insert-only policies on the audit table, so history cannot be rewritten in the first place.</li>
-      </ul>
     </div>
   </section>
 
