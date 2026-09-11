@@ -1800,7 +1800,7 @@ priority_weight = playbook.business_priority_weights[domain]
         Two design next steps, in the order I would take them.
       </p>
       <ul class="list">
-        <li><strong>Give the ranker a metric-direction convention.</strong> <code>normalizedLift</code> takes <code>predicted_lift.magnitude</code> at face value, and the proposer's schema types it as a bare number. A card that lowers cost per lead by 34 percent, written as a negative magnitude, would score below a small positive gain on a metric where up is good. A metric where lower is better needs a sign map before the ranker sees it: a direction field on the metric, or magnitude defined as improvement. The worked example above uses a metric where up is good.</li>
+        <li><strong>Give the ranker a metric-direction convention.</strong> <code>normalizedLift</code> takes <code>predicted_lift.magnitude</code> at face value, and the proposer's schema types it as a bare number. A metric where lower is better needs a sign map before the ranker sees it: a direction field on the metric, or magnitude defined as improvement. The worked example above uses a metric where up is good.</li>
         <li><strong>Make the audit chain tamper-proof.</strong> Today it is tamper-evident: rows carry <code>prev_hash</code> and a SHA-256 signature written under a per-tenant advisory lock, so a rewrite of history breaks the chain and shows up on verification. The next step is insert-only policies on the audit table, so history cannot be rewritten in the first place.</li>
       </ul>
     </div>

@@ -248,21 +248,16 @@
 
 <section id="brief">
   <div class="sec-head"><span class="sec-num mono">01</span><h2 class="serif">Last night, in one screen</h2></div>
-  <p class="sec-sub">The Morning Brief answers the operator's three questions in order: did the engine run and what did it cost, where does the site stand, and what landed that I might want to take back.</p>
+  <p class="sec-sub">The Morning Brief answers the operator's three questions in order: did the engine run and what did it cost against the $45 cap, where does the site stand on its two grades, and what landed that I might want to take back. Health is read from the run's own artifacts, and twelve self-checks run against the console itself, each naming the file in git that would settle it.</p>
   <figure>
-    <div class="shot"><img src="img/brief-top-crop.png" alt="Morning Brief for Sep 10, 2026: sensor health reads healthy, run status complete, sensor duration 9.2 minutes, cost tonight $30.33 of $45 linked to cost-ledger.json, and a self-checks row drawn from 12 checks." width="1440" height="485" loading="lazy" decoding="async"></div>
-    <figcaption><b>Morning Brief, top of the page.</b> The night's cost sits against the $45 cap, and the run status says whether it finished. Health is read from the run's own artifacts rather than from the workflow's exit status. Twelve self-checks run against the console itself, and each one names the file in git that would settle it.
-    <a class="full" href="img/brief-top-crop.png" target="_blank" rel="noopener">Open the screenshot</a></figcaption>
+    <div class="shot"><img src="img/brief-missions-crop.png" alt="Tonight's missions table: two class A missions, both landed, as pull requests #215 and #216." width="960" height="184" loading="lazy" decoding="async"></div>
+    <figcaption><b>Tonight's two missions.</b> Both landed unattended overnight as pull requests #215 and #216. On the live page each row ends in a Revert link; the confirm step it opens is in section 03.
+    <a class="full" href="img/brief-missions-crop.png" target="_blank" rel="noopener">Open the screenshot</a></figcaption>
   </figure>
   <figure>
-    <div class="shot"><img src="img/brief-missions.png" alt="Tonight's missions table: two class A missions landed as PR #215 and PR #216, each with a Revert link." width="1440" height="270" loading="lazy" decoding="async"></div>
-    <figcaption><b>Tonight's two missions.</b> Both landed unattended overnight as pull requests #215 and #216, and the last column on each row is Revert. Pressing Revert opens a confirm step, and the engine opens the revert pull request on its next run.
-    <a class="full" href="img/brief-missions.png" target="_blank" rel="noopener">Open the full screenshot</a></figcaption>
-  </figure>
-  <figure class="clip">
-    <div class="shot"><img src="img/queue.png" alt="Queue page: open class-C items the newest retro still carries, oldest first, each opening to a decision: Resolved elsewhere, Note to brain, Defer to date, or Veto." width="1440" height="1200" loading="lazy" decoding="async"></div>
+    <div class="shot"><img src="img/queue-crop.png" alt="Queue page header: open class-C items the newest retro still carries, oldest first; each item opens to a decision: Resolved elsewhere, Note to brain, Defer to date, or Veto." width="1440" height="362" loading="lazy" decoding="async"></div>
     <figcaption><b>The class C queue.</b> Open items sit oldest first, and the loop keeps running while they wait. An item opens to its reason, its retros and its receipts, and closes as one of four records: resolved elsewhere, note to brain, defer to a date, or veto.
-    <a class="full" href="img/queue.png" target="_blank" rel="noopener">Open the full screenshot</a></figcaption>
+    <a class="full" href="img/queue-crop.png" target="_blank" rel="noopener">Open the screenshot</a></figcaption>
   </figure>
 </section>
 
@@ -305,7 +300,7 @@
   <h3>How a night runs</h3>
   <ol class="steps">
     <li><b>Sense.</b> A scheduled GitHub Actions run executes the LangGraph DAG: crawl the site, analyze pages, compute standings, sweep AI answer engines for citations, mine keywords, and write the night's findings, standings and GEO mentions as JSON snapshots committed to the repo.</li>
-    <li><b>Decide.</b> A decision layer (the "brain") reads the snapshots, the open experiments, the council's directives and the priority weights, and picks at most three missions for the night by weight times evidence. Caps are read from <span class="mono">policy.json</span>, which the engine cannot edit.</li>
+    <li><b>Decide.</b> A decision layer (the "brain") reads the snapshots, the open experiments, the council's directives and the priority weights, and picks at most three missions per run by weight times evidence. Caps are read from <span class="mono">policy.json</span>, which the engine cannot edit.</li>
     <li><b>Do.</b> Each mission is dispatched to an AI coding agent working in its own git worktree with a written acceptance list. A verifier re-runs the deterministic gates (lint, type-check, build, tests, brand QA, scope allowlist) on the result.</li>
     <li><b>Land or stage.</b> Class A work lands on its own. Class B policy requires a pull request and one night of canary before landing. Class C work waits for a human decision.</li>
     <li><b>Retro.</b> The run writes a retrospective in plain language, records lessons in its own words, opens or closes experiments, and sends the founder a digest. Nightshift renders all of that the next morning.</li>
@@ -333,7 +328,7 @@
   </figure>
   <figure>
     <div class="shot"><img src="img/steering-budgets.png" alt="Budgets: nightly cap $45, weekly cap $250, missions a night 3 max, pages a night 1 max, all read from policy.json." width="1440" height="450" loading="lazy" decoding="async"></div>
-    <figcaption><b>Budgets are read-only here and everywhere.</b> The caps live in the policy file, which sits in class C and changes only by a human commit on main. When a run hits the nightly cap the wrapper kills it and records the cap amount, marked as a charge.
+    <figcaption><b>Budgets are read-only here and everywhere.</b> The caps live in the policy file, which sits in class C and changes only by a human commit on main. When a run hits the nightly cap the wrapper kills it and records the cap amount, marked as a charge. The mission cap is labelled per night here and enforced per run, so a night with two runs can show up to six missions on the Missions page.
     <a class="full" href="img/steering-budgets.png" target="_blank" rel="noopener">Open the full screenshot</a></figcaption>
   </figure>
 </section>
