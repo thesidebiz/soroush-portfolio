@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Side was a pre-construction sales platform for real-estate agents. Its conversation layer went through three technology generations: a rule-based workflow, in-house NLU models trained on 8,000 annotated turns, then LLM agents.">
+<meta name="description" content="Side was a pre-construction sales platform for real-estate agents. Its conversation layer went through three technology generations: a rule-based workflow, in-house NLU models trained on transcripts from 8,000 captured turns, then LLM agents.">
 <meta name="author" content="Soroush Seif">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Side.io: three generations of one conversation layer">
@@ -146,7 +146,7 @@
   <p class="lede">The human at the far end was someone looking at a presale tower at eleven at night, wanting to know whether the parking stall was included and whether they could assign the contract before completion. Those are not questions a brochure answers, and they are not questions an agent answers at eleven at night. The product answered them in seconds, worked out from the reply whether this was a buyer or a browser, and woke the agent only when it was worth waking him. Getting that to work took us three goes, over three different technologies.</p>
   <div class="metrics">
     <div class="metric"><b>50 &rarr; 120+</b><span>branches in the rule-based workflow before it stopped being maintainable</span></div>
-    <div class="metric"><b>8,000</b><span>annotated SMS and web-chat turns behind the in-house models</span></div>
+    <div class="metric"><b>8,000</b><span>captured SMS and web-chat turns behind the in-house models, segmented before annotation</span></div>
     <div class="metric"><b>374</b><span>presale projects in the data base behind the answers, across 17 linked tables</span></div>
   </div>
 </header>
@@ -186,10 +186,10 @@
 
   <h3>Generation two: in-house models on our own transcripts</h3>
   <div class="prose">
-    <p>The replacement was a set of in-house natural-language understanding models, trained on 8,000 annotated SMS and web-chat turns collected between May 2021 and August 2022 from real buyer conversations. The annotation ran under a written process with a spot-check on a sample, and new examples fed a nightly retrain. Recordings had a retention limit and the store was encrypted.</p>
-    <p>The models were built by our internal engineering team, with a collaboration with a University of British Columbia master's of data science capstone team. The team ran three deliberately different pipelines against the same problem so we could compare, with an entity extractor and a confidence threshold below which the system handed the conversation to a human.</p>
+    <p>The replacement was a set of in-house natural-language understanding models, trained on transcripts from 8,000 SMS and web-chat turns captured between May 2021 and August 2022 from real buyer conversations, de-identified and segmented before annotation. The annotation ran under a written process with a spot-check on a sample, and new examples fed a nightly retrain. Recordings had a retention limit and the store was encrypted.</p>
+    <p>The models were built by our internal engineering team, led by our CTO. The team ran three deliberately different pipelines against the same problem so we could compare, with an entity extractor and a confidence threshold below which the system handed the conversation to a human.</p>
     <p>That generation is where the funnel numbers moved. Lead-to-transaction conversion went from 1% to 3%, and the layer handled more than 1,000 buyer conversations a day.</p>
-    <p>The part I would want a technical reviewer to hear is the piece that did not work. The capstone collaboration also produced transformer-based lead-warmth classifiers, and they reached 0.55 to 0.59 accuracy with 0.33 recall on the hot class. The team's own written verdict was that this was not promising. We did not put them in the funnel. Two years of hindsight says the labels were the problem and we should have spent that quarter on the annotation guide.</p>
+    <p>The part I would want a technical reviewer to hear is the piece that did not work. A separate 2024 collaboration with a University of British Columbia master of data science capstone team produced transformer-based lead-warmth classifiers, and they reached 0.55 to 0.59 accuracy with 0.33 recall on the hot class. The team's own report says the end goals were not reached with the data available. We did not put them in the funnel. Two years of hindsight says the labels were the problem and we should have spent that quarter on the annotation guide.</p>
   </div>
   <p class="callout"><b>The data layer both generations answered out of:</b> an Airtable and Postgres hybrid with 17 linked tables (pricing, developer, completion dates, amenities, architect) and 374 project records, ingested by scheduled extraction tasks against developer and listing portals, with a per-row extract timestamp so a stale answer could be identified as stale. The conversation layer got most of the attention. This is the thing that made its answers true.</p>
 
