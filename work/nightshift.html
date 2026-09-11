@@ -8,12 +8,12 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nightshift">
 <meta property="og:description" content="An engine that finds its own work, writes the code and lands it by trust class. 58 runs across 48 nights. 1,559 tests passing. Veto and revert, no approval inbox.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>"><text y='.9em' font-size='90'>🌙</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 <title>Nightshift · Soroush Seif</title>
 <style>
   :root{
-    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#6E7A69;
-    --rule:#DCE0D6; --accent:#0F7F62; --gate:#9A6F1E; --spine:#C9D2C4;
+    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#667162;
+    --rule:#DCE0D6; --accent:#0F7F62; --gate:#8F671C; --spine:#C9D2C4;
     --shadow:0 1px 2px rgba(18,24,15,.05), 0 8px 24px -12px rgba(18,24,15,.14);
   }
   @media (prefers-color-scheme:dark){
@@ -104,6 +104,21 @@
   @media (max-width:34rem){ body{font-size:16px} header{padding:2rem 0 2rem} section{padding:2.6rem 0} }
   @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
 
+
+  /* ---------- reading comfort + mobile behaviour ---------- */
+  .prose,.sec-sub,ul.plain,ol.steps,.role,.callout,.entity,.sys .what,.sys p,.sys ul,figcaption{max-width:64ch}
+  figcaption{font-size:.88rem}
+  .run{flex-wrap:wrap; row-gap:.55rem}
+  .tbl table{min-width:34rem}
+  .tbl{-webkit-overflow-scrolling:touch}
+  td{font-variant-numeric:tabular-nums}
+  .links a,.contact a,nav.toc a,.docs a{display:inline-flex; align-items:center; min-height:40px}
+  .docs li{margin:0 0 .2rem}
+  @media (max-width:34rem){
+    .metrics,.facts{grid-template-columns:1fr}
+    .callout{padding-left:1rem}
+    figcaption{padding:.75rem .9rem .85rem}
+  }
   @media print{
     @page{size:Letter; margin:.45in}
     :root{--ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
@@ -175,6 +190,17 @@
     .sitebar nav a{font-size:.66rem; letter-spacing:.1em}
   }
   @media print{ .skip,.sitebar{display:none!important} }
+
+  @media print{
+      :root,:root:not([data-theme="light"]),:root[data-theme="dark"]{
+      --ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
+      --rule:#c0c0c0; --accent:#0b5a45; --gate:#7a5714; --spine:#b5b5b5; --shadow:none}
+    body{background:#fff; color:#111}
+    .skip,.sitebar{display:none!important}
+    .links a,.docs a,.contact a{min-height:0}
+    a[href^="http"]::after,a[href^="mailto"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666;
+      word-break:break-all}
+  }
 </style>
 </head>
 <body>
@@ -253,11 +279,11 @@
   <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">Proof</h2></div>
   <p class="sec-sub">The console is behind a login on a live site, so these are two screens from it. There is a full screen-by-screen walkthrough on the next page.</p>
   <figure>
-    <img src="../nightshift/img/brief-top.png" width="1440" height="1350" alt="Morning Brief: sensor health, run status, cost tonight $30.33 of $45, self-checks 4 failing and 2 unknown, business grade 50, hygiene grade 100, AI citations 0 of 20, kill gate 96 days left." loading="lazy">
+    <img src="../nightshift/img/brief-top.png" alt="Morning Brief: sensor health, run status, cost tonight $30.33 of $45, self-checks 4 failing and 2 unknown, business grade 50, hygiene grade 100, AI citations 0 of 20, kill gate 96 days left." width="1440" height="1350" loading="lazy" decoding="async">
     <figcaption><b>The first screen of the morning, on 10 September.</b> Cost of the night against the cap. Two grades side by side and never averaged. Citations drawn as zero of twenty rather than as a percentage, because the query pack has changed size before and a share would have hidden that. The self-check pill reads four failing and two unknown, which is what was true that morning.</figcaption>
   </figure>
   <figure>
-    <img src="../nightshift/img/veto-confirm.png" width="1440" height="900" alt="Confirm veto screen: Take this back, tonight. Nothing is written until you confirm. Record the veto or Cancel." loading="lazy">
+    <img src="../nightshift/img/veto-confirm.png" alt="Confirm veto screen: Take this back, tonight. Nothing is written until you confirm. Record the veto or Cancel." width="1440" height="900" loading="lazy" decoding="async">
     <figcaption><b>The only control in the console that writes anything.</b> Confirming appends one line to a decisions file in git. The engine reads it at the start of the next run, opens the revert pull request and echoes what it honoured into the next retro. Nothing deploys on the click, and there is no button anywhere that says approve.</figcaption>
   </figure>
   <p class="links">

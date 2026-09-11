@@ -8,12 +8,12 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Seven client systems on one platform">
 <meta property="og:description" content="What is actually built, in a client book of about 85 sub-accounts, and what survives a technical reviewer's questions.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>"><text y='.9em' font-size='90'>☎️</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 <title>Seven client systems on one platform</title>
 <style>
   :root{
-    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#6E7A69;
-    --rule:#DCE0D6; --accent:#0F7F62; --gate:#9A6F1E; --spine:#C9D2C4;
+    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#667162;
+    --rule:#DCE0D6; --accent:#0F7F62; --gate:#8F671C; --spine:#C9D2C4;
     --shadow:0 1px 2px rgba(18,24,15,.05), 0 8px 24px -12px rgba(18,24,15,.14);
   }
   @media (prefers-color-scheme:dark){
@@ -94,9 +94,67 @@
     .sitebar nav{gap:0 .9rem}
     .sitebar nav a{font-size:.66rem; letter-spacing:.1em}
   }
+
+  /* ---------- reading comfort + mobile behaviour ---------- */
+  .prose,.sec-sub,ul.plain,ol.steps,.role,.callout,.entity,.sys .what,.sys p,.sys ul,figcaption{max-width:64ch}
+  figcaption{font-size:.88rem}
+  .run{flex-wrap:wrap; row-gap:.55rem}
+  .tbl table{min-width:34rem}
+  .tbl{-webkit-overflow-scrolling:touch}
+  td{font-variant-numeric:tabular-nums}
+  .links a,.contact a,nav.toc a,.docs a{display:inline-flex; align-items:center; min-height:40px}
+  .docs li{margin:0 0 .2rem}
+  @media (max-width:34rem){
+    .metrics,.facts{grid-template-columns:1fr}
+    .callout{padding-left:1rem}
+    figcaption{padding:.75rem .9rem .85rem}
+  }
   @media print{ .skip,.sitebar{display:none!important} }
   .ident{font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin:1.6rem 0 0}
   .entity{color:var(--ink-3); font-size:.86rem; max-width:64ch; margin:.7rem 0 0}
+
+  @media print{
+    @page{size:Letter; margin:.45in}
+      :root,:root:not([data-theme="light"]),:root[data-theme="dark"]{
+      --ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
+      --rule:#c0c0c0; --accent:#0b5a45; --gate:#7a5714; --spine:#b5b5b5; --shadow:none}
+    body{background:#fff; color:#111}
+    body{font-size:8.4pt; line-height:1.3; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .wrap{max-width:none; padding:0}
+    .skip,.sitebar,nav.toc,.full{display:none!important}
+    header{padding:0 0 .5rem; border-bottom:1px solid var(--rule)}
+    .eyebrow{font-size:6.6pt; margin:0 0 .3rem}
+    h1{font-size:15pt; line-height:1.08; margin:0 0 .35rem}
+    .lede{font-size:8.8pt; max-width:none; margin:0 0 .35rem}
+    .prose{max-width:none}
+    .prose p{margin:0 0 .3rem}
+    section{padding:.5rem 0; break-inside:auto}
+    .sec-head{margin:0 0 .25rem}
+    h2{font-size:10pt}
+    h3{font-size:8.8pt; margin:.5rem 0 .2rem}
+    .sec-sub{margin:0 0 .4rem; max-width:none}
+    .facts,.metrics{margin:.5rem 0 0; break-inside:avoid}
+    .fact,.metric{padding:.28rem .4rem}
+    .fact b,.metric b{font-size:9.8pt}
+    .fact span,.metric span{font-size:6.4pt; margin-top:.1rem; line-height:1.25}
+    .callout{margin:.45rem 0 0; font-size:8.2pt; max-width:none; padding-left:.7rem; break-inside:avoid}
+    ul.plain,ol.steps{margin:.3rem 0 0; max-width:none; padding-left:.9rem}
+    ul.plain li,ol.steps li{margin:0 0 .2rem}
+    .links{margin:.35rem 0 0; font-size:7.6pt; gap:.2rem .9rem}
+    .links a{min-height:0}
+    footer{padding:.6rem 0 0}
+    .ident{font-size:6.6pt; margin:.5rem 0 .25rem}
+    .entity{font-size:7.2pt; max-width:none; margin:.3rem 0 0}
+    a{color:inherit; text-decoration:none}
+    a[href^="http"]::after,a[href^="mailto"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666;
+      word-break:break-all}
+    .sys{padding:.5rem .5rem .4rem .7rem; margin:0 0 .45rem; box-shadow:none; break-inside:avoid}
+    .sys h3{font-size:9pt; margin:0 0 .25rem}
+    .sys p,.sys ul{font-size:8pt; margin:0 0 .3rem; max-width:none}
+    .sys ul{padding-left:.9rem}
+    .kind{font-size:6.4pt; margin:0 0 .2rem}
+    .why{padding-top:.3rem; font-size:8pt}
+  }
 </style>
 </head>
 <body>
@@ -126,7 +184,7 @@
   <div class="facts">
     <div class="fact"><b>84</b><span>sub-accounts audited on one platform; about 45 are active clients, the rest past clients, templates and internal accounts</span></div>
     <div class="fact"><b>11</b><span>purpose-built AI voice agents, 6 of them on live inbound lines; a vendor demo agent installed for a 2026 evaluation is not counted</span></div>
-    <div class="fact"><b>~1,200</span></b><span>workflows built across the estate; roughly two in five are published and running</span></div>
+    <div class="fact"><b>~1,200</b><span>workflows built across the estate; roughly two in five are published and running</span></div>
     <div class="fact"><b>2</b><span>external systems bridged by schema: a recreation-management platform and a clinic EMR</span></div>
     <div class="fact"><b>2023</b><span>first LLM workflows in production, with a human-handoff pattern that still ships</span></div>
   </div>

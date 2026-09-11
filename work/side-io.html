@@ -8,12 +8,12 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Side.io: three generations of one conversation layer">
 <meta property="og:description" content="Rule-based workflow first, in-house NLU models next, LLM agents now. Shipped in 2020-21, before generative AI.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>"><text y='.9em' font-size='90'>💬</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 <title>Side.io · Soroush Seif</title>
 <style>
   :root{
-    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#6E7A69;
-    --rule:#DCE0D6; --accent:#0F7F62; --gate:#9A6F1E; --spine:#C9D2C4;
+    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#667162;
+    --rule:#DCE0D6; --accent:#0F7F62; --gate:#8F671C; --spine:#C9D2C4;
     --shadow:0 1px 2px rgba(18,24,15,.05), 0 8px 24px -12px rgba(18,24,15,.14);
   }
   @media (prefers-color-scheme:dark){
@@ -91,6 +91,21 @@
   @media (max-width:34rem){ body{font-size:16px} header{padding:2rem 0 2rem} section{padding:2.6rem 0} }
   @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
 
+
+  /* ---------- reading comfort + mobile behaviour ---------- */
+  .prose,.sec-sub,ul.plain,ol.steps,.role,.callout,.entity,.sys .what,.sys p,.sys ul,figcaption{max-width:64ch}
+  figcaption{font-size:.88rem}
+  .run{flex-wrap:wrap; row-gap:.55rem}
+  .tbl table{min-width:34rem}
+  .tbl{-webkit-overflow-scrolling:touch}
+  td{font-variant-numeric:tabular-nums}
+  .links a,.contact a,nav.toc a,.docs a{display:inline-flex; align-items:center; min-height:40px}
+  .docs li{margin:0 0 .2rem}
+  @media (max-width:34rem){
+    .metrics,.facts{grid-template-columns:1fr}
+    .callout{padding-left:1rem}
+    figcaption{padding:.75rem .9rem .85rem}
+  }
   @media print{
     @page{size:Letter; margin:.45in}
     :root{--ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
@@ -160,6 +175,17 @@
     .sitebar nav a{font-size:.66rem; letter-spacing:.1em}
   }
   @media print{ .skip,.sitebar{display:none!important} }
+
+  @media print{
+      :root,:root:not([data-theme="light"]),:root[data-theme="dark"]{
+      --ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
+      --rule:#c0c0c0; --accent:#0b5a45; --gate:#7a5714; --spine:#b5b5b5; --shadow:none}
+    body{background:#fff; color:#111}
+    .skip,.sitebar{display:none!important}
+    .links a,.docs a,.contact a{min-height:0}
+    a[href^="http"]::after,a[href^="mailto"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666;
+      word-break:break-all}
+  }
 </style>
 </head>
 <body>
@@ -215,11 +241,11 @@
     <p>I keep the screenshots because they are the honest picture of what generation one actually was. A reviewer who assumes the early system was an LLM is going to ask which model produced the result, and the answer is that there was no model. The result came from the operating design.</p>
   </div>
   <figure>
-    <img src="../earlier-work/img/decision-tree-01.png" width="2400" height="1430" alt="Screenshot of the GoHighLevel conversation workflow: a branching decision tree of conditional nodes, tags and stage moves." loading="lazy">
+    <img src="../earlier-work/img/decision-tree-01.png" alt="Screenshot of the GoHighLevel conversation workflow: a branching decision tree of conditional nodes, tags and stage moves." width="2400" height="1430" loading="lazy" decoding="async">
     <figcaption><b>Generation one, as it stood in 2021-22.</b> Every diamond is a condition somebody had to write down and later maintain. This is the artifact people mean when they say a system was rule-based, and it is worth looking at before believing any claim about early conversational AI.</figcaption>
   </figure>
   <figure>
-    <img src="../earlier-work/img/decision-tree-02.png" width="2400" height="1554" alt="Second screenshot of the same GoHighLevel workflow showing further branches of the conditional tree." loading="lazy">
+    <img src="../earlier-work/img/decision-tree-02.png" alt="Second screenshot of the same GoHighLevel workflow showing further branches of the conditional tree." width="2400" height="1554" loading="lazy" decoding="async">
     <figcaption><b>The other half of the same tree.</b> Growth from 50 branches to more than 120 is what a rules engine looks like when the domain is richer than the tool. The branch count is the reason for generation two, and the reason I stopped defending the first design.</figcaption>
   </figure>
 

@@ -753,9 +753,78 @@
     .tl-time { margin-left: 0; width: 100%; }
   }
 
+  /* ---------- shared portfolio chrome ---------- */
+  .skip {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 60;
+    padding: 10px 16px;
+    background: var(--card);
+    border: 1px solid var(--rule-2);
+    border-radius: 4px;
+    color: var(--ink);
+    font-size: 14px;
+  }
+
+  .skip:focus { left: 12px; top: 10px; }
+
+  a:focus-visible,
+  input:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  .sitebar {
+    background: var(--card-1);
+    border-bottom: 1px solid var(--rule-2);
+  }
+
+  .sitebar-in {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 18px;
+    flex-wrap: wrap;
+    min-height: 46px;
+  }
+
+  .sitebar a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    color: var(--ink-2);
+    font: 11.5px/1 var(--mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .sitebar a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+  .sitebar .home {
+    color: var(--ink);
+    font: 600 13.5px/1 var(--sans);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .sitebar nav { display: flex; flex-wrap: wrap; gap: 0 16px; }
+
+  [id] { scroll-margin-top: 64px; }
+
+  @media (max-width: 680px) {
+    .sitebar-in { padding: 0 12px; min-height: 42px; gap: 0 12px; }
+    .sitebar a { font-size: 10.5px; letter-spacing: .08em; }
+  }
+
   @media print {
     body { background: var(--bg); }
-    .topbar, .searchbar { display: none; }
+    .topbar, .searchbar, .skip, .sitebar { display: none; }
     .shell { max-width: none; padding: 0; }
     .module, .hero-copy, .summary-card, .honest, .stat, .cluster, .step, .map-node, .node, .tl, .shot {
       break-inside: avoid;
@@ -765,7 +834,20 @@
 </style>
 </head>
 <body>
-<main class="shell">
+<a class="skip" href="#main">Skip to content</a>
+<div class="sitebar">
+  <div class="sitebar-in">
+    <a class="home" href="../">Soroush Seif</a>
+    <nav aria-label="Portfolio sections">
+      <a href="../#systems">Systems</a>
+      <a href="../nightshift/">Nightshift</a>
+      <a href="../atlas/side-intelligence-architecture-atlas.html">Atlas</a>
+      <a href="../agency/">Clients</a>
+      <a href="../#documents">Documents</a>
+    </nav>
+  </div>
+</div>
+<main class="shell" id="main">
   <header class="topbar">
     <a class="brand" href="#top" aria-label="Architecture Atlas home">
       <span class="mark">S</span>
@@ -1596,7 +1678,7 @@ priority_weight = playbook.business_priority_weights[domain]
 
     <div class="shots">
       <figure class="shot searchable" data-keywords="playbook guardrails yaml overridable keys voice rules forbidden phrases cooldown budget ceiling cpa threshold tenant config editor">
-        <img src="screen-playbook-guardrails.png" width="1300" height="1258" alt="The per-tenant Playbook editor. The left column lists overridable keys with descriptions and empty override fields. The right column shows the resolved YAML for the tenant, including voice rules, ad budget guardrails and SEO priorities." />
+        <img src="screen-playbook-guardrails.png" alt="The per-tenant Playbook editor. The left column lists overridable keys with descriptions and empty override fields. The right column shows the resolved YAML for the tenant, including voice rules, ad budget guardrails and SEO priorities." / width="1300" height="1258" loading="lazy" decoding="async" />
         <figcaption>
           <strong>Per-tenant playbook editor.</strong> On the left, the keys an operator may
           override, each with what it controls. On the right, the resolved document for that
@@ -1613,7 +1695,7 @@ priority_weight = playbook.business_priority_weights[domain]
       </figure>
 
       <figure class="shot searchable" data-keywords="connectors matrix health probe synthetic failing unconfigured connected badges cross tenant provenance">
-        <img src="screen-connectors-matrix.png" width="1290" height="360" alt="The cross-tenant connector health matrix. Rows are tenants, columns are the nine client-data providers, and each cell holds a status pill reading Connected, Failing, Synthetic or Unconfigured." />
+        <img src="screen-connectors-matrix.png" alt="The cross-tenant connector health matrix. Rows are tenants, columns are the nine client-data providers, and each cell holds a status pill reading Connected, Failing, Synthetic or Unconfigured." / width="1290" height="360" loading="lazy" decoding="async" />
         <figcaption>
           <strong>Cross-tenant connector health.</strong> Rows are tenants, columns are the nine
           client-data providers, and each cell is the result of a probe, not a stored flag. The
