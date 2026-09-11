@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>theSide.io Intelligence Platform · Architecture Atlas</title>
+<title>Intelligence Platform Atlas · Soroush Seif</title>
 <meta name="author" content="Soroush Seif" />
-<meta name="description" content="Architecture atlas for the theSide.io Intelligence Platform: a multi-tenant agent runtime with a human approval gate, idempotent execution, a signed audit chain and outcome attribution." />
+<meta name="description" content="Architecture atlas for the theSide.io Intelligence Platform: a multi-tenant agent runtime with a human approval gate, idempotent execution, a signed audit chain and outcome attribution. Built and audited; the nightly loop is idle pending a worker-runtime migration." />
 <style>
   :root {
     --bg: #f7f7f4;
@@ -790,14 +790,14 @@
     <div class="hero-copy">
       <div>
         <p class="eyebrow">theSide.io Intelligence Platform · architecture atlas</p>
-        <h1>One console, many agents, one approval gate.</h1>
+        <h1>A multi-tenant agent runtime behind one approval gate.</h1>
         <p class="lead">
-          For the person who runs a client account, the clinic owner or the Side operator
-          who manages them, this platform turns that business's own advertising, booking and
-          search data into a short list of proposed actions to approve or reject. Approved
-          actions run against the vendor APIs behind an idempotency claim and a signed audit
-          row. Seven, fourteen and twenty-eight days later the platform records what each one
-          changed and writes that back as memory the next run reads.
+          The readers here are the clinic owner and the Side operator who runs her account.
+          The platform turns that business's own advertising, booking and search data into a
+          short list of proposed actions to approve or reject. Approved actions run against the
+          vendor APIs behind an idempotency claim and a signed audit row. Seven, fourteen and
+          twenty-eight days later the platform records what each one changed, and writes that
+          back as memory the next run reads.
         </p>
       </div>
       <div class="byline">
@@ -820,7 +820,7 @@
         </p>
       </div>
       <div class="honest">
-        <h2>What I personally did</h2>
+        <h2>My role</h2>
         <ul class="mine">
           <li>I defined the architecture, the agent roles, the data model, the acceptance criteria and the guardrails.</li>
           <li>I directed AI coding agents, Claude Code and Codex, through the implementation in reviewed increments.</li>
@@ -838,7 +838,7 @@
     <div class="stat"><span class="num">4 + 4</span><span class="label">pipeline roles (proposer, critic, ranker, supervisor) and domain specialists (paid media, sales, SEO, project management), plus one deterministic PM sub-investigator</span></div>
     <div class="stat"><span class="num">14</span><span class="label">tenant memory kinds, each with its own value schema and half-life</span></div>
     <div class="stat"><span class="num">9</span><span class="label">hook events across the agent lifecycle, with http, prompt and audit-only runners</span></div>
-    <div class="stat span2"><span class="num small">0 · 0 · 21</span><span class="label">TypeScript errors, ESLint findings across 369 files, and passing test groups. Automated static audit run 17 June 2026 against commit <code>b9f4230</code>. The tooling also flagged a security and correctness backlog, summarised under Status honesty.</span></div>
+    <div class="stat span2"><span class="num small">0 · 0 · 21</span><span class="label">TypeScript errors, ESLint findings across 369 files, and passing test groups. Automated static audit run 17 June 2026 against commit <code>b9f4230</code>. The tooling also flagged a security and correctness backlog, summarized under Status honesty.</span></div>
   </section>
 
   <section class="module" id="map">
@@ -964,10 +964,10 @@
     <div class="section-head">
       <div>
         <p class="eyebrow">02 · Runtime loop</p>
-        <h2>The daily loop</h2>
+        <h2>The runtime loop</h2>
       </div>
       <p>
-        Every nightly run, manual specialist run and supervisor investigation follows the
+        Each scheduled run, manual specialist run and supervisor investigation follows the
         same nine steps: context in, structured cards out, approved execution, measured
         result, memory update.
       </p>
@@ -1175,7 +1175,7 @@ priority_weight = playbook.business_priority_weights[domain]
         </p>
         <ul class="list">
           <li><strong>Service tier.</strong> A service code is inferred from the card's action type and domain, and the tier is read from <code>client_services</code>. A tier of <code>audit_only</code> is a structural refusal that returns 403 even after a human click. A tier of <code>advisory</code> forces the human path and blocks auto-execution.</li>
-          <li><strong>Operator rules.</strong> Rules stored in <code>tenant_config</code> under scope <code>approval</code> parse into a small permission language. A deny rule outranks a human click, by design, because the rule is the operator's standing contract.</li>
+          <li><strong>Operator rules.</strong> Rules stored in <code>tenant_config</code> under scope <code>approval</code> parse into a small permission language. A deny rule outranks a human click by design. The rule is the operator's standing contract.</li>
           <li><strong>Hooks.</strong> The <code>PreActionExecute</code> event fires and its outcomes are reduced most-restrictive first: deny beats ask, ask beats allow. A hook that allows does not auto-approve on its own; a matching auto-approve rule is also required, and platform auto-approval is off by default.</li>
           <li><strong>The human.</strong> With no deny anywhere, the operator's click carries the decision.</li>
         </ul>
@@ -1256,12 +1256,12 @@ priority_weight = playbook.business_priority_weights[domain]
         </p>
         <p>
           An action is marked attributed only once all three windows exist. Where there is no
-          data the metric key is <code>unattributable_no_data</code> and the row says so,
-          rather than recording a zero. Each write emits the <code>OutcomeRecorded</code> hook
+          data the metric key is <code>unattributable_no_data</code> and the row says so. No
+          zero is recorded. Each write emits the <code>OutcomeRecorded</code> hook
           and its own audit row with actor
           <code>system:outcome_attribution</code>. This is a before-and-after measurement on
-          the tenant's own account. There is no holdout and no control group, which is stated
-          here because it bounds what the number means.
+          the tenant's own account. There is no holdout and no control group. That bounds what
+          the number means, so it is stated here.
         </p>
       </div>
 
@@ -1333,7 +1333,7 @@ priority_weight = playbook.business_priority_weights[domain]
       </article>
       <article class="cluster searchable" data-keywords="project management pm weekly qbr health churn risk escalation backlog">
         <h3>Project management</h3>
-        <p>Cross-domain synthesis for weekly summaries, escalation, prioritisation, client health and quarterly reviews.</p>
+        <p>Cross-domain synthesis for weekly summaries, escalation, prioritization, client health and quarterly reviews.</p>
         <ul class="list">
           <li>Action types: <code>summarize_week</code>, <code>escalate_to_owner</code>, <code>flag_for_review</code>, <code>prioritize_backlog</code>.</li>
           <li>Can fork sub-investigators behind a feature flag. Those sub-investigators are deterministic database and memory queries with no model call.</li>
@@ -1396,8 +1396,8 @@ priority_weight = playbook.business_priority_weights[domain]
         </ul>
         <p style="margin-top:10px">
           Each kind has a value schema validated on every write, and a half-life used for
-          decay. Compliance observations and weekly review notes never decay, because one is a
-          regulatory trail and the other is source material for a quarterly review. A daily
+          decay. Compliance observations and weekly review notes never decay. One is a
+          regulatory trail; the other is source material for a quarterly review. A daily
           composite such as <code>client_health_score</code> has a one-day half-life.
         </p>
       </article>
@@ -1450,7 +1450,7 @@ priority_weight = playbook.business_priority_weights[domain]
         <h3>Reads and writes</h3>
         <ul class="list">
           <li><strong>Reads today:</strong> ad platforms, business profile, CRM, membership systems, local rank grids, keyword and SERP data.</li>
-          <li><strong>Writes implemented, not yet exercised in production:</strong> pausing an ad set or campaign, and changing a campaign daily budget, both through the approval gate.</li>
+          <li><strong>Writes implemented and tested:</strong> pausing an ad set or campaign, and changing a campaign daily budget, both through the approval gate. Neither has been exercised against a live client account.</li>
           <li><strong>Deferred writes:</strong> content-management and pixel installation, agency-level CRM provisioning, and social planner posts. These generate reviewable drafts and hand back to a human.</li>
           <li>The gap between the read surface and the write surface is intentional and is listed under Status honesty.</li>
         </ul>
@@ -1534,31 +1534,31 @@ priority_weight = playbook.business_priority_weights[domain]
         <h2>Safety and control</h2>
       </div>
       <p>
-        Every automation layer has a counterweight. The gaps in this table are listed
-        honestly in the last section rather than smoothed over here.
+        Every automation layer has a counterweight. Where a layer has a gap, the gap is named
+        in this table and again in the last section.
       </p>
     </div>
     <div class="status-grid">
       <div class="head">Layer</div><div class="head">Status</div><div class="head">What it protects</div>
 
       <div class="searchable" data-keywords="tenant scoping isolation tenant_id predicate query rls backstop">Tenant scoping</div>
-      <div class="searchable" data-keywords="tenant scoping isolation tenant_id predicate query rls backstop"><span class="chip live">Live</span></div>
+      <div class="searchable" data-keywords="tenant scoping isolation tenant_id predicate query rls backstop"><span class="chip live">Enforced</span></div>
       <div class="searchable" data-keywords="tenant scoping isolation tenant_id predicate query rls backstop">Every query and tool is constrained by <code>tenant_id</code>. This is an application-level invariant with no database-level backstop today, which is the first known gap below.</div>
 
       <div class="searchable" data-keywords="forced structured output submit_recommendations tool choice no free text parsing">Forced structured output</div>
-      <div class="searchable" data-keywords="forced structured output submit_recommendations tool choice no free text parsing"><span class="chip live">Live</span></div>
+      <div class="searchable" data-keywords="forced structured output submit_recommendations tool choice no free text parsing"><span class="chip live">Enforced</span></div>
       <div class="searchable" data-keywords="forced structured output submit_recommendations tool choice no free text parsing">Proposers and the model critic must answer through a named tool call. A response without the tool block raises an error instead of being parsed out of prose.</div>
 
       <div class="searchable" data-keywords="critic ranker deterministic policy kill downgrade model drift">Critic and ranker</div>
-      <div class="searchable" data-keywords="critic ranker deterministic policy kill downgrade model drift"><span class="chip live">Live</span></div>
+      <div class="searchable" data-keywords="critic ranker deterministic policy kill downgrade model drift"><span class="chip live">Enforced</span></div>
       <div class="searchable" data-keywords="critic ranker deterministic policy kill downgrade model drift">The deterministic policy is the only thing that can kill a card. The ranker performs arithmetic only, so ordering stays stable across model changes.</div>
 
       <div class="searchable" data-keywords="permission rules lattice hooks human queue auto approval deny ask">Permission lattice</div>
-      <div class="searchable" data-keywords="permission rules lattice hooks human queue auto approval deny ask"><span class="chip live">Live</span></div>
+      <div class="searchable" data-keywords="permission rules lattice hooks human queue auto approval deny ask"><span class="chip live">Enforced</span></div>
       <div class="searchable" data-keywords="permission rules lattice hooks human queue auto approval deny ask">Operator rules, hook decisions and the human queue compose most-restrictive first. Auto-approval is off by default and needs a matching rule even when a hook allows.</div>
 
       <div class="searchable" data-keywords="service tier gate audit only advisory managed supported structural refusal">Service-tier gate</div>
-      <div class="searchable" data-keywords="service tier gate audit only advisory managed supported structural refusal"><span class="chip live">Live</span></div>
+      <div class="searchable" data-keywords="service tier gate audit only advisory managed supported structural refusal"><span class="chip live">Enforced</span></div>
       <div class="searchable" data-keywords="service tier gate audit only advisory managed supported structural refusal">An <code>audit_only</code> tier refuses execution even after a human approval, and the check is repeated inside the executor so no path bypasses it.</div>
 
       <div class="searchable" data-keywords="signed audit chain sha256 prev hash advisory lock fork genesis">Signed audit chain</div>
@@ -1566,7 +1566,7 @@ priority_weight = playbook.business_priority_weights[domain]
       <div class="searchable" data-keywords="signed audit chain sha256 prev hash advisory lock fork genesis">Rows carry <code>prev_hash</code> and a SHA-256 <code>signature</code>; a per-tenant advisory lock rules out chain forks. The hash is unkeyed, so it detects tampering rather than preventing it.</div>
 
       <div class="searchable" data-keywords="idempotency claim atomic duplicate vendor call primary key conflict">Idempotency claims</div>
-      <div class="searchable" data-keywords="idempotency claim atomic duplicate vendor call primary key conflict"><span class="chip live">Live</span></div>
+      <div class="searchable" data-keywords="idempotency claim atomic duplicate vendor call primary key conflict"><span class="chip live">Enforced</span></div>
       <div class="searchable" data-keywords="idempotency claim atomic duplicate vendor call primary key conflict">An atomic single-winner insert keyed on <code>(tenant_id, token)</code> stops a repeated approval or a retry storm from producing a second vendor call.</div>
 
       <div class="searchable" data-keywords="budget abort tree cost ceiling cancellation flag token usage">Budget and abort tree</div>
@@ -1574,8 +1574,8 @@ priority_weight = playbook.business_priority_weights[domain]
       <div class="searchable" data-keywords="budget abort tree cost ceiling cancellation flag token usage">Per-tier cost ceilings, token accounting and a cancellation tree are wired through the engine, with enforcement gated by feature flags rather than on everywhere.</div>
 
       <div class="searchable" data-keywords="webhook verification hmac constant time quarantine unknown tenant">Webhook verification</div>
-      <div class="searchable" data-keywords="webhook verification hmac constant time quarantine unknown tenant"><span class="chip live">Live</span></div>
-      <div class="searchable" data-keywords="webhook verification hmac constant time quarantine unknown tenant">Inbound webhooks are HMAC-verified with a constant-time comparison, and events for an unrecognised tenant are quarantined instead of dropped.</div>
+      <div class="searchable" data-keywords="webhook verification hmac constant time quarantine unknown tenant"><span class="chip live">Enforced</span></div>
+      <div class="searchable" data-keywords="webhook verification hmac constant time quarantine unknown tenant">Inbound webhooks are HMAC-verified with a constant-time comparison, and events for an unrecognized tenant are quarantined instead of dropped.</div>
     </div>
   </section>
 
@@ -1586,10 +1586,9 @@ priority_weight = playbook.business_priority_weights[domain]
         <h2>Operator surface</h2>
       </div>
       <p>
-        Two screens from the operator console. Both are redacted: the tenant is shown as
-        Tenant A. They are here because the two claims that matter most on this page are
-        visible in them, that guardrails are configuration rather than code, and that
-        connector health is measured.
+        Two screens from the operator console, redacted: the tenant is shown as Tenant A.
+        They carry the two claims this page rests on. Guardrails are configuration, and
+        connector health is measured rather than asserted.
       </p>
     </div>
 
@@ -1599,9 +1598,9 @@ priority_weight = playbook.business_priority_weights[domain]
         <figcaption>
           <strong>Per-tenant playbook editor.</strong> On the left, the keys an operator may
           override, each with what it controls. On the right, the resolved document for that
-          tenant: the niche default merged with saved overrides. This is the point of the
-          screen. The values the agents obey are rows in a database, so changing a tone rule or
-          a spend ceiling is an operator action rather than a code change and a release.
+          tenant: the niche default merged with saved overrides. The values the agents obey are
+          rows in a database, so changing a tone rule or a spend ceiling is an operator action
+          rather than a code change and a release. That is what this screen is for.
           Visible here: a hard ceiling on per-card paid-media reallocation, set to 500; a
           CPA-increase percentage that triggers a pause recommendation, set to 40; the phrases
           the critic downgrades a card for using; the signature block every outbound message
@@ -1617,12 +1616,11 @@ priority_weight = playbook.business_priority_weights[domain]
           <strong>Cross-tenant connector health.</strong> Rows are tenants, columns are the nine
           client-data providers, and each cell is the result of a probe, not a stored flag. The
           probe writes last check time, last success, 24-hour error rate and p95 latency, and
-          the summary line reports how many cells were checked. The honest state is the reason
-          this screen is worth showing: one provider connected, two failing, twelve on synthetic
-          fallback and three unconfigured. Synthetic means the factory returned a stand-in
-          client because no credential was present, so a chart built on that provider is
-          illustrative. An operator can see that at a glance, which is the difference between a
-          dashboard that is trustworthy and one that is merely populated.
+          the summary line reports how many cells were checked. What it found on this run: one
+          provider connected, two failing, twelve on synthetic fallback and three unconfigured.
+          Synthetic means the factory returned a stand-in client where no credential was
+          present, so a chart built on that provider is illustrative. The badge says so on the
+          cell, and an operator sees it before the chart.
         </figcaption>
       </figure>
     </div>
@@ -1664,26 +1662,26 @@ priority_weight = playbook.business_priority_weights[domain]
     <div class="section-head">
       <div>
         <p class="eyebrow">11 · Status honesty</p>
-        <h2>What is live, what is wired, what is deferred</h2>
+        <h2>What is implemented, what is wired, what is deferred</h2>
       </div>
       <p>
         Counts on this page describe the system in the repository as of September 2026. They
-        are not traffic figures. The most recent review of the operated environment found the
-        nightly loop idle, because the worker runtime it was written against has been retired
-        and the migration is not done, and the outcome ledger empty as a result. That is the
-        third gap listed below.
+        are not traffic figures. The most recent review of the deployed environment found the
+        nightly loop idle: the worker runtime it was written against has been retired and the
+        migration is not done, so the outcome ledger is empty. That is the third gap listed
+        below.
       </p>
     </div>
     <div class="grid-3">
       <article class="cluster searchable" data-keywords="live status shipped working today proposer critic ranker approval queue audit idempotency connectors pause budget">
-        <h3><span class="chip live">Live</span></h3>
+        <h3><span class="chip live">Implemented and tested</span></h3>
         <ul class="list">
           <li>Tenant creation, custom niches, operator team invites and the admin gate.</li>
           <li>Proposer, critic, ranker and the approval queue, with forced structured output.</li>
           <li>The engine lifecycle, hooks, memory injection and the service matrix.</li>
           <li>Connector credentials, agency grants, health probes and provenance badges.</li>
           <li>The signed audit chain, idempotency claims, the tool registry and permission rules.</li>
-          <li>Write executors, implemented and tested but not yet exercised in production: pausing an ad set or campaign, changing a campaign daily budget.</li>
+          <li>Write executors for pausing an ad set or campaign and for changing a campaign daily budget, implemented and tested. Neither has run against a live client account.</li>
         </ul>
       </article>
       <article class="cluster searchable" data-keywords="wired foundation attribution pixel budget pace hook main contact drafts qbr cost ceiling abort tree flags">
@@ -1749,6 +1747,10 @@ priority_weight = playbook.business_priority_weights[domain]
       <a href="https://theside.studio" target="_blank" rel="noopener">theside.studio</a>
       · September 2026. Client identifiers are redacted throughout. Counts are taken from the
       repository and the schema, and are dated where they came from an audit.
+      Side is the company I co-founded in Vancouver in 2021. Side Studios, its studio
+      subsidiary, designs and runs client sites and agents (theside.studio). theSide.io is the
+      intelligence platform we built for those clients. Nightshift is the console for our
+      autonomous SEO and AI-visibility engine.
     </p>
   </section>
 </main>
