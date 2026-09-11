@@ -165,10 +165,10 @@
   <div class="prose">
     <p>Each client is a tenant. A tenant carries its own connector credentials, its own playbook file, its own memory and its own service tier, and every row in the database is scoped to it.</p>
     <p>A run is always the same shape. A specialist agent proposes, a critic argues, a ranker orders, a supervisor routes by service tier and permission, and a person decides. The proposer cannot answer in prose. It has to call a <span class="mono">submit_recommendations</span> tool with a typed payload, so nothing in the path from model to card depends on parsing free text.</p>
-    <p>The ranker has no model in it. It scores expected lift, confidence and novelty against the tenant's own priority weights using arithmetic, because the order cards appear in is exactly the thing a client notices when it moves for no reason they can see.</p>
+    <p>The ranker has no model in it. It scores expected lift, confidence and novelty against the tenant's own priority weights using arithmetic. The order cards appear in is the thing a client notices when it moves for no reason they can see.</p>
     <p>Execution takes an idempotency claim before it calls a vendor, so approving the same card twice does not send the same message twice. Every write appends a signed row to an audit chain, under an advisory lock, so two runs for one tenant cannot fork the history.</p>
     <p>Outcomes come back at 7, 14 and 28 days and are written into tenant memory, which the next run retrieves before it proposes anything. That is the only way an agent here learns: through a recorded result, not through a longer prompt.</p>
-    <p>Nobody signs up for this. The design is that Side Studios installs it, connects the client's accounts and runs it on their behalf; the client sees the work and the outcome, and the console is ours.</p>
+    <p>Nobody signs up for this. The design is that Side Studios installs it, connects the client's accounts and runs it on their behalf. The client sees the work and the outcome. The console is ours.</p>
   </div>
   <div class="run" aria-label="Runtime loop">
     <span class="stage"><span class="dot"></span>Propose (forced tool output)</span><span class="arrow"></span>
@@ -192,9 +192,9 @@
 <section id="role">
   <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">My role</h2></div>
   <div class="prose">
-    <p>I wrote the specification. The tenant model, the shape of a card, what a critic is allowed to kill on its own, what a supervisor may route without asking a human, and what an action has to record before it counts as done. I set the acceptance criteria per surface and the rule that a connector cannot write anything until its health and its credentials resolve to a real account.</p>
-    <p>I do not hand-write most of the application code. Coding agents wrote the bulk of it against those criteria, and I read the diffs, ran the suites and rejected what missed. The codebase is around 77,000 lines. I would not offer that as evidence of anything except that a lot of it exists. What I will defend is the shape: why the ranker has no model in it, why the executor claims an idempotency key before it calls out, why the audit chain is signed and locked.</p>
-    <p>Here is the boundary. I did not build the vendor APIs and I do not maintain them. The attribution windows are my design decision and they have not been validated against a holdout, so what the platform reports at 14 days is a correlation with a timestamp on it. Read it as a signal and nothing stronger. If you want to size my own hands, the fast way is to put a change in front of me and watch how I scope it.</p>
+    <p>I defined the specification. The tenant model, the shape of a card, what a critic is allowed to kill on its own, what a supervisor may route without asking a human, and what an action has to record before it counts as done. I set the acceptance criteria per surface, and the rule that a connector cannot write anything until its health and its credentials resolve to a real account.</p>
+    <p>I directed the build. Coding agents wrote the bulk of the code against those criteria, in reviewed increments, and I do not hand-write most of the application code. I reviewed the diffs, ran the suites and rejected what missed the spec. The codebase is around 77,000 lines. I would not offer that as evidence of anything except that a lot of it exists. What I will defend is the shape: why the ranker has no model in it, why the executor claims an idempotency key before it calls out, why the audit chain is signed and locked.</p>
+    <p>What I did not do. I did not build the vendor APIs and I do not maintain them. The attribution windows are my design decision and they have not been validated against a holdout, so what the platform reports at 14 days is a correlation with a timestamp on it. Read it as a signal and nothing stronger. If you want to size my own hands, the fast way is to put a change in front of me and watch how I scope it.</p>
   </div>
 </section>
 
@@ -203,11 +203,11 @@
   <p class="sec-sub">Two screens and the architecture document. Tenant names are redacted.</p>
   <figure>
     <img src="img/screen-connectors-matrix.png" width="1290" height="360" alt="Connectors matrix: two tenants by nine providers, with each cell showing Connected, Failing, Synthetic or Unconfigured, and a counter reading 1 connected, 0 degraded, 2 failing, 12 synthetic, 3 unconfigured across 18 probed cells." loading="lazy">
-    <figcaption><b>Connector health, told on itself.</b> Nine providers across the top, one row per tenant, one probe per cell. The counter at the left says what it found: one provider genuinely connected, two failing, twelve running on synthetic fixtures and three never configured. A dashboard that painted all eighteen cells green would be easier to show and useless to operate against.</figcaption>
+    <figcaption><b>Connector health, told on itself.</b> Nine providers across the top, one row per tenant, one probe per cell. The counter at the left says what it found: one provider connected to a real account, two failing, twelve running on synthetic fixtures and three never configured. A dashboard that painted all eighteen cells green would be easier to show and useless to operate against.</figcaption>
   </figure>
   <figure>
     <img src="img/screen-playbook-guardrails.png" width="1300" height="1258" alt="Playbook editor for Tenant A: overridable keys such as voice_rules.tone, forbidden_phrases, ad_budget_guardrails.max_auto_proposed_reallocation_usd and reactivation_strategy tiers, beside the resolved YAML of niche defaults plus saved overrides." loading="lazy">
-    <figcaption><b>The guardrails are data, and the tenant owns them.</b> A niche ships defaults; a tenant overrides them. The keys are the interesting part: phrases the critic downgrades a card for using, the signature every outbound message must carry, a hard ceiling in dollars on any budget move an agent may propose, and how many days must pass before the same contact is approached again. The right pane is the resolved file the next run actually reads.</figcaption>
+    <figcaption><b>The guardrails are data, and the tenant owns them.</b> A niche ships defaults; a tenant overrides them. The keys are the interesting part: phrases the critic downgrades a card for using, the signature every outbound message must carry, a hard ceiling in dollars on any budget move an agent may propose, and how many days must pass before the same contact is approached again. The right pane is the resolved file the next run reads.</figcaption>
   </figure>
   <p class="links">
     <a href="../atlas/side-intelligence-architecture-atlas.html">Architecture atlas: layers, runtime loop, connector registry, status list</a>
@@ -223,7 +223,7 @@
     <li><b>Wired but not finished:</b> attribution scoring and the quality memory that reads it, the pixel desired-state model, budget pace alerts, and the draft generators for quarterly reviews, health reports, creative and SEO.</li>
     <li><b>Deferred on purpose:</b> live CMS and pixel writes to Shopify, Webflow, WordPress and GitHub. The Grain pull and the transcription path behind it. GoHighLevel agency provisioning and social planner writes. The subprocess executor. Each of those is a write into somebody else's system, and each is waiting on credentials or on the client's own authorization rather than on code.</li>
     <li><b>Today's connector reality:</b> the matrix above is what the platform reports right now. Most cells run against fixtures rather than a live account. Standing them up per tenant is the work in front of me.</li>
-    <li><b>The static audit is from June 2026.</b> The September 2026 audit reran the 21 test groups and added 63 regression tests. If you want either rerun before we talk, say so and I will send the raw output.</li>
+    <li><b>The static audit is from June 2026.</b> The September 2026 audit reran the 21 test groups and added 63 regression tests. I can send the raw output of either run.</li>
   </ul>
   <p class="callout gate">The thing I would most want to show a reviewer is one action traced the whole way through: what the proposer saw, what the critic downgraded it to, where the ranker put it, who approved it and at what time, what the executor claimed and called, and what the 14-day outcome row said. I can walk that live against a real tenant.</p>
 </section>
@@ -239,7 +239,7 @@
     <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
     <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
   </p>
-  <p class="entity">Side Studios (theside.studio) is my firm; theSide.io is the intelligence platform we built for our clients; Nightshift is the console for our autonomous SEO and AI-visibility engine. Vancouver, BC · Canadian citizen.</p>
+  <p class="entity">Side is the company I co-founded in Vancouver in 2021. Side Studios, its studio subsidiary, designs and runs client sites and agents (theside.studio). theSide.io is the intelligence platform we built for those clients. Nightshift is the console for our autonomous SEO and AI-visibility engine. Canadian citizen.</p>
 </footer>
 
 </div>

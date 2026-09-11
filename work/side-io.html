@@ -157,7 +157,7 @@
     <p>Side was a pre-construction sales platform an individual real-estate agent could buy. It shipped in 2020-21, before generative AI. The revenue system it sat inside is <a href="acquisition-to-close.html">a separate page</a>. This one is about the product and the three attempts at its hardest part.</p>
     <p>Before any of that there was a data problem. Presale inventory has no MLS. There is no single source of truth for what is selling, at what price, with what deposit structure or completion date, so the first build was a data layer: an Airtable and Postgres pair fed by automated extraction against developer and listing portals, with a timestamp on every extracted row. The production base carried 17 linked tables and 374 projects, covering pricing, developer, completion dates, amenities and architect.</p>
     <p>Everything the conversation layer could say, it said out of that base.</p>
-    <p class="callout" style="margin-left:0">One naming note, because it confuses people. Side.io was this product. The intelligence platform my firm built years later for its clients carries the same domain name and is a different system. There is a map of the names at the bottom of the page.</p>
+    <p class="callout" style="margin-left:0">One naming note. This one confuses people. Side.io was this product. The intelligence platform Side built years later for the studio's clients carries the same domain name and is a different system. There is a map of the names at the bottom of the page.</p>
   </div>
 </section>
 
@@ -173,7 +173,7 @@
   <div class="prose">
     <p>The first version had no model in it at all. It was a conditional workflow in GoHighLevel, triggered by form and paid-social lead submissions, branching on tagged intent into stage moves, tags and an agent handoff. It began at around 50 branching nodes and grew past 120.</p>
     <p>Over a six-week window covering more than 2,000 unique engagements it held about a 1% conversion rate, which was the industry baseline. So it worked, and it did not win. What killed it was maintenance: past a certain branch count nobody could reason about the tree, and the company's own record of the period says translating the expanding conditional framework into code had become unmanageable.</p>
-    <p>I keep the screenshots because they are the honest picture of what generation one actually was. A reviewer who assumes the early system was an LLM is going to ask which model produced the result, and the answer is that there was no model. The result came from the operating design.</p>
+    <p>I keep the screenshots. They are the honest picture of what generation one was. A reviewer who assumes the early system was an LLM is going to ask which model produced the result, and the answer is that there was no model. The result came from the operating design.</p>
   </div>
   <figure>
     <img src="../earlier-work/img/decision-tree-01.png" width="2400" height="1430" alt="Screenshot of the GoHighLevel conversation workflow: a branching decision tree of conditional nodes, tags and stage moves." loading="lazy">
@@ -188,22 +188,22 @@
   <div class="prose">
     <p>The replacement was a set of in-house natural-language understanding models, trained on 8,000 annotated SMS and web-chat turns collected between May 2021 and August 2022 from real buyer conversations. The annotation ran under a written process with a spot-check on a sample, and new examples fed a nightly retrain. Recordings had a retention limit and the store was encrypted.</p>
     <p>The models were built by our internal engineering team, with a collaboration with a University of British Columbia master's of data science capstone team. The team ran three deliberately different pipelines against the same problem so we could compare, with an entity extractor and a confidence threshold below which the system handed the conversation to a human.</p>
-    <p>That generation is where the funnel numbers moved. Conversion went from about 1% to over 3%, and the layer handled more than 1,000 buyer conversations a day.</p>
+    <p>That generation is where the funnel numbers moved. Lead-to-transaction conversion went from 1% to 3%, and the layer handled more than 1,000 buyer conversations a day.</p>
     <p>The part I would want a technical reviewer to hear is the piece that did not work. The capstone collaboration also produced transformer-based lead-warmth classifiers, and they reached 0.55 to 0.59 accuracy with 0.33 recall on the hot class. The team's own written verdict was that this was not promising. We did not put them in the funnel. Two years of hindsight says the labels were the problem and we should have spent that quarter on the annotation guide.</p>
   </div>
   <p class="callout"><b>The data layer both generations answered out of:</b> an Airtable and Postgres hybrid with 17 linked tables (pricing, developer, completion dates, amenities, architect) and 374 project records, ingested by scheduled extraction tasks against developer and listing portals, with a per-row extract timestamp so a stale answer could be identified as stale. The conversation layer got most of the attention. This is the thing that made its answers true.</p>
 
   <h3>Generation three: LLM agents</h3>
   <div class="prose">
-    <p>The third generation replaced the in-house classifiers with LLM-based conversational agents once those became reliable and affordable enough to put in front of buyers. It is the shortest section here because it is the least interesting engineering decision I made on this product. By then the hard work was done: we knew the intents, we had the transcripts, and we knew what a good handoff looked like.</p>
+    <p>The third generation replaced the in-house classifiers with LLM-based conversational agents once those became reliable and affordable enough to put in front of buyers. It is the shortest section here, and it was the least interesting engineering decision I made on this product. By then the hard work was done: we knew the intents, we had the transcripts, and we knew what a good handoff looked like.</p>
   </div>
 </section>
 
 <section id="role">
   <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">My role</h2></div>
   <div class="prose">
-    <p>I founded and directed the programme. I identified the segment, defined the product and the customer journey, set what the conversation layer had to deliver, chose when to make each generational transition, and led a small team through it. The applied research ran as a federally supported project with a filed description, objectives and deliverables, and I wrote those.</p>
-    <p>What I did not do: I did not build the models. Our CTO and the engineering team built the natural-language work, and the capstone team built the classifiers that did not make it. That division is recorded in what the company wrote at the time to a federal agency, in several separate documents, and I would rather be the person who states it plainly than the one who lets a resume imply otherwise.</p>
+    <p>I founded the programme and I defined the product. I identified the segment, set the customer journey, set what the conversation layer had to deliver, and chose when to make each generational transition. The applied research ran as a federally supported project with a filed description, objectives and deliverables, and I wrote those.</p>
+    <p>I directed a small team through all three generations, and I reviewed what each one had to hit before it replaced the last. What I did not do: I did not build the models. Our CTO and the engineering team built the natural-language work, and the capstone team built the classifiers that did not make it. That division is recorded in what the company wrote at the time to a federal agency, in several separate documents, and I would rather be the person who states it plainly than the one who lets a resume imply otherwise.</p>
     <p>What I take from it is narrower than a resume line. Three generations of the same problem taught me that the model is rarely the constraint. The constraint was the labels, the data layer underneath, and whether the handoff carried enough context for a commissioned salesperson to trust it.</p>
   </div>
 </section>
@@ -229,7 +229,7 @@
     <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
     <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
   </p>
-  <p class="entity">Side Studios (theside.studio) is my firm; theSide.io is the intelligence platform we built for our clients; Nightshift is the console for our autonomous SEO and AI-visibility engine. Vancouver, BC · Canadian citizen.</p>
+  <p class="entity">Side is the company I co-founded in Vancouver in 2021. Side Studios, its studio subsidiary, designs and runs client sites and agents (theside.studio). theSide.io is the intelligence platform we built for those clients. Nightshift is the console for our autonomous SEO and AI-visibility engine. Canadian citizen.</p>
 </footer>
 
 </div>

@@ -169,8 +169,8 @@
 <section id="what">
   <div class="sec-head"><span class="sec-num mono">01</span><h2 class="serif">What it is</h2></div>
   <div class="prose">
-    <p>Two layers. The first is a <b>19-node LangGraph state graph with a bounded revision loop</b>, written in Python and run by GitHub Actions. Seven of the nodes call a model or a paid API; twelve are deterministic. It is not a strict DAG, because brand QA can send a draft back to the writer with the violations attached, at most twice, and then it ships nothing.</p>
-    <p>The graph crawls the site and runs nine analyzer categories over what it finds. It refreshes Search Console, reads GA4 and sweeps 20 positioning queries against an answer engine. Then it scores two grades. The business grade covers the things a client pays for. The hygiene grade covers the site's own upkeep. They are never averaged into one number, because averaging them is how a site with perfect metadata and no customers gets a good report.</p>
+    <p>Two layers. The first is a <b>19-node LangGraph state graph with a bounded revision loop</b>, written in Python and run by GitHub Actions. Seven of the nodes call a model or a paid API; twelve are deterministic. It is not a strict DAG: brand QA can send a draft back to the writer with the violations attached, at most twice, and then it ships nothing.</p>
+    <p>The graph crawls the site and runs nine analyzer categories over what it finds. It refreshes Search Console, reads GA4 and sweeps 20 positioning queries against an answer engine. Then it scores two grades. The business grade covers the things a client pays for. The hygiene grade covers the site's own upkeep. They are never averaged into one number. Averaging them is how a site with perfect metadata and no customers gets a good report.</p>
     <p>The second layer is a decision loop. It reads the night's snapshots, the open experiments and the council's directives. Then it picks at most three missions, using a weighted score over search demand, gap severity and the mission-type weights the retro tunes. Each mission goes to a coding agent working in its own worktree with a written acceptance list, and a verifier re-runs the gates on the result.</p>
     <p>Then the work lands by trust class, or it waits. Class A goes in the same night once link validation, brand QA, pytest, ruff, lint, typecheck, build and the two required CI workflows are all green. Class B opens a pull request and waits one night of canary. Class C is staged for me with a diff and a risk note.</p>
     <p>There is no approval control anywhere in the console. Landed work carries a Revert affordance, and class C items wait in a queue with their age and the cost of leaving them alone.</p>
@@ -203,10 +203,10 @@
 <section id="geo">
   <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">The number I would rather show you</h2></div>
   <div class="prose">
-    <p>Once a night the engine puts 20 positioning queries to a single answer-engine surface, a ChatGPT-class model with web search, through DataForSEO. A query counts as a mention if the brand appears in the prose or our domain appears in a cited link. There is no rank recorded, because the surface returns prose and inventing a position would be a lie about what was measured.</p>
+    <p>Once a night the engine puts 20 positioning queries to a single answer-engine surface, a ChatGPT-class model with web search, through DataForSEO. A query counts as a mention if the brand appears in the prose or our domain appears in a cited link. There is no rank recorded. The surface returns prose, and inventing a position would be a lie about what was measured.</p>
     <p>On the last three nights the answer was zero of twenty.</p>
-    <p>I show it because it is the number the engine's own kill gate is set against. If it cannot produce ten non-branded clicks by 15 December 2026, it stops. A metric that can only go up is decoration, and an engine that gets to grade itself on a metric it chose is worth nothing to a client.</p>
-    <p>The same instinct runs through the measurement code. If the answer-engine credentials are missing in CI, the run emits a loud line saying the measurement was unavailable rather than recording twenty misses, because a missing measurement is not a zero. An empty or unparseable answer raises an error instead of quietly counting as a miss, since that would bias the whole series toward zero and nobody would ever see it happen.</p>
+    <p>I show it for one reason: it is the number the engine's own kill gate is set against. If the engine cannot produce ten non-branded clicks by 15 December 2026, it stops. A metric that can only go up is decoration, and an engine that gets to grade itself on a metric it chose is worth nothing to a client.</p>
+    <p>The same instinct runs through the measurement code. If the answer-engine credentials are missing in CI, the run emits a loud line saying the measurement was unavailable rather than recording twenty misses. A missing measurement is never written down as a zero. An empty or unparseable answer raises an error instead of quietly counting as a miss. Counting it would bias the whole series toward zero, and nobody would ever see it happen.</p>
   </div>
 </section>
 
@@ -215,14 +215,14 @@
   <p class="sec-sub">The console is behind a login on a live site, so these are two screens from it. There is a full screen-by-screen walkthrough on the next page.</p>
   <figure>
     <img src="../nightshift/img/brief-top.png" width="1440" height="1350" alt="Morning Brief: sensor health, run status, cost tonight $30.33 of $45, self-checks 4 failing and 2 unknown, business grade 50, hygiene grade 100, AI citations 0 of 20, kill gate 96 days left." loading="lazy">
-    <figcaption><b>The first screen of the morning, on 10 September.</b> Cost of the night against the cap. Two grades side by side and never averaged. Citations drawn as zero of twenty rather than as a percentage, because the query pack has changed size before and a share would have hidden that. The self-check pill reads four failing and two unknown, which is what was true that morning.</figcaption>
+    <figcaption><b>The first screen of the morning, on 10 September.</b> Cost of the night against the cap. Two grades side by side and never averaged. Citations drawn as zero of twenty rather than as a percentage: the query pack has changed size before, and a share would have hidden that. The self-check pill reads four failing and two unknown, which is what was true that morning.</figcaption>
   </figure>
   <figure>
     <img src="../nightshift/img/veto-confirm.png" width="1440" height="900" alt="Confirm veto screen: Take this back, tonight. Nothing is written until you confirm. Record the veto or Cancel." loading="lazy">
     <figcaption><b>The only control in the console that writes anything.</b> Confirming appends one line to a decisions file in git. The engine reads it at the start of the next run, opens the revert pull request and echoes what it honoured into the next retro. Nothing deploys on the click, and there is no button anywhere that says approve.</figcaption>
   </figure>
   <p class="links">
-    <a href="../nightshift/">Nightshift walkthrough: the console's eleven sections, eight of them screen by screen</a>
+    <a href="../nightshift/">Nightshift walkthrough: nine of the console's eleven sections, screen by screen</a>
   </p>
 </section>
 
@@ -230,8 +230,8 @@
   <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">Honest state</h2></div>
   <p class="sec-sub">Read this the way the console would report it.</p>
   <ul class="plain">
-    <li><b>Tenancy:</b> it runs nightly on our own site today. Two client sites are registered with connectors and the engine has not been enabled against either. That is a deliberate gate, one client at a time, because the first time this thing writes to somebody else's repository I want to be watching.</li>
-    <li><b>Outcomes:</b> business grade 50 out of 100 and answer-engine citations at 0 of 20 on 10 September. Hygiene grade 100. Non-branded clicks are small. The kill gate is set for 15 December 2026: ten non-branded clicks by then, or it stops.</li>
+    <li><b>Tenancy:</b> it runs nightly on our own site today. Two client sites are registered with connectors and the engine has not been enabled against either. That is a deliberate gate, one client at a time. The first time this thing writes to somebody else's repository I want to be watching.</li>
+    <li><b>Outcomes:</b> business grade 50 out of 100 and answer-engine citations at 0 of 20 on 10 September. Hygiene grade 100. Non-branded clicks have not reached the ten the gate needs. The kill gate is set for 15 December 2026: ten non-branded clicks by then, or it stops.</li>
     <li><b>Self-checks failing on 10 September:</b> cost was not recorded on two runs, no red-team report in the last seven days, no human audit report this month, and GA4 is not wired for outcome measurement. Two more are unknown rather than failing: digest delivery and schedule drift are not yet evidenced in git, and the console says unknown instead of guessing.</li>
     <li><b>The veto surface is built and tested, and no decision has been recorded through it yet.</b> Every time I have disagreed with something the engine landed I have reverted it in git directly. The console path works in tests and has not been used in anger.</li>
     <li><b>Known gaps:</b> the verifier does not yet run the console's own test suite, and the retro does not record what each waiting human item is blocking. A stale-marker bug in the decision layer was found and fixed by the engine itself on 9 September.</li>
@@ -242,9 +242,9 @@
 <section id="role">
   <div class="sec-head"><span class="sec-num mono">05</span><h2 class="serif">My role</h2></div>
   <div class="prose">
-    <p>I wrote the specification: two audiences with three questions each, four principles, and phase-gated acceptance criteria with a byte budget per route. Each principle is in there because a recorded failure earned it, and the spec names the failure beside the rule. The trust classes, the budgets, the projection schema and the locked metrics contract are mine.</p>
-    <p>Coding agents implemented it under those constraints, in their own worktrees, against the same gates the engine uses at night. I read the diffs, ran the suites and rejected what missed the spec. I do not hand-write most of the application code. I own what it must do, what it is allowed to do without asking, and whether it did.</p>
-    <p>The part I would defend hardest is the decision to remove the human merge gate rather than keep it. The first version was an article factory behind a human review step, and between 1 August and 3 September it produced 34 nights, zero published pages and 37 open pull requests, while its own kill gate counted the freeze against it. The gate was not protecting anything. It was the reason nothing shipped. So I replaced it with a change taxonomy, a set of deterministic gates that hold, and a veto I actually use.</p>
+    <p>I defined the specification: two audiences with three questions each, four principles, and phase-gated acceptance criteria with a byte budget per route. Each principle earned its place from a recorded failure, and the spec names the failure beside the rule. The trust classes, the budgets, the projection schema and the locked metrics contract are mine.</p>
+    <p>I directed the build. Coding agents implemented the spec under those constraints, in their own worktrees, against the same gates the engine uses at night. I reviewed the diffs, ran the suites and rejected what missed. I do not hand-write most of the application code. I own what it must do, what it is allowed to do without asking, and whether it did. What I did not do: I still merge my own pull requests by hand, so what runs without me is the class A path and nothing wider.</p>
+    <p>The part I would defend hardest is the decision to remove the human merge gate rather than keep it. The first version was an article factory behind a human review step, and between 1 August and 3 September it produced 34 nights, zero published pages and 37 open pull requests, while its own kill gate counted the freeze against it. The gate was not protecting anything. It was the reason nothing shipped. So I replaced it with a change taxonomy, a set of deterministic gates that hold, and a veto I use.</p>
   </div>
 </section>
 
@@ -259,7 +259,7 @@
     <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
     <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
   </p>
-  <p class="entity">Side Studios (theside.studio) is my firm; theSide.io is the intelligence platform we built for our clients; Nightshift is the console for our autonomous SEO and AI-visibility engine. Vancouver, BC · Canadian citizen.</p>
+  <p class="entity">Side is the company I co-founded in Vancouver in 2021. Side Studios, its studio subsidiary, designs and runs client sites and agents (theside.studio). theSide.io is the intelligence platform we built for those clients. Nightshift is the console for our autonomous SEO and AI-visibility engine. Canadian citizen.</p>
 </footer>
 
 </div>
