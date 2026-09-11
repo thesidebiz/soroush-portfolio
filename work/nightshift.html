@@ -229,7 +229,7 @@
 <header>
   <p class="eyebrow mono">Autonomous engine · writes and lands its own code</p>
   <h1 class="serif">Nightshift: an engine that finds its own work, and the rules it works <em>under</em>.</h1>
-  <p class="lede">The human in this one is me. The run starts at 08:23 UTC, which is twenty past one in the morning where I live. By the time I am up it has crawled our site, measured where we stand in search and in AI answers, picked up to three missions, dispatched coding agents to do them, run the gates and either landed the work or left it for me. I read a digest with coffee. If I disagree with something it landed, I press Revert, and it opens the revert on the next run and records what it honoured.</p>
+  <p class="lede">The human in this one is me. The run starts at 08:23 UTC, which is twenty past one in the morning where I live. By the time I am up it has crawled our site, measured where we stand in search and in AI answers, picked up to three missions, dispatched coding agents to do them, run the gates and either landed the work or left it for me. I read a digest with coffee. The console can queue a revert for the next run; so far, I have reverted changes directly in git.</p>
   <div class="metrics">
     <div class="metric"><b>58</b><span>runs across 48 nights since 11 July 2026</span></div>
     <div class="metric"><b>1,559</b><span>tests passing: 1,100 pytest, 459 node</span></div>
@@ -257,7 +257,7 @@
   <div class="tbl"><table>
     <tr><th>Class</th><th>What happens</th><th>What is in it</th></tr>
     <tr><td><span class="chip a">A</span></td><td>Lands the same night once every gate is green.</td><td>Content pages drafted from sourced research, engine code with green tests, additive structured data, title and meta fixes</td></tr>
-    <tr><td><span class="chip">B</span></td><td>Opens a PR, waits one night of canary, lands the next night if the sensors show no regression.</td><td>Edits to existing routes, new non-content routes, components, performance work, the console itself, per-site engine config</td></tr>
+    <tr><td><span class="chip">B</span></td><td>Policy requires a pull request and one night of canary before landing.</td><td>Edits to existing routes, new non-content routes, components, performance work, the console itself, per-site engine config</td></tr>
     <tr><td><span class="chip c">C</span></td><td>Staged with a diff and a risk note. A human lands it or does not.</td><td>Workflows, policy, the orchestrator and land scripts, the console's contract, anything that sends, spends or deletes</td></tr>
   </table></div>
   <h3>The limits it cannot move</h3>
