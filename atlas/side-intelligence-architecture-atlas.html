@@ -1338,7 +1338,7 @@ priority_weight = playbook.business_priority_weights[domain]
           <code>lift</code>, under a unique index on
           <code>(action_id, window_days)</code>. The metric key is chosen by action type: a
           pause is measured as <code>ad_spend_daily_savings_usd</code>, a budget change as
-          <code>roas_change</code>, an outbound message as <code>reply_received</code>. The
+          <code>roas_change</code>, an outbound message as <code>reply_received</code>. The pause in this example is therefore evaluated on spend savings. That measurement does not establish whether the predicted increase in leads occurred; the outcome row records which metric was measured, so the gap is visible rather than hidden. The
           baseline is the seven days before execution.
         </p>
         <p>

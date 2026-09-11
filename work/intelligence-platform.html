@@ -265,7 +265,7 @@
   <div class="prose">
     <p>I defined the specification. The tenant model, the shape of a card, what a critic is allowed to kill on its own, what a supervisor may route without asking a human, and what an action has to record before it counts as done. I set the acceptance criteria per surface, and the rule that a connector cannot write anything until its health and its credentials resolve to a real account.</p>
     <p>I directed the build. Coding agents wrote the bulk of the code against those criteria, in reviewed increments, and I do not hand-write most of the application code. I reviewed the diffs, ran the suites and rejected what missed the spec. The codebase is around 77,000 lines. I would not offer that as evidence of anything except that a lot of it exists. What I will defend is the shape: why the ranker has no model in it, why the executor claims an idempotency key before it calls out, why the audit chain is signed and locked.</p>
-    <p>What I did not do. I did not build the vendor APIs and I do not maintain them. The attribution windows are my design decision and they have not been validated against a holdout, so what the platform reports at 14 days is a correlation with a timestamp on it. Read it as a signal and nothing stronger. If you want to size my own hands, the fast way is to put a change in front of me and watch how I scope it.</p>
+    <p>What I did not do. The attribution windows are my design decision and they have not been validated against a holdout, so what the platform reports at 14 days is a correlation with a timestamp on it. Read it as a signal and nothing stronger.</p>
   </div>
 </section>
 
@@ -274,7 +274,7 @@
   <p class="sec-sub">Two screens and the architecture document. Tenant names are redacted.</p>
   <figure>
     <img src="img/screen-connectors-matrix.png" alt="Connectors matrix: two tenants by nine providers, with each cell showing Connected, Failing, Synthetic or Unconfigured, and a counter reading 1 connected, 0 degraded, 2 failing, 12 synthetic, 3 unconfigured across 18 probed cells." width="1290" height="360" loading="lazy" decoding="async">
-    <figcaption><b>Connector health, told on itself.</b> Nine providers across the top, one row per tenant, one probe per cell. The counter at the left says what it found: one provider connected to a real account, two failing, twelve running on synthetic fixtures and three never configured. A dashboard that painted all eighteen cells green would be easier to show and useless to operate against.</figcaption>
+    <figcaption><b>Connector health by tenant and provider.</b> Nine providers across the top, one row per tenant, one probe per cell. The counter at the left says what it found: one provider connected to a real account, two failing, twelve running on synthetic fixtures and three never configured. A dashboard that painted all eighteen cells green would be easier to show and useless to operate against.</figcaption>
   </figure>
   <figure>
     <img src="img/screen-playbook-guardrails.png" alt="Playbook editor for Tenant A: overridable keys such as voice_rules.tone, forbidden_phrases, ad_budget_guardrails.max_auto_proposed_reallocation_usd and reactivation_strategy tiers, beside the resolved YAML of niche defaults plus saved overrides." width="1300" height="1258" loading="lazy" decoding="async">

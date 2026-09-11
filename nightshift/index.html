@@ -307,7 +307,7 @@
     <li><b>Sense.</b> A scheduled GitHub Actions run executes the LangGraph DAG: crawl the site, analyze pages, compute standings, sweep AI answer engines for citations, mine keywords, and write the night's findings, standings and GEO mentions as JSON snapshots committed to the repo.</li>
     <li><b>Decide.</b> A decision layer (the "brain") reads the snapshots, the open experiments, the council's directives and the priority weights, and picks at most three missions for the night by weight times evidence. Caps are read from <span class="mono">policy.json</span>, which the engine cannot edit.</li>
     <li><b>Do.</b> Each mission is dispatched to an AI coding agent working in its own git worktree with a written acceptance list. A verifier re-runs the deterministic gates (lint, type-check, build, tests, brand QA, scope allowlist) on the result.</li>
-    <li><b>Land or stage.</b> Class A work lands on its own. Class B work opens a pull request and lands the next night if the sensors show no regression. Class C work waits for a human decision.</li>
+    <li><b>Land or stage.</b> Class A work lands on its own. Class B policy requires a pull request and one night of canary before landing. Class C work waits for a human decision.</li>
     <li><b>Retro.</b> The run writes a retrospective in plain language, records lessons in its own words, opens or closes experiments, and sends the founder a digest. Nightshift renders all of that the next morning.</li>
   </ol>
 </section>
