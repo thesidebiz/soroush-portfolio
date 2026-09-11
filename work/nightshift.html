@@ -276,7 +276,7 @@
   <div class="prose">
     <p>Once a night the engine puts 20 positioning queries to a single answer-engine surface, a ChatGPT-class model with web search, through DataForSEO. A query counts as a mention if the brand appears in the prose or our domain appears in a cited link. There is no rank recorded. The surface returns prose, and inventing a position would be a lie about what was measured.</p>
     <p>On the last three nights the answer was zero of twenty.</p>
-    <p>I show it for one reason: it is the number the engine's own kill gate is set against. If the engine cannot produce ten non-branded clicks by 15 December 2026, it stops. A metric that can only go up is decoration, and an engine that gets to grade itself on a metric it chose is worth nothing to a client.</p>
+    <p>I show it anyway. The engine's kill gate is set on a harder number: if it cannot produce ten non-branded clicks by 15 December 2026, it stops. A metric that can only go up is decoration, and an engine that gets to grade itself on a metric it chose is worth nothing to a client.</p>
     <p>The same instinct runs through the measurement code. If the answer-engine credentials are missing in CI, the run emits a loud line saying the measurement was unavailable rather than recording twenty misses. A missing measurement is never written down as a zero. An empty or unparseable answer raises an error instead of quietly counting as a miss. Counting it would bias the whole series toward zero, and nobody would ever see it happen.</p>
   </div>
 </section>
@@ -290,7 +290,7 @@
   </figure>
   <figure>
     <img src="../nightshift/img/veto-confirm.png" alt="Confirm veto screen: Take this back, tonight. Nothing is written until you confirm. Record the veto or Cancel." width="1440" height="900" loading="lazy" decoding="async">
-    <figcaption><b>The only control in the console that writes anything.</b> Confirming appends one line to a decisions file in git. The engine reads it at the start of the next run, opens the revert pull request and echoes what it honoured into the next retro. Nothing deploys on the click, and there is no button anywhere that says approve.</figcaption>
+    <figcaption><b>The veto, which writes one line.</b> Confirming appends one line to a decisions file in git. The engine reads it at the start of the next run, opens the revert pull request and echoes what it honoured into the next retro. Nothing deploys on the click, and there is no button anywhere that says approve.</figcaption>
   </figure>
   <p class="links">
     <a href="../nightshift/">Nightshift walkthrough: nine of the console's eleven sections, screen by screen</a>

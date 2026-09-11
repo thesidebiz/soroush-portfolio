@@ -7,7 +7,7 @@
   @page { size: Letter; margin: 0.3in 0.5in; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root { --ink:#1a1a1a; --muted:#555; --accent:#173a5e; --rule:#c9d2dc; }
-  body { font-family: "Helvetica Neue", Arial, "Segoe UI", system-ui, sans-serif; color: var(--ink); font-size: 8.7pt; line-height: 1.21; -webkit-font-smoothing: antialiased; }
+  body { font-family: "Helvetica Neue", Arial, "Segoe UI", system-ui, sans-serif; color: var(--ink); font-size: 8.6pt; line-height: 1.2; -webkit-font-smoothing: antialiased; }
 
   .name { font-size: 21pt; font-weight: 800; letter-spacing: .3px; color: var(--accent); line-height: 1.21; }
   .headline { font-size: 10pt; font-weight: 600; color: var(--ink); letter-spacing: .5px; text-transform: uppercase; margin-top: 2px; }
@@ -15,7 +15,7 @@
   .proof b { color: var(--accent); }
   .contact { font-size: 8.7pt; color: var(--muted); margin-top: 4px; }
 
-  section { margin-top: 7px; }
+  section { margin-top: 6px; }
   h2 { font-size: 9.8pt; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); border-bottom: 1.3px solid var(--rule); padding-bottom: 2px; margin-bottom: 5px; }
   h2 .sub { font-weight:500; font-style:italic; text-transform:none; letter-spacing:0; font-size:8.4pt; color:var(--muted); }
   .summary { font-size: 8.9pt; line-height: 1.28; }
@@ -30,7 +30,7 @@
   .title .tag { font-weight: 500; font-style: italic; color: var(--muted); font-size: 8.7pt; }
   .meta { font-size: 8.5pt; color: var(--muted); white-space: nowrap; font-style: italic; }
   ul { list-style: none; margin-top: 3px; }
-  li { position: relative; padding-left: 11px; margin-bottom: 2px; font-size: 8.8pt; line-height: 1.26; }
+  li { position: relative; padding-left: 11px; margin-bottom: 1.5px; font-size: 8.8pt; line-height: 1.26; }
   li::before { content: "›"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
   b, strong { font-weight: 700; color: var(--ink); }
 
@@ -52,7 +52,7 @@
   <section>
     <h2>Summary</h2>
     <div class="summary">
-      I build and ship AI systems: a <b>multi-tenant agent runtime</b>, built and audited, with 9 connectors, and a <b>19-node nightly LangGraph engine</b> that finds its own work, writes the code and lands it by trust class behind deterministic gates. I define the architecture, agent roles, data flows, approval gates and acceptance criteria, then <b>direct AI coding agents</b> through implementation and testing. Since 2012 I have turned growth constraints into working revenue systems; as a <b>government-appointed CDAP advisor</b> I have <b>assessed 800 businesses</b>. Now focused on long-horizon ownership inside one embedded team.
+      I build and ship AI systems: a <b>multi-tenant agent runtime</b>, built and audited, with 9 connectors, and a <b>19-node nightly LangGraph engine</b> that finds its own work, writes the code and lands it by trust class behind deterministic gates. I define the architecture, agent roles, data flows, approval gates and acceptance criteria, then <b>direct AI coding agents</b> through implementation and testing. Since 2012 I have turned growth constraints into working revenue systems; as a <b>government-appointed CDAP advisor</b> I led the practice that <b>assessed 800 businesses</b>. Now focused on long-horizon ownership inside one embedded team.
     </div>
     <div class="flow"><b>How I work:</b> define architecture &amp; acceptance criteria → direct AI coding agents → gate by class of change, with scope allowlists and a veto I use → measure with outcome attribution</div>
   </section>
@@ -60,8 +60,8 @@
   <section>
     <h2>Systems Built <span class="sub">· architecture, agent design, acceptance criteria and delivery direction, all mine</span></h2>
     <ul>
-      <li><b>theSide.io Intelligence Platform.</b> A multi-tenant agent runtime, built and audited: proposer → critic → ranker → supervisor turns live client data into <b>scored, human-approved actions</b> across <b>9 connectors</b>, with outcomes attributed over 7, 14 and 28 days. Forced structured output, a deterministic ranker, idempotency claims, a signed audit chain. <b>32 tables, 39 API routes; 0 TypeScript errors, 0 ESLint findings across 369 files, 21 test groups passing</b> (automated audit, June 2026).</li>
-      <li><b>Nightshift, an autonomous SEO &amp; AI-visibility engine.</b> A <b>19-node LangGraph state graph</b> with a bounded revision loop, run nightly: it crawls, mines search and answer-engine gaps, prioritizes on a weighted score the retro tunes, and drafts brand-checked changes. Work lands by <b>trust class A/B/C</b> behind link validation, brand QA, pytest, lint, typecheck, build and two required CI workflows; I keep a veto and a revert. <b>58 runs across 48 nights since July 2026; 1,559 tests passing;</b> caps of $45 a night, $250 a week.</li>
+      <li><b>theSide.io Intelligence Platform.</b> A multi-tenant agent runtime, built and audited: proposer → critic → ranker → supervisor turns live client data into <b>scored, human-approved actions</b> across <b>9 connectors</b>, with outcomes attributed over 7, 14 and 28 days. Forced structured output, a deterministic ranker, idempotency claims, a signed audit chain. <b>32 tables, 39 API routes; 0 TypeScript errors, 0 ESLint findings across 369 files, 21 test groups passing</b> (automated audit, June 2026). Nightly loop idle pending a worker-runtime migration; no actions executed in production yet.</li>
+      <li><b>Nightshift, an autonomous SEO &amp; AI-visibility engine.</b> A <b>19-node LangGraph state graph</b> with a bounded revision loop, run nightly: it crawls, mines search and answer-engine gaps, and drafts brand-checked changes. Work lands by <b>trust class A/B/C</b> behind brand QA, the test suites and two required CI workflows; I keep a veto and a revert. <b>58 runs across 48 nights since July 2026; 1,559 tests passing;</b> caps of $45 a night, $250 a week.</li>
       <li><b>PerfectMind MCP server.</b> Diagnosed a recreation-management platform's workflow gaps, then specified and delivered an <b>MCP integration layer</b> exposing its operations to AI agents as typed, callable tools.</li>
     </ul>
   </section>
@@ -75,11 +75,11 @@
         <div class="meta">Vancouver, BC · Oct 2021 – Present</div>
       </div>
       <ul>
-        <li>Own growth, product and AI adoption, and <b>ship the software Side runs on</b>: requirements, agent roles, data flows and approval gates, then directing AI coding agents through implementation and testing.</li>
-        <li><b>AI enablement at scale.</b> Government-appointed <b>CDAP advisor</b>: <b>assessed 800 businesses</b> and delivered <b>300 roadmaps</b> across sales, marketing, automation and practical AI adoption, then built the first piece inside each client's real budget. <b>Adoption was the deliverable</b>; a roadmap nobody follows is worth nothing.</li>
+        <li>Own growth, product and AI adoption, and <b>ship the software Side runs on</b> by defining requirements, agent roles, data flows and approval gates, then directing AI coding agents.</li>
+        <li><b>AI enablement at scale.</b> Government-appointed <b>CDAP advisor</b>: led the advisory practice that <b>assessed 800 businesses</b> and delivered <b>300 roadmaps</b> across sales, marketing, automation and practical AI adoption, then built the first piece inside each client's real budget. <b>Adoption was the deliverable</b>; a roadmap nobody follows is worth nothing.</li>
         <li><b>Identified an underserved segment and conceived a conversation-driven sales platform</b> for pre-construction real-estate agents. Project-marketing firms served developers; nothing served the agent. Shipped in <b>2020-21, before generative AI</b>, handling <b>1,000+ buyer conversations per day</b>: capture, prequalification and nurture, then handing agents a ready-to-close deal.</li>
         <li><b>Owned the product through three technology generations</b>: rule-based conversation workflows, then in-house NLU models trained on transcripts from 8,000 captured SMS and web-chat turns, then LLM agents. Our engineering team built the NLU models; a UBC capstone team's lead-warmth classifiers did not ship. Improved lead-to-transaction conversion from <b>1% to 3%</b> on <b>~$45M year-one transaction value (transactions, not revenue)</b>, then <b>productized the service into a repeatable subscription / commission offering</b>.</li>
-        <li>Architect and run <b>client-acquisition systems</b> for <b>~45 active clients</b>: demand generation, landing pages and forms, qualification, email/SMS nurture, CRM orchestration, sales handoff and attribution.</li>
+        <li>Architect and run <b>client-acquisition systems</b> for <b>~45 active clients</b>: demand generation, landing pages, qualification, nurture, CRM orchestration, handoff and attribution.</li>
       </ul>
     </div>
 

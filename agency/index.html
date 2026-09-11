@@ -240,7 +240,7 @@
   <article class="sys">
     <p class="kind mono">Conversation AI · numbered, ordered units</p>
     <h3>AI.00 to AI.14</h3>
-    <p>A numbered, dependency-ordered series of workflow units (AI.00 to AI.14) that covers the four things naive bot builds leave out: a debounce for double messages, a fallback when the model has nothing useful to say, a human kill-switch (one tag stops the bot and alerts a person), and externalized prompt loading so the persona is configuration rather than code. The rest handle channel selection, conversation summarization into the contact record, and database reactivation. The same unit set, and the same stop-and-alert tags, appear in every account provisioned from the template. Three units of the set are still drafts, and one of them is the alert half of that kill-switch. The stop-bot tag fires; the notification does not. That is on my list, and I would rather you heard it here.</p>
+    <p>A numbered, dependency-ordered series of workflow units (AI.00 to AI.14) that covers the four things naive bot builds leave out: a debounce for double messages, a fallback when the model has nothing useful to say, a human kill-switch (one tag stops the bot; the staff-notification workflow remains unpublished), and externalized prompt loading so the persona is configuration rather than code. The rest handle channel selection, conversation summarization into the contact record, and database reactivation. The same unit set, and the same stop-and-alert tags, appear in every account provisioned from the template. Three units of the set are still drafts, and one of them is the alert half of that kill-switch. The stop-bot tag fires; the notification does not.</p>
     <p class="why"><b>What it shows:</b> platform thinking inside a no-code tool.</p>
   </article>
 </section>
@@ -252,7 +252,7 @@
     <p class="kind mono">Integration · schema design</p>
     <h3>A recreation platform and a clinic EMR, flattened on purpose</h3>
     <p>For the members-based client, ten calendars and a field cluster are created programmatically from the practice-management system, with the raw record retained as JSON. For a med-spa on a Canadian clinic EMR, bidirectional sync workflows land a flattened appointment schema of about 95 fields on the contact, including the next two appointments side by side and a last-updated watermark. Three decisions, each with a reason. Denormalized: the CRM's workflows cannot walk a relation. Raw JSON kept: the vendor's schema changes without notice. Watermark kept, so a stale sync is visible rather than silent.</p>
-    <p class="why"><b>What it shows:</b> the reasons behind an ugly schema, stated. This is the section that reads as engineering rather than configuration.</p>
+    <p class="why"><b>What it shows:</b> the reasons behind an ugly schema, stated.</p>
   </article>
 </section>
 

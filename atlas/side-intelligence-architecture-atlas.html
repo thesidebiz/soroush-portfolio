@@ -1181,7 +1181,7 @@ tool_choice: {
         <p>
           <strong>This run's card (illustrative):</strong> <code>action_type: "pause_ad"</code>,
           <code>target_entity: { kind: "ad_set", id: "…", platform: "meta" }</code>,
-          <code>predicted_lift: { metric: "cost_per_lead", magnitude: -34, window: "14d" }</code>,
+          <code>predicted_lift: { metric: "leads_per_week", magnitude: 22, window: "14d" }</code>,
           <code>confidence: 0.78</code>.
         </p>
       </div>
@@ -1212,7 +1212,7 @@ tool_choice: {
         </p>
         <p>
           <strong>This run (illustrative):</strong> the stored attribution score for that
-          platform is 0.58, below the 0.65 threshold, and <code>cost_per_lead</code> is
+          platform is 0.58, below the 0.65 threshold, and <code>leads_per_week</code> is
           attribution-dependent. <code>critic_decision</code> becomes
           <code>downgraded</code> and <code>adjusted_confidence</code> is capped at
           <code>0.65</code>. A kill would have been written to the audit log as
@@ -1395,7 +1395,7 @@ priority_weight = playbook.business_priority_weights[domain]
         <h3>Paid media</h3>
         <p>The largest delivery domain. Reads ad metrics, attribution quality, budget pace, platform context and service tier.</p>
         <ul class="list">
-          <li>Executing today: pause an ad set or campaign, change a campaign daily budget.</li>
+          <li>Execution paths implemented and tested: pause an ad set or campaign, change a campaign daily budget.</li>
           <li>Proposal-only today: creative tests, duplicating winners, lookalikes, reallocation within and across platforms, creative rotation.</li>
           <li>Guarded by a per-card reallocation ceiling and a CPA-increase threshold, both set per tenant in the playbook.</li>
         </ul>
@@ -1797,17 +1797,18 @@ priority_weight = playbook.business_priority_weights[domain]
     <div class="cluster searchable" style="margin-top:10px" data-keywords="known gaps risks rls row level security tenant isolation backstop credentials encryption envelope scheduler worker runtime migration audit chain unkeyed revoke insert only gateway">
       <h3>Known gaps</h3>
       <p>
-        These are the four findings I would raise first if I were reviewing this system, taken
-        from the September 2026 audit and the target-architecture proposal that answers it.
+        These are the five findings I would raise first if I were reviewing this system. Four come
+        from the September 2026 audit and the target-architecture proposal that answers it; the fifth I found while writing this page.
       </p>
       <ul class="list">
         <li><strong>No database-level tenant isolation.</strong> All 32 tables have row-level security disabled and no policies, and the application role can bypass it. Isolation rests entirely on a <code>tenant_id</code> predicate applied by hand at every query site. The current code holds that invariant; there is no backstop if a future query forgets it. The fix is designed and not shipped: policies bound to a transaction-local tenant setting, a non-owner application role, and a continuous-integration check that fails any tenant-table query without a predicate.</li>
         <li><strong>Connector credentials are stored unencrypted.</strong> Credential payloads sit in the database as plain JSON, so a read-only database leak or a backup exposure is a credential leak for every tenant. Envelope encryption at the resolver boundary is specified and not built, and it needs to land before the tenant count or the value of the stored tokens grows.</li>
         <li><strong>The scheduler is not running on a supported worker runtime.</strong> The worker package is pinned to a version whose shutdown is complete, the stored schedules are reference rows rather than execution receipts, and the dispatcher reads them without triggering jobs. Until that migration lands and one full run is observed with receipts, the nightly loop is code that has run rather than code that is running.</li>
         <li><strong>The audit chain detects tampering without preventing it.</strong> The hash is unkeyed and the application role retains update and delete rights on the audit table, so a sufficiently privileged database role could rewrite history and re-sign it. Revoking those rights and adding insert-only policies is a small change that has not been made, and until it is, the chain is strong evidence rather than non-repudiation.</li>
+        <li><strong>The ranker has no metric-direction convention.</strong> <code>normalizedLift</code> takes <code>predicted_lift.magnitude</code> at face value, and the proposer's schema types it as a bare number. A card that lowers cost per lead by 34 percent, written as a negative magnitude, would score below a small positive gain on a metric where up is good. The fix is a direction field on the metric, or magnitude defined as improvement. Until then the worked example above uses a metric where up is good.</li>
       </ul>
       <p style="margin:10px 0 0">
-        The proposed answer to all four is one architecture: keep this console as the tenant
+        The proposed answer to the first four is one architecture: keep this console as the tenant
         and policy plane, move effect execution behind a gateway that is the only service able
         to resolve write credentials, and give every step a durable receipt. That proposal is a
         reviewable document today, and it is deliberately still a proposal.
