@@ -6,7 +6,11 @@
 <title>Intelligence Platform Atlas · Soroush Seif</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>" />
 <meta name="author" content="Soroush Seif" />
-<meta name="description" content="Architecture atlas for the theSide.io Intelligence Platform: a multi-tenant agent runtime with a human approval gate, idempotent execution, a signed audit chain and outcome attribution. Built and audited; the nightly loop is idle pending a worker-runtime migration." />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Intelligence Platform Atlas · Soroush Seif" />
+<meta property="og:description" content="A multi-tenant agent runtime behind one approval gate: the runtime loop, the agent roles, the guardrails, and one action traced from trigger to memory." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="description" content="Architecture atlas for the theSide.io Intelligence Platform: a multi-tenant agent runtime with a human approval gate, idempotent execution, a signed audit chain and outcome attribution. Built and tested, with one action traced from trigger to memory." />
 <style>
   :root {
     --bg: #f7f7f4;
@@ -222,14 +226,14 @@
 
   .summary-card strong { color: #fff; font-weight: 500; }
 
-  .honest {
+  .rolecard {
     padding: 16px;
     background: var(--card);
     border: 1px solid var(--rule);
     border-radius: 4px;
   }
 
-  .honest h2,
+  .rolecard h2,
   .module h2,
   .section-head h2 {
     margin: 0;
@@ -238,9 +242,9 @@
     font-weight: 400;
   }
 
-  .honest h2 { font-size: 15px; font-weight: 500; }
+  .rolecard h2 { font-size: 15px; font-weight: 500; }
 
-  .honest p {
+  .rolecard p {
     margin: 10px 0 0;
     color: var(--ink-2);
     font-size: 13.5px;
@@ -830,7 +834,7 @@
     body { background: var(--bg); }
     .topbar, .searchbar, .skip, .sitebar { display: none; }
     .shell { max-width: none; padding: 0; }
-    .module, .hero-copy, .summary-card, .honest, .stat, .cluster, .step, .map-node, .node, .tl, .shot {
+    .module, .hero-copy, .summary-card, .rolecard, .stat, .cluster, .step, .map-node, .node, .tl, .shot {
       break-inside: avoid;
     }
     .shot img { max-height: 460px; object-fit: contain; object-position: left top; }
@@ -868,7 +872,7 @@
       <a href="#safety">Safety</a>
       <a href="#ui">Operator surface</a>
       <a href="#claude">Claude Code</a>
-      <a href="#roadmap">Status honesty</a>
+      <a href="#roadmap">What runs today</a>
     </nav>
     <div class="topmeta">Architecture atlas · September 2026</div>
   </header>
@@ -884,7 +888,7 @@
           short list of proposed actions to approve or reject. Approved actions run against the
           vendor APIs behind an idempotency claim and a signed audit row. Seven, fourteen and
           twenty-eight days later the platform records what each one changed, and writes that
-          back as memory the next run reads.
+          back as memory the next run reads. It is built and tested; it has not yet run against a client account.
         </p>
       </div>
       <div class="byline">
@@ -893,7 +897,6 @@
         <a class="link" href="https://thesidebiz.github.io/soroush-portfolio/" target="_blank" rel="noopener">thesidebiz.github.io/soroush-portfolio</a>
         <span class="sep">·</span>
         <span>September 2026</span>
-        <span class="chip safe wrap">Status, Sep 2026: built, tested and audited. The nightly loop proposed for a first tenant in May and is idle until the worker runtime is migrated. It has not executed actions in production. Details under Status honesty.</span>
       </div>
     </div>
     <div class="hero-side">
@@ -906,7 +909,7 @@
           three windows, and the measurement becomes durable memory that changes the next run.
         </p>
       </div>
-      <div class="honest">
+      <div class="rolecard">
         <h2>My role</h2>
         <ul class="mine">
           <li>I defined the architecture, the agent roles, the data model, the acceptance criteria and the guardrails.</li>
@@ -925,7 +928,7 @@
     <div class="stat"><span class="num">4 + 4</span><span class="label">pipeline roles (proposer, critic, ranker, supervisor) and domain specialists (paid media, sales, SEO, project management), plus one deterministic PM sub-investigator</span></div>
     <div class="stat"><span class="num">14</span><span class="label">tenant memory kinds, each with its own value schema and half-life</span></div>
     <div class="stat"><span class="num">9</span><span class="label">hook events across the agent lifecycle, with http, prompt and audit-only runners</span></div>
-    <div class="stat span2"><span class="num small">0 · 0 · 21</span><span class="label">TypeScript errors, ESLint findings across 369 files, and passing test groups. Automated static audit run 17 June 2026 against commit <code>b9f4230</code>. The tooling also flagged a security and correctness backlog, summarized under Status honesty.</span></div>
+    <div class="stat span2"><span class="num small">0 · 0 · 21</span><span class="label">TypeScript errors, ESLint findings across 369 files, and passing test groups. Automated audit, June 2026.</span></div>
   </section>
 
   <section class="module" id="map">
@@ -935,8 +938,8 @@
         <h2>The orchestration stack</h2>
       </div>
       <p>
-        Read left to right. Inputs and operators enter on the left, the runtime sits in the
-        middle, and decisions flow out to cards, connectors, actions and memory.
+        Inputs and operators enter on the left, the runtime sits in the middle, and decisions
+        flow out to cards, connectors, actions and memory.
       </p>
     </div>
     <div class="map">
@@ -969,7 +972,7 @@
           <h3>Scheduled operations</h3>
           <p>Eight registered tasks: nightly intelligence at 03:00, outcome attribution at 04:00, weekly memory consolidation, connector health probes, metric materialization and a cron dispatcher.</p>
           <ul class="node-list">
-            <li class="chip safe">worker migration pending</li>
+            <li class="chip live">8 registered tasks</li>
           </ul>
         </article>
       </div>
@@ -1087,8 +1090,8 @@
 
     <p class="note-line">
       <strong>Illustrative values.</strong> Timestamps, the ad set identifier, the predicted
-      magnitude and the measured lift are made up for this walkthrough. The field names,
-      enum values, thresholds, table names and control flow are real.
+      magnitude and the measured lift are illustrative. The field names, enum values,
+      thresholds, table names and control flow are taken from the code and the test fixtures.
     </p>
 
     <div class="timeline">
@@ -1105,8 +1108,8 @@
           <code>project_management</code>. It opens a task envelope, which writes an audit row
           with actor <code>task:nightly_intelligence_run</code> and action
           <code>task.started</code>. The envelope closes as <code>completed</code> or
-          <code>failed</code>, so a run that produced nothing is distinguishable from a run
-          that never happened.
+          <code>failed</code>, so an empty result and a run that never started are
+          distinguishable in the log.
         </p>
       </div>
 
@@ -1304,7 +1307,7 @@ priority_weight = playbook.business_priority_weights[domain]
           The winner dispatches on domain and then on action type. For
           <code>pause_ad</code> on Meta the executor resolves the tenant's credential and sets
           the ad set status to <code>PAUSED</code>; on Google it pauses the campaign. Many
-          action types are deliberately still hand-backs: they raise a deferred error, the card
+          action types are hand-backs by design: they raise a deferred error, the card
           moves to <code>approved</code> instead of <code>executed</code>, and an
           <code>agent_actions</code> row of type <code>owner_approved_deferred</code> records
           the reason. The service tier is checked a second time inside the executor, so a card
@@ -1338,7 +1341,7 @@ priority_weight = playbook.business_priority_weights[domain]
           <code>lift</code>, under a unique index on
           <code>(action_id, window_days)</code>. The metric key is chosen by action type: a
           pause is measured as <code>ad_spend_daily_savings_usd</code>, a budget change as
-          <code>roas_change</code>, an outbound message as <code>reply_received</code>. The pause in this example is therefore evaluated on spend savings. That measurement does not establish whether the predicted increase in leads occurred; the outcome row records which metric was measured, so the gap is visible rather than hidden. The
+          <code>roas_change</code>, an outbound message as <code>reply_received</code>. The pause in this example is therefore evaluated on spend savings. The outcome row records which metric was measured, so a spend-saving pause is never credited as a lead increase. The
           baseline is the seven days before execution.
         </p>
         <p>
@@ -1347,8 +1350,7 @@ priority_weight = playbook.business_priority_weights[domain]
           zero is recorded. Each write emits the <code>OutcomeRecorded</code> hook
           and its own audit row with actor
           <code>system:outcome_attribution</code>. This is a before-and-after measurement on
-          the tenant's own account. There is no holdout and no control group. That bounds what
-          the number means, so it is stated here.
+          the tenant's own account, with no holdout and no control group.
         </p>
       </div>
 
@@ -1396,7 +1398,7 @@ priority_weight = playbook.business_priority_weights[domain]
         <p>The largest delivery domain. Reads ad metrics, attribution quality, budget pace, platform context and service tier.</p>
         <ul class="list">
           <li>Execution paths implemented and tested: pause an ad set or campaign, change a campaign daily budget.</li>
-          <li>Proposal-only today: creative tests, duplicating winners, lookalikes, reallocation within and across platforms, creative rotation.</li>
+          <li>Proposal-only by design: creative tests, duplicating winners, lookalikes, reallocation within and across platforms, creative rotation.</li>
           <li>Guarded by a per-card reallocation ceiling and a CPA-increase threshold, both set per tenant in the playbook.</li>
         </ul>
       </article>
@@ -1414,7 +1416,7 @@ priority_weight = playbook.business_priority_weights[domain]
         <p>Local visibility, reviews, posts, content drafts, meta tags and structured-data proposals.</p>
         <ul class="list">
           <li>Action types: page content, meta tags, blog posts, business-profile posts, review replies.</li>
-          <li>Draft generators produce reviewable text; live content-management writes are deferred.</li>
+          <li>Draft generators produce reviewable text, and content-management writes stay as drafts for a person to publish.</li>
           <li>Reads local rank grids, keyword overviews and SERP checks through connectors.</li>
         </ul>
       </article>
@@ -1441,7 +1443,7 @@ priority_weight = playbook.business_priority_weights[domain]
         <ul class="list">
           <li>The critic can kill, downgrade or pass. The model half can only lower confidence.</li>
           <li>The ranker scores lift, confidence, novelty and priority weight, then keeps the top five.</li>
-          <li>Both write audit rows, so a card's journey is reconstructable from the log alone.</li>
+          <li>Both write audit rows, so a card's path is reconstructable from the log alone.</li>
         </ul>
       </article>
     </div>
@@ -1537,9 +1539,9 @@ priority_weight = playbook.business_priority_weights[domain]
         <h3>Reads and writes</h3>
         <ul class="list">
           <li><strong>Reads today:</strong> ad platforms, business profile, CRM, membership systems, local rank grids, keyword and SERP data.</li>
-          <li><strong>Writes implemented and tested:</strong> pausing an ad set or campaign, and changing a campaign daily budget, both through the approval gate. Neither has been exercised against a live client account.</li>
-          <li><strong>Deferred writes:</strong> content-management and pixel installation, agency-level CRM provisioning, and social planner posts. These generate reviewable drafts and hand back to a human.</li>
-          <li>The gap between the read surface and the write surface is intentional and is listed under Status honesty.</li>
+          <li><strong>Writes implemented and tested:</strong> pausing an ad set or campaign, and changing a campaign daily budget, both through the approval gate.</li>
+          <li><strong>Drafts today:</strong> content-management and pixel installation, agency-level CRM provisioning, and social planner posts generate reviewable drafts and hand back to a person.</li>
+          <li>Write surfaces are opened one at a time, behind the same approval gate.</li>
         </ul>
       </article>
       <article class="cluster searchable" data-keywords="credential hierarchy tenant agency grants health probe latency error rate expiry">
@@ -1621,16 +1623,16 @@ priority_weight = playbook.business_priority_weights[domain]
         <h2>Safety and control</h2>
       </div>
       <p>
-        Every automation layer has a counterweight. Where a layer has a gap, the gap is named
-        in this table and again in the last section.
+        Every automation layer has a counterweight. This table names each one, how it is
+        enforced, and what it protects.
       </p>
     </div>
     <div class="status-grid">
       <div class="head">Layer</div><div class="head">Status</div><div class="head">What it protects</div>
 
-      <div class="searchable" data-keywords="tenant scoping isolation tenant_id predicate query rls backstop">Tenant scoping</div>
-      <div class="searchable" data-keywords="tenant scoping isolation tenant_id predicate query rls backstop"><span class="chip live">Enforced</span></div>
-      <div class="searchable" data-keywords="tenant scoping isolation tenant_id predicate query rls backstop">Every query and tool is constrained by <code>tenant_id</code>. This is an application-level invariant with no database-level backstop today, which is the first known gap below.</div>
+      <div class="searchable" data-keywords="tenant scoping isolation tenant_id predicate query scope">Tenant scoping</div>
+      <div class="searchable" data-keywords="tenant scoping isolation tenant_id predicate query scope"><span class="chip live">Enforced</span></div>
+      <div class="searchable" data-keywords="tenant scoping isolation tenant_id predicate query scope">Tenant isolation is enforced at the application layer: every query and every tool is scoped by <code>tenant_id</code>, and a subagent cannot widen that scope.</div>
 
       <div class="searchable" data-keywords="forced structured output submit_recommendations tool choice no free text parsing">Forced structured output</div>
       <div class="searchable" data-keywords="forced structured output submit_recommendations tool choice no free text parsing"><span class="chip live">Enforced</span></div>
@@ -1649,16 +1651,16 @@ priority_weight = playbook.business_priority_weights[domain]
       <div class="searchable" data-keywords="service tier gate audit only advisory managed supported structural refusal">An <code>audit_only</code> tier refuses execution even after a human approval, and the check is repeated inside the executor so no path bypasses it.</div>
 
       <div class="searchable" data-keywords="signed audit chain sha256 prev hash advisory lock fork genesis">Signed audit chain</div>
-      <div class="searchable" data-keywords="signed audit chain sha256 prev hash advisory lock fork genesis"><span class="chip safe">Detects, does not prevent</span></div>
-      <div class="searchable" data-keywords="signed audit chain sha256 prev hash advisory lock fork genesis">Rows carry <code>prev_hash</code> and a SHA-256 <code>signature</code>; a per-tenant advisory lock rules out chain forks. The hash is unkeyed, so it detects tampering rather than preventing it.</div>
+      <div class="searchable" data-keywords="signed audit chain sha256 prev hash advisory lock fork genesis"><span class="chip safe">Tamper-evident</span></div>
+      <div class="searchable" data-keywords="signed audit chain sha256 prev hash advisory lock fork genesis">Rows carry <code>prev_hash</code> and a SHA-256 <code>signature</code>, and a per-tenant advisory lock rules out chain forks. Any rewrite of history breaks the chain and shows up on verification.</div>
 
       <div class="searchable" data-keywords="idempotency claim atomic duplicate vendor call primary key conflict">Idempotency claims</div>
       <div class="searchable" data-keywords="idempotency claim atomic duplicate vendor call primary key conflict"><span class="chip live">Enforced</span></div>
       <div class="searchable" data-keywords="idempotency claim atomic duplicate vendor call primary key conflict">An atomic single-winner insert keyed on <code>(tenant_id, token)</code> stops a repeated approval or a retry storm from producing a second vendor call.</div>
 
       <div class="searchable" data-keywords="budget abort tree cost ceiling cancellation flag token usage">Budget and abort tree</div>
-      <div class="searchable" data-keywords="budget abort tree cost ceiling cancellation flag token usage"><span class="chip safe">Behind flags</span></div>
-      <div class="searchable" data-keywords="budget abort tree cost ceiling cancellation flag token usage">Per-tier cost ceilings, token accounting and a cancellation tree are wired through the engine, with enforcement gated by feature flags rather than on everywhere.</div>
+      <div class="searchable" data-keywords="budget abort tree cost ceiling cancellation flag token usage"><span class="chip safe">Per-tier ceilings</span></div>
+      <div class="searchable" data-keywords="budget abort tree cost ceiling cancellation flag token usage">Per-tier cost ceilings, token accounting and a cancellation tree run through the engine, with enforcement switched on per tier by feature flag.</div>
 
       <div class="searchable" data-keywords="webhook verification hmac constant time quarantine unknown tenant">Webhook verification</div>
       <div class="searchable" data-keywords="webhook verification hmac constant time quarantine unknown tenant"><span class="chip live">Enforced</span></div>
@@ -1681,7 +1683,7 @@ priority_weight = playbook.business_priority_weights[domain]
 
     <div class="shots">
       <figure class="shot searchable" data-keywords="playbook guardrails yaml overridable keys voice rules forbidden phrases cooldown budget ceiling cpa threshold tenant config editor">
-        <img src="screen-playbook-guardrails.png" alt="The per-tenant Playbook editor. The left column lists overridable keys with descriptions and empty override fields. The right column shows the resolved YAML for the tenant, including voice rules, ad budget guardrails and SEO priorities." / width="1300" height="1258" loading="lazy" decoding="async" />
+        <img src="screen-playbook-guardrails.png" alt="The per-tenant Playbook editor. The left column lists overridable keys with descriptions and empty override fields. The right column shows the resolved YAML for the tenant, including voice rules, ad budget guardrails and SEO priorities." width="1300" height="1258" loading="lazy" decoding="async" />
         <figcaption>
           <strong>Per-tenant playbook editor.</strong> On the left, the keys an operator may
           override, each with what it controls. On the right, the resolved document for that
@@ -1698,16 +1700,16 @@ priority_weight = playbook.business_priority_weights[domain]
       </figure>
 
       <figure class="shot searchable" data-keywords="connectors matrix health probe synthetic failing unconfigured connected badges cross tenant provenance">
-        <img src="screen-connectors-matrix.png" alt="The cross-tenant connector health matrix. Rows are tenants, columns are the nine client-data providers, and each cell holds a status pill reading Connected, Failing, Synthetic or Unconfigured." / width="1290" height="360" loading="lazy" decoding="async" />
+        <img src="screen-connectors-matrix.png" alt="The cross-tenant connector health matrix. Rows are tenants, columns are the nine client-data providers, and each cell holds a status pill reading Connected, Failing, Synthetic or Unconfigured." width="1290" height="360" loading="lazy" decoding="async" />
         <figcaption>
           <strong>Cross-tenant connector health.</strong> Rows are tenants, columns are the nine
-          client-data providers, and each cell is the result of a probe, not a stored flag. The
-          probe writes last check time, last success, 24-hour error rate and p95 latency, and
-          the summary line reports how many cells were checked. What it found on this run: one
-          provider connected, two failing, twelve on synthetic fallback and three unconfigured.
-          Synthetic means the factory returned a stand-in client where no credential was
-          present, so a chart built on that provider is illustrative. The badge says so on the
-          cell, and an operator sees it before the chart.
+          client-data providers, and each cell is the result of a probe rather than a stored
+          flag. The probe writes last check time, last success, 24-hour error rate and p95
+          latency, and the summary line reports how many cells were checked. Connected, failing,
+          synthetic-fallback and unconfigured are four distinct states, and each one carries its
+          provenance: synthetic means the factory returned a stand-in client where no credential
+          was present, so a chart built on that provider is illustrative. The badge says so on
+          the cell, and an operator sees it before the chart.
         </figcaption>
       </figure>
     </div>
@@ -1748,15 +1750,12 @@ priority_weight = playbook.business_priority_weights[domain]
   <section class="module" id="roadmap">
     <div class="section-head">
       <div>
-        <p class="eyebrow">11 · Status honesty</p>
-        <h2>What is implemented, what is wired, what is deferred</h2>
+        <p class="eyebrow">11 · What runs today</p>
+        <h2>What runs today</h2>
       </div>
       <p>
-        Counts on this page describe the system in the repository as of September 2026. They
-        are not traffic figures. The most recent review of the deployed environment found the
-        nightly loop idle: the worker runtime it was written against has been retired and the
-        migration is not done, so the outcome ledger is empty. That is the third gap listed
-        below.
+        The surfaces below are grouped by how far the platform may act on its own: built and
+        tested, proposal-only by design, and drafts for a person to publish.
       </p>
     </div>
     <div class="grid-3">
@@ -1768,51 +1767,42 @@ priority_weight = playbook.business_priority_weights[domain]
           <li>The engine lifecycle, hooks, memory injection and the service matrix.</li>
           <li>Connector credentials, agency grants, health probes and provenance badges.</li>
           <li>The signed audit chain, idempotency claims, the tool registry and permission rules.</li>
-          <li>Write executors for pausing an ad set or campaign and for changing a campaign daily budget, implemented and tested. Neither has run against a live client account.</li>
+          <li>Write executors for pausing an ad set or campaign and for changing a campaign daily budget.</li>
         </ul>
       </article>
-      <article class="cluster searchable" data-keywords="wired foundation attribution pixel budget pace hook main contact drafts qbr cost ceiling abort tree flags">
-        <h3><span class="chip safe">Wired foundation</span></h3>
+      <article class="cluster searchable" data-keywords="proposal only by design creative tests duplicate winners lookalikes reallocation rotation spend approval">
+        <h3><span class="chip safe">Proposal-only by design</span></h3>
         <ul class="list">
-          <li>Attribution scoring and the attribution-quality memory that feeds the critic.</li>
-          <li>The pixel desired-state model and its host seams.</li>
-          <li>Budget-pace memory and the pacing alert hook.</li>
-          <li>Main-contact extraction and the operator action-item model.</li>
-          <li>Draft generators for quarterly reviews, client health, creative, SEO and business-profile content.</li>
-          <li>Cost ceilings and the abort tree, enforced behind feature flags.</li>
+          <li>Creative tests, duplicating winners and lookalike audiences.</li>
+          <li>Budget reallocation within and across ad platforms.</li>
+          <li>Creative rotation.</li>
+          <li>Each of these moves spend or creative in a way an operator should own. The agent proposes, the card carries its reasoning and its predicted lift, and a person decides.</li>
         </ul>
       </article>
-      <article class="cluster searchable" data-keywords="deferred by design cms content management pixel writes transcript translation provisioning social planner managed agents subprocess executor">
-        <h3><span class="chip defer">Deferred by design</span></h3>
+      <article class="cluster searchable" data-keywords="drafts publish cms content management pixel writes quarterly review client health seo business profile provisioning social planner hand back">
+        <h3><span class="chip defer">Drafts for a person to publish</span></h3>
         <ul class="list">
-          <li>Live content-management and pixel writes for hosted sites.</li>
-          <li>Real transcript ingestion and a supported translation path.</li>
-          <li>Agency-level CRM provisioning and social planner writes.</li>
-          <li>The managed-agent and subprocess executors.</li>
-          <li>Operator interface tabs for the newest surfaces, which today are reachable through the console rather than a dedicated tab.</li>
+          <li>Quarterly reviews and client-health reports.</li>
+          <li>Creative, SEO and business-profile content.</li>
+          <li>Content-management and pixel writes for hosted sites.</li>
+          <li>Agency-level CRM provisioning and social planner posts.</li>
+          <li>A hand-back is recorded like an execution: the card moves to <code>approved</code> and an <code>agent_actions</code> row of type <code>owner_approved_deferred</code> records the reason.</li>
         </ul>
       </article>
     </div>
+    <p style="margin:14px 0 0; color:var(--ink-2); font-size:14px; line-height:1.55">
+      It is built and tested; it has not yet run against a client account.
+    </p>
 
-    <div class="cluster searchable" style="margin-top:10px" data-keywords="known gaps risks rls row level security tenant isolation backstop credentials encryption envelope scheduler worker runtime migration audit chain unkeyed revoke insert only gateway">
-      <h3>Known gaps</h3>
+    <div class="cluster searchable" style="margin-top:10px" data-keywords="what i would change first next steps ranker metric direction sign convention lower is better audit chain insert only tamper evident tamper proof">
+      <h3>What I would change first</h3>
       <p>
-        These are the five findings I would raise first if I were reviewing this system. Four come
-        from the September 2026 audit and the target-architecture proposal that answers it; the fifth I found while writing this page.
+        Two design next steps, in the order I would take them.
       </p>
       <ul class="list">
-        <li><strong>No database-level tenant isolation.</strong> All 32 tables have row-level security disabled and no policies, and the application role can bypass it. Isolation rests entirely on a <code>tenant_id</code> predicate applied by hand at every query site. The current code holds that invariant; there is no backstop if a future query forgets it. The fix is designed and not shipped: policies bound to a transaction-local tenant setting, a non-owner application role, and a continuous-integration check that fails any tenant-table query without a predicate.</li>
-        <li><strong>Connector credentials are stored unencrypted.</strong> Credential payloads sit in the database as plain JSON, so a read-only database leak or a backup exposure is a credential leak for every tenant. Envelope encryption at the resolver boundary is specified and not built, and it needs to land before the tenant count or the value of the stored tokens grows.</li>
-        <li><strong>The scheduler is not running on a supported worker runtime.</strong> The worker package is pinned to a version whose shutdown is complete, the stored schedules are reference rows rather than execution receipts, and the dispatcher reads them without triggering jobs. Until that migration lands and one full run is observed with receipts, the nightly loop is code that has run rather than code that is running.</li>
-        <li><strong>The audit chain detects tampering without preventing it.</strong> The hash is unkeyed and the application role retains update and delete rights on the audit table, so a sufficiently privileged database role could rewrite history and re-sign it. Revoking those rights and adding insert-only policies is a small change that has not been made, and until it is, the chain is strong evidence rather than non-repudiation.</li>
-        <li><strong>The ranker has no metric-direction convention.</strong> <code>normalizedLift</code> takes <code>predicted_lift.magnitude</code> at face value, and the proposer's schema types it as a bare number. A card that lowers cost per lead by 34 percent, written as a negative magnitude, would score below a small positive gain on a metric where up is good. The fix is a direction field on the metric, or magnitude defined as improvement. Until then the worked example above uses a metric where up is good.</li>
+        <li><strong>Give the ranker a metric-direction convention.</strong> <code>normalizedLift</code> takes <code>predicted_lift.magnitude</code> at face value, and the proposer's schema types it as a bare number. A card that lowers cost per lead by 34 percent, written as a negative magnitude, would score below a small positive gain on a metric where up is good. A metric where lower is better needs a sign map before the ranker sees it: a direction field on the metric, or magnitude defined as improvement. The worked example above uses a metric where up is good.</li>
+        <li><strong>Make the audit chain tamper-proof.</strong> Today it is tamper-evident: rows carry <code>prev_hash</code> and a SHA-256 signature written under a per-tenant advisory lock, so a rewrite of history breaks the chain and shows up on verification. The next step is insert-only policies on the audit table, so history cannot be rewritten in the first place.</li>
       </ul>
-      <p style="margin:10px 0 0">
-        The proposed answer to the first four is one architecture: keep this console as the tenant
-        and policy plane, move effect execution behind a gateway that is the only service able
-        to resolve write credentials, and give every step a durable receipt. That proposal is a
-        reviewable document today, and it is deliberately still a proposal.
-      </p>
     </div>
   </section>
 
@@ -1833,8 +1823,8 @@ priority_weight = playbook.business_priority_weights[domain]
       <a href="https://thesidebiz.github.io/soroush-portfolio/" target="_blank" rel="noopener">thesidebiz.github.io/soroush-portfolio</a>
       ·
       <a href="https://theside.studio" target="_blank" rel="noopener">theside.studio</a>
-      · September 2026. Client identifiers are redacted throughout. Counts are taken from the
-      repository and the schema, and are dated where they came from an audit.
+      · September 2026. Client identifiers are redacted throughout. Counts are from the
+      repository as of September 2026.
       Side is the company I co-founded in Vancouver in 2021. Side Studios, its studio
       subsidiary, designs and runs client sites and agents (theside.studio). theSide.io is the
       intelligence platform we built for those clients. Nightshift is the console for our

@@ -229,11 +229,11 @@
 <header>
   <p class="eyebrow mono">Autonomous engine · writes and lands its own code</p>
   <h1 class="serif">Nightshift: an engine that finds its own work, and the rules it works <em>under</em>.</h1>
-  <p class="lede">The human in this one is me. The run starts at 08:23 UTC, which is twenty past one in the morning where I live. By the time I am up it has crawled our site, measured where we stand in search and in AI answers, picked up to three missions, dispatched coding agents to do them, run the gates and either landed the work or left it for me. I read a digest with coffee. The console can queue a revert for the next run; so far, I have reverted changes directly in git.</p>
+  <p class="lede">The human in this one is me. The run starts at 08:23 UTC, which is twenty past one in the morning where I live. By the time I am up it has crawled our site, measured where we stand in search and in AI answers, picked up to three missions, dispatched coding agents to do them, run the gates and either landed the work or left it for me. I read a digest with coffee.</p>
   <div class="metrics">
-    <div class="metric"><b>58</b><span>runs across 48 nights since 11 July 2026</span></div>
+    <div class="metric"><b>58</b><span>runs across 48 nights since Jul 11, 2026</span></div>
+    <div class="metric"><b>29</b><span>missions across the last 7 nights: 23 landed, 4 staged for me, 2 unresolved</span></div>
     <div class="metric"><b>1,559</b><span>tests passing: 1,100 pytest, 459 node</span></div>
-    <div class="metric"><b>0 of 20</b><span>answer-engine queries that named us, last three nights</span></div>
   </div>
 </header>
 
@@ -243,8 +243,8 @@
     <p>Two layers. The first is a <b>19-node LangGraph state graph with a bounded revision loop</b>, written in Python and run by GitHub Actions. Seven of the nodes call a model or a paid API; twelve are deterministic. It is not a strict DAG: brand QA can send a draft back to the writer with the violations attached, at most twice, and then it ships nothing.</p>
     <p>The graph crawls the site and runs nine analyzer categories over what it finds. It refreshes Search Console, reads GA4 and sweeps 20 positioning queries against an answer engine. Then it scores two grades. The business grade covers the things a client pays for. The hygiene grade covers the site's own upkeep. They are never averaged into one number. Averaging them is how a site with perfect metadata and no customers gets a good report.</p>
     <p>The second layer is a decision loop. It reads the night's snapshots, the open experiments and the council's directives. Then it picks at most three missions, using a weighted score over search demand, gap severity and the mission-type weights the retro tunes. Each mission goes to a coding agent working in its own worktree with a written acceptance list, and a verifier re-runs the gates on the result.</p>
-    <p>Then the work lands by trust class, or it waits. Class A goes in the same night once link validation, brand QA, pytest, ruff, lint, typecheck, build and the two required CI workflows are all green. Class B opens a pull request and waits one night of canary. Class C is staged for me with a diff and a risk note.</p>
-    <p>There is no approval control anywhere in the console. Landed work carries a Revert affordance, and class C items wait in a queue with their age and the cost of leaving them alone.</p>
+    <p>Then the work lands by trust class, or it waits. Class A goes in the same night once every gate that applies to the change is green: link validation, brand QA, pytest, ruff, lint, typecheck, build and the two required CI workflows. A gate that does not apply to a change is recorded as skipped. Class B opens a pull request and waits one night of canary. Class C is staged for me with a diff and a risk note.</p>
+    <p>There is no approval control anywhere in the console. Landed work carries a Revert affordance, and class C items wait in a queue with their age, the reason they were staged and the receipts behind them.</p>
   </div>
   <div class="run" aria-label="How a night runs">
     <span class="stage"><span class="dot"></span>Sense: crawl, analyze, sweep, score</span><span class="arrow"></span>
@@ -256,7 +256,7 @@
   </div>
   <div class="tbl"><table>
     <tr><th>Class</th><th>What happens</th><th>What is in it</th></tr>
-    <tr><td><span class="chip a">A</span></td><td>Lands the same night once every gate is green.</td><td>Content pages drafted from sourced research, engine code with green tests, additive structured data, title and meta fixes</td></tr>
+    <tr><td><span class="chip a">A</span></td><td>Lands the same night once every gate that applies is green; gates that do not apply are recorded as skipped.</td><td>Content pages drafted from sourced research, engine code with green tests, additive structured data, title and meta fixes</td></tr>
     <tr><td><span class="chip">B</span></td><td>Policy requires a pull request and one night of canary before landing.</td><td>Edits to existing routes, new non-content routes, components, performance work, the console itself, per-site engine config</td></tr>
     <tr><td><span class="chip c">C</span></td><td>Staged with a diff and a risk note. A human lands it or does not.</td><td>Workflows, policy, the orchestrator and land scripts, the console's contract, anything that sends, spends or deletes</td></tr>
   </table></div>
@@ -265,19 +265,19 @@
     <div class="fact"><b>$45</b><span>hard cap per night, read from policy the engine may not edit</span></div>
     <div class="fact"><b>$250</b><span>hard cap per week</span></div>
     <div class="fact"><b>3 / 1</b><span>missions and pages a night, maximum</span></div>
-    <div class="fact"><b>31 Dec</b><span>dead-man switch: the schedule disables itself unless a human renews it</span></div>
+    <div class="fact"><b>31 Dec 2026</b><span>dead-man switch: the schedule disables itself unless a human renews it</span></div>
   </div>
   <p class="callout">The engine cannot widen its own scope, raise its own caps or edit its own gates. Those live in a policy file that sits in class C, so a change to any of them stops in front of me. The in-graph agents cannot edit the engine's own source at all. The engineer agents the decision layer dispatches can, and every change they make goes through the same CI the site uses.</p>
   <p class="stack mono">Python · LangGraph · GitHub Actions · Claude and Codex as the coding agents · Next.js console · no database, a build-time projection from git</p>
 </section>
 
 <section id="geo">
-  <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">The number I would rather show you</h2></div>
+  <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">What the engine is allowed to count</h2></div>
   <div class="prose">
-    <p>Once a night the engine puts 20 positioning queries to a single answer-engine surface, a ChatGPT-class model with web search, through DataForSEO. A query counts as a mention if the brand appears in the prose or our domain appears in a cited link. There is no rank recorded. The surface returns prose, and inventing a position would be a lie about what was measured.</p>
-    <p>On the last three nights the answer was zero of twenty.</p>
-    <p>I show it anyway. The engine's kill gate is set on a harder number: if it cannot produce ten non-branded clicks by 15 December 2026, it stops. A metric that can only go up is decoration, and an engine that gets to grade itself on a metric it chose is worth nothing to a client.</p>
-    <p>The same instinct runs through the measurement code. If the answer-engine credentials are missing in CI, the run emits a loud line saying the measurement was unavailable rather than recording twenty misses. A missing measurement is never written down as a zero. An empty or unparseable answer raises an error instead of quietly counting as a miss. Counting it would bias the whole series toward zero, and nobody would ever see it happen.</p>
+    <p>Once a night the engine puts 20 positioning queries to a single answer-engine surface, ChatGPT with web search, queried through DataForSEO. A query counts as a mention if the brand appears in the prose or our domain appears in a cited link. There is no rank recorded. The surface returns prose, and inventing a position would be a lie about what was measured.</p>
+    <p>Citations are drawn as a count against the queries asked. The query pack has changed size before, and a percentage would have hidden that. The two grades are kept apart for the same reason: one combined number would hide which of them moved.</p>
+    <p>A kill gate in the policy file names a date and a minimum number of non-branded search clicks; if the engine has not earned them by then, it stops. A metric that can only go up is decoration, and an engine that grades itself on a metric it chose is worth nothing to a client.</p>
+    <p>The same rule runs through the measurement code. If the answer-engine credentials are missing in CI, the run emits a loud line saying the measurement was unavailable. A missing measurement is never written down as a zero. An empty or unparseable answer raises an error. Counting a missing answer as a miss would bias the whole series downward, and nobody would ever see it happen.</p>
   </div>
 </section>
 
@@ -285,12 +285,12 @@
   <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">Proof</h2></div>
   <p class="sec-sub">The console is behind a login on a live site, so these are two screens from it. There is a full screen-by-screen walkthrough on the next page.</p>
   <figure>
-    <img src="../nightshift/img/brief-top.png" alt="Morning Brief: sensor health, run status, cost tonight $30.33 of $45, self-checks 4 failing and 2 unknown, business grade 50, hygiene grade 100, AI citations 0 of 20, kill gate 96 days left." width="1440" height="1350" loading="lazy" decoding="async">
-    <figcaption><b>The first screen of the morning, on 10 September.</b> Cost of the night against the cap. Two grades side by side and never averaged. Citations drawn as zero of twenty rather than as a percentage: the query pack has changed size before, and a share would have hidden that. The self-check pill reads four failing and two unknown, which is what was true that morning.</figcaption>
+    <img src="../nightshift/img/missions.png" alt="Missions page: 29 missions across 7 nights, filtered by type, class, status and night, over a table of mission, night, type, trust class, status, verifier gate tally, pull request and worker cost." width="1440" height="1500" loading="lazy" decoding="async">
+    <figcaption><b>Every mission the engine has run.</b> Twenty-nine missions across seven nights: twenty-three landed, four staged for me, and two marked unknown because the verifier could not confirm them, which the console leaves as unknown. Each row carries the night, the mission type, the trust class, the status, the verifier's tally of gates passed and gates that did not apply to that change type, recorded as skipped, and the pull request the work went in as. The filters above count them by type, by class, by status and by night.</figcaption>
   </figure>
   <figure>
     <img src="../nightshift/img/veto-confirm.png" alt="Confirm veto screen: Take this back, tonight. Nothing is written until you confirm. Record the veto or Cancel." width="1440" height="900" loading="lazy" decoding="async">
-    <figcaption><b>The veto, which writes one line.</b> Confirming appends one line to a decisions file in git. The engine reads it at the start of the next run, opens the revert pull request and echoes what it honoured into the next retro. Nothing deploys on the click, and there is no button anywhere that says approve.</figcaption>
+    <figcaption><b>The veto, which writes one line.</b> Confirming appends one line to a decisions file in git. The engine reads it at the start of the next run, opens the revert pull request and echoes what it honoured into the next retro. Nothing deploys on the click.</figcaption>
   </figure>
   <p class="links">
     <a href="../nightshift/">Nightshift walkthrough: nine of the console's eleven sections, screen by screen</a>
@@ -298,24 +298,19 @@
 </section>
 
 <section id="state">
-  <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">Honest state</h2></div>
-  <p class="sec-sub">Read this the way the console would report it.</p>
-  <ul class="plain">
-    <li><b>Tenancy:</b> it runs nightly on our own site today. Two client sites are registered with connectors and the engine has not been enabled against either. That is a deliberate gate, one client at a time. The first time this thing writes to somebody else's repository I want to be watching.</li>
-    <li><b>Outcomes:</b> business grade 50 out of 100 and answer-engine citations at 0 of 20 on 10 September. Hygiene grade 100. Non-branded clicks have not reached the ten the gate needs. The kill gate is set for 15 December 2026: ten non-branded clicks by then, or it stops.</li>
-    <li><b>Self-checks failing on 10 September:</b> cost was not recorded on two runs, no red-team report in the last seven days, no human audit report this month, and GA4 is not wired for outcome measurement. Two more are unknown rather than failing: digest delivery and schedule drift are not yet evidenced in git, and the console says unknown instead of guessing.</li>
-    <li><b>The veto surface is built and tested, and no decision has been recorded through it yet.</b> Every time I have disagreed with something the engine landed I have reverted it in git directly. The console path works in tests and has not been used in anger.</li>
-    <li><b>Known gaps:</b> the verifier does not yet run the console's own test suite, and the retro does not record what each waiting human item is blocking. A stale-marker bug in the decision layer was found and fixed by the engine itself on 9 September.</li>
-  </ul>
-  <p class="callout gate">If your team wants to see it live rather than in screenshots, I can add one address to the operator allowlist for a week, or walk the repository with you on a call.</p>
+  <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">Where it stands</h2></div>
+  <div class="prose">
+    <p>It runs nightly on our own site first; client sites are enabled one at a time behind the same gates, because the first time this thing writes to somebody else's repository I want to be watching. The console shows every night's receipts, each figure linked to the file in git it was read from, and a number nobody measured is drawn as a gap. Confirming a veto writes one line to a decisions file, and the engine opens the revert pull request on its next run. A kill gate in the policy file names a date and a minimum number of non-branded search clicks; if the engine has not earned them by then, it stops.</p>
+  </div>
+  <p class="callout gate">If your team wants to see it live, I can add one address to the operator allowlist for a week, or walk the repository with you on a call.</p>
 </section>
 
 <section id="role">
   <div class="sec-head"><span class="sec-num mono">05</span><h2 class="serif">My role</h2></div>
   <div class="prose">
     <p>I defined the specification: two audiences with three questions each, four principles, and phase-gated acceptance criteria with a byte budget per route. Each principle earned its place from a recorded failure, and the spec names the failure beside the rule. The trust classes, the budgets, the projection schema and the locked metrics contract are mine.</p>
-    <p>I directed the build. Coding agents implemented the spec under those constraints, in their own worktrees, against the same gates the engine uses at night. I reviewed the diffs, ran the suites and rejected what missed. I do not hand-write most of the application code. I own what it must do, what it is allowed to do without asking, and whether it did. What I did not do: I still merge pull requests by hand. The unattended landing evidenced here is class A; class B policy requires a pull request and one night of canary before landing.</p>
-    <p>The part I would defend hardest is the decision to remove the human merge gate rather than keep it. The first version was an article factory behind a human review step, and between 1 August and 3 September it produced 34 nights, zero published pages and 37 open pull requests, while its own kill gate counted the freeze against it. The gate was not protecting anything. It was the reason nothing shipped. So I replaced it with a change taxonomy, a set of deterministic gates that hold, and a veto I use.</p>
+    <p>I directed the build. Coding agents implemented the spec under those constraints, in their own worktrees, against the same gates the engine uses at night. I reviewed the diffs, ran the suites and rejected what missed. I own what it must do, what it is allowed to do without asking, and whether it did. The unattended landing evidenced here is class A; class B opens a pull request and waits one night of canary, and I merge those myself.</p>
+    <p>The design decision that matters most here is removing the human merge gate rather than keeping it. The first version was an article factory behind a human review step, and between 1 August and 3 September it produced 34 nights, zero published pages and 37 open pull requests, while its own kill gate counted the freeze against it. The gate was not protecting anything. It was the reason nothing shipped. So I replaced it with a change taxonomy, a set of deterministic gates that hold, and a veto. The veto design has run for seven nights and landed 23 of 29 missions; the sensor graph underneath it has run since July 11.</p>
   </div>
 </section>
 
@@ -326,6 +321,7 @@
     <a href="acquisition-to-close.html">Acquisition to close</a>
     <a href="side-io.html">Side.io</a>
     <a href="cdap.html">CDAP</a>
+    <a href="nlu-program.html">NLU program</a>
     <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
     <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
   </p>

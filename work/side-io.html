@@ -217,8 +217,8 @@
   <p class="lede">The human at the far end was someone looking at a presale tower at eleven at night, wanting to know whether the parking stall was included and whether they could assign the contract before completion. Those are not questions a brochure answers, and they are not questions an agent answers at eleven at night. The product answered them in seconds, worked out from the reply whether this was a buyer or a browser, and woke the agent only when it was worth waking him. Getting that to work took us three goes, over three different technologies.</p>
   <div class="metrics">
     <div class="metric"><b>50 &rarr; 120+</b><span>branches in the rule-based workflow before it stopped being maintainable</span></div>
-    <div class="metric"><b>8,000</b><span>captured SMS and web-chat turns behind the in-house models, segmented before annotation</span></div>
-    <div class="metric"><b>374</b><span>presale projects in the data base behind the answers, across 17 linked tables</span></div>
+    <div class="metric"><b>8,000</b><span>captured buyer-conversation turns behind the in-house models</span></div>
+    <div class="metric"><b>374</b><span>presale projects in the database behind the answers, across 17 linked tables</span></div>
   </div>
 </header>
 
@@ -228,7 +228,7 @@
     <p>Side was a pre-construction sales platform an individual real-estate agent could buy. It shipped in 2020-21, before generative AI. The revenue system it sat inside is <a href="acquisition-to-close.html">a separate page</a>. This one is about the product and the three attempts at its hardest part.</p>
     <p>Before any of that there was a data problem. Presale inventory has no MLS. There is no single source of truth for what is selling, at what price, with what deposit structure or completion date, so the first build was a data layer: an Airtable and Postgres pair fed by automated extraction against developer and listing portals, with a timestamp on every extracted row. The production base carried 17 linked tables and 374 projects, covering pricing, developer, completion dates, amenities and architect.</p>
     <p>Everything the conversation layer could say, it said out of that base.</p>
-    <p class="callout" style="margin-left:0">One naming note. This one confuses people. Side.io was this product. The intelligence platform Side built years later for the studio's clients carries the same domain name and is a different system. There is a map of the names at the bottom of the page.</p>
+    <p class="callout" style="margin-left:0">A note on the name: Side.io was this product. The intelligence platform we built years later for the studio's clients carries the same domain and is a different system.</p>
   </div>
 </section>
 
@@ -243,16 +243,16 @@
   <h3>Generation one: a rule-based workflow, and the wall it hit</h3>
   <div class="prose">
     <p>The first version had no model in it at all. It was a conditional workflow in GoHighLevel, triggered by form and paid-social lead submissions, branching on tagged intent into stage moves, tags and an agent handoff. It began at around 50 branching nodes and grew past 120.</p>
-    <p>Over a six-week window covering more than 2,000 unique engagements it held about a 1% conversion rate, which was the industry baseline. So it worked, and it did not win. What killed it was maintenance: past a certain branch count nobody could reason about the tree, and the company's own record of the period says translating the expanding conditional framework into code had become unmanageable.</p>
-    <p>I keep the screenshots. They are the honest picture of what generation one was. A reviewer who assumes the early system was an LLM is going to ask which model produced the result, and the answer is that there was no model. The result came from the operating design.</p>
+    <p>Over a six-week window covering more than 2,000 unique engagements it held about a 1% conversion rate, which was the industry baseline. So it worked, and it did not win. What killed it was maintenance: past a certain branch count nobody could reason about the tree. By the company's own record of the period, translating the expanding conditional framework into code had become unmanageable.</p>
+    <p>The screenshots below show generation one as it was. The operating design produced that result, before any model.</p>
   </div>
   <figure>
     <img src="../earlier-work/img/decision-tree-01.png" alt="The GoHighLevel conversation workflow: a branching decision tree of conditional nodes, tags and stage moves." width="2400" height="1430" loading="lazy" decoding="async">
-    <figcaption><b>Generation one, as it stood in 2021-22.</b> Every diamond is a condition somebody had to write down and later maintain. This is the artifact people mean when they say a system was rule-based, and it is worth looking at before believing any claim about early conversational AI.</figcaption>
+    <figcaption><b>Generation one, as it stood in 2021-22.</b> Every diamond is a condition somebody had to write down and later maintain. This is what people mean when they call a conversation layer rule-based.</figcaption>
   </figure>
   <figure>
     <img src="../earlier-work/img/decision-tree-02.png" alt="Further branches of the same GoHighLevel workflow, continuing the conditional tree." width="2400" height="1554" loading="lazy" decoding="async">
-    <figcaption><b>The other half of the same tree.</b> Growth from 50 branches to more than 120 is what a rules engine looks like when the domain is richer than the tool. The branch count is the reason for generation two, and the reason I stopped defending the first design.</figcaption>
+    <figcaption><b>The other half of the same tree.</b> Growth from 50 branches to more than 120 is what a rules engine looks like when the domain is richer than the tool. The branch count is the reason for generation two.</figcaption>
   </figure>
 
   <h3>Generation two: in-house models on our own transcripts</h3>
@@ -260,34 +260,34 @@
     <p>The replacement was a set of in-house natural-language understanding models, trained on transcripts from 8,000 SMS and web-chat turns captured between May 2021 and August 2022 from real buyer conversations, de-identified and segmented before annotation. The annotation ran under a written process with a spot-check on a sample, and new examples fed a nightly retrain. Recordings had a retention limit and the store was encrypted.</p>
     <p>The models were built by our internal engineering team, led by our CTO. The team ran three deliberately different pipelines against the same problem so we could compare, with an entity extractor and a confidence threshold below which the system handed the conversation to a human.</p>
     <p>That generation is where the funnel numbers moved. Lead-to-transaction conversion went from 1% to 3%, and the layer handled more than 1,000 buyer conversations a day.</p>
-    <p>The part I would want a technical reviewer to hear is the piece that did not work. A separate 2024 collaboration with a University of British Columbia master of data science capstone team produced transformer-based lead-warmth classifiers, and they reached 0.55 to 0.59 accuracy with 0.33 recall on the hot class. The team's own report says the end goals were not reached with the data available. We did not put them in the funnel. Two years of hindsight says the labels were the problem and we should have spent that quarter on the annotation guide.</p>
+    <p>A separate 2024 workstream on transformer lead scoring, run with a University of British Columbia master of data science capstone team, did not ship: their report says the end goals were not reached with the data available. We kept the classifiers out of the funnel, and the product moved to LLM agents.</p>
   </div>
-  <p class="callout"><b>The data layer both generations answered out of:</b> an Airtable and Postgres hybrid with 17 linked tables (pricing, developer, completion dates, amenities, architect) and 374 project records, ingested by scheduled extraction tasks against developer and listing portals, with a per-row extract timestamp so a stale answer could be identified as stale. The conversation layer got most of the attention. This is the thing that made its answers true.</p>
+  <p class="callout"><b>The data layer both generations answered out of:</b> an Airtable and Postgres hybrid covering pricing, developer, completion dates, amenities and architect, ingested by scheduled extraction tasks against developer and listing portals, with a per-row extract timestamp so a stale answer could be identified as stale. The conversation layer got most of the attention. This is the thing that made its answers true.</p>
 
   <h3>Generation three: LLM agents</h3>
   <div class="prose">
-    <p>The third generation replaced the in-house classifiers with LLM-based conversational agents once those became reliable and affordable enough to put in front of buyers. It is the shortest section here, and it was the least interesting engineering decision I made on this product. By then the hard work was done: we knew the intents, we had the transcripts, and we knew what a good handoff looked like.</p>
+    <p>The third generation replaced the in-house classifiers with LLM-based conversational agents once those became reliable and affordable enough to put in front of buyers. By then the hard work was done: we knew the intents, we had the transcripts, and we knew what a good handoff looked like.</p>
   </div>
 </section>
 
 <section id="role">
   <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">My role</h2></div>
   <div class="prose">
-    <p>I founded the programme and I defined the product. I identified the segment, set the customer journey, set what the conversation layer had to deliver, and chose when to make each generational transition. The applied research ran as a federally supported project with a filed description, objectives and deliverables, and I wrote those.</p>
-    <p>I directed a small team through all three generations, and I reviewed what each one had to hit before it replaced the last. What I did not do: I did not build the models. Our CTO and the engineering team built the natural-language work, and the capstone team built the classifiers that did not make it. That division is recorded in what the company wrote at the time to a federal agency, in several separate documents, and I would rather be the person who states it plainly than the one who lets a resume imply otherwise.</p>
-    <p>What I take from it is narrower than a resume line. Three generations of the same problem taught me that the model is rarely the constraint. The constraint was the labels, the data layer underneath, and whether the handoff carried enough context for a commissioned salesperson to trust it.</p>
+    <p>I founded the program and I defined the product. I identified the segment, mapped the path a buyer takes, set what the conversation layer had to deliver, and chose when to make each generational transition. The applied research ran as a federally supported project with a filed description, objectives and deliverables, and I wrote those.</p>
+    <p>I directed a small team through all three generations, and I set what each one had to hit before it replaced the last. The engineering was theirs: our CTO and the internal team built the natural-language work, and the capstone team built the warmth classifiers. That division is recorded in what the company filed with a federal agency at the time.</p>
+    <p>Three generations of the same problem taught me that the model is rarely the constraint. The constraint was the labels, the data layer underneath, and whether the handoff carried enough context for a commissioned salesperson to trust it.</p>
   </div>
 </section>
 
 <section id="proof">
   <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">Proof</h2></div>
-  <p class="sec-sub">Contemporaneous documents, redacted. Amounts, named officials, client names and personal data are removed.</p>
+  <p class="sec-sub">Documents from the time. Names, client details and personal data are removed.</p>
   <p class="links">
     <a href="../earlier-work/Side-Pitch-Deck-2023-excerpt.pdf">Pitch deck, 2023 (product-story slides only)</a>
     <a href="../earlier-work/IRAP-Project-Description-2023.pdf">Project description filed with NRC IRAP, 2023</a>
-    <a href="nlu-program.html">The NLU program, as documented for SR&amp;ED</a>
+    <a href="nlu-program.html">The NLU program, as it was written down</a>
   </p>
-  <p class="callout">The IRAP filing is the one I would read first. It was written in 2023 for a federal funding application, so it had to be specific about objectives and deliverables, and its phase order is the same acquisition-to-close sequence I still design around.</p>
+  <p class="callout">The IRAP filing is the one to read first. It was written in 2023 for a federal funding application, so it had to be specific about objectives and deliverables, and its phase order is the same acquisition-to-close sequence I still design around.</p>
 </section>
 
 <footer>
@@ -297,6 +297,7 @@
     <a href="nightshift.html">Nightshift</a>
     <a href="acquisition-to-close.html">Acquisition to close</a>
     <a href="cdap.html">CDAP</a>
+    <a href="nlu-program.html">NLU program</a>
     <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
     <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
   </p>

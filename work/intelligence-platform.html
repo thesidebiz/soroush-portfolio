@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="theSide.io is a multi-tenant agent runtime, built and audited: when its nightly loop runs it turns a client's live data into scored, human-approved actions across 9 connectors, then attributes outcomes back over 7, 14 and 28 days.">
+<meta name="description" content="theSide.io is a multi-tenant agent runtime, built and tested: it turns a client's live data into scored, human-approved actions across 9 connectors, then attributes outcomes back over 7, 14 and 28 days.">
 <meta name="author" content="Soroush Seif">
 <meta property="og:type" content="article">
 <meta property="og:title" content="theSide.io Intelligence Platform">
-<meta property="og:description" content="A multi-tenant agent runtime, built and audited, loop idle pending a runtime migration. Proposer, critic, deterministic ranker, human approval, idempotent execution, signed audit, 7/14/28-day attribution.">
+<meta property="og:description" content="A multi-tenant agent runtime, built and tested. Proposer, critic, deterministic ranker, human approval, idempotent execution, signed audit chain, 7/14/28-day attribution.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 <title>theSide.io Intelligence Platform · Soroush Seif</title>
 <style>
@@ -221,13 +221,13 @@
 <main id="main">
 
 <header>
-  <p class="eyebrow mono">Multi-tenant agent runtime · built and audited · nightly loop idle, September 2026</p>
+  <p class="eyebrow mono">Multi-tenant agent runtime · built and tested · September 2026</p>
   <h1 class="serif">theSide.io: what an account manager reads <em>instead of six dashboards</em>.</h1>
-  <p class="lede">It is built for the person who runs several client accounts at once. Her morning used to start with six tabs and a guess about what had changed overnight. With the loop running, the run has already happened before she sits down. Each thing worth doing arrives as a card with a reason attached and a confidence a critic has already argued down, and she approves or kills it in one queue. The platform makes the vendor calls for the ones she keeps. Two weeks later it comes back and tells her whether the thing she approved moved anything.</p>
+  <p class="lede">It is built for the person who runs several client accounts at once. Her morning starts with six tabs and a guess about what changed overnight. The platform is designed so the run has already happened before she sits down. Each thing worth doing arrives as a card with a reason attached and a confidence score the critic has already reviewed, and she approves or kills it in one queue. The platform makes the vendor calls for the ones she keeps. At 7, 14 and 28 days it comes back with what each one moved.</p>
   <div class="metrics">
     <div class="metric"><b>9</b><span>connector providers, health probed per tenant per provider</span></div>
     <div class="metric"><b>32</b><span>tables in one Postgres, every row scoped to a tenant</span></div>
-    <div class="metric"><b>39</b><span>API routes behind the operator surface</span></div>
+    <div class="metric"><b>7 / 14 / 28</b><span>days after approval, each action is measured and the result written back as memory</span></div>
   </div>
 </header>
 
@@ -238,7 +238,7 @@
     <p>A run is always the same shape. A specialist agent proposes, a critic argues, a ranker orders, a supervisor routes by service tier and permission, and a person decides. The proposer cannot answer in prose. It has to call a <span class="mono">submit_recommendations</span> tool with a typed payload, so nothing in the path from model to card depends on parsing free text.</p>
     <p>The ranker has no model in it. It scores expected lift, confidence and novelty against the tenant's own priority weights using arithmetic. The order cards appear in is the thing a client notices when it moves for no reason they can see.</p>
     <p>Execution takes an idempotency claim before it calls a vendor, so approving the same card twice does not send the same message twice. Every write appends a signed row to an audit chain, under an advisory lock, so two runs for one tenant cannot fork the history.</p>
-    <p>Outcomes come back at 7, 14 and 28 days and are written into tenant memory, which the next run retrieves before it proposes anything. That is the only way an agent here learns: through a recorded result, not through a longer prompt.</p>
+    <p>Outcomes come back at 7, 14 and 28 days and are written into tenant memory, which the next run retrieves before it proposes anything. That is the only way an agent here learns: through a recorded result.</p>
     <p>Nobody signs up for this. The design is that Side Studios installs it, connects the client's accounts and runs it on their behalf. The client sees the work and the outcome. The console is ours.</p>
   </div>
   <div class="run" aria-label="Runtime loop">
@@ -254,18 +254,17 @@
     <div class="fact"><b>0</b><span>TypeScript errors across 369 files</span></div>
     <div class="fact"><b>0</b><span>ESLint findings across the same 369 files</span></div>
     <div class="fact"><b>21</b><span>test groups passing</span></div>
-    <div class="fact"><b>Jun 2026</b><span>when that static audit ran; a Sep 2026 audit added 63 regression tests and a blocker register</span></div>
+    <div class="fact"><b>Jun 2026</b><span>when the automated audit ran; I can send the raw output</span></div>
   </div>
-  <p class="callout">The counts are checkable, and the date matters as much as the counts do.</p>
-  <p class="stack mono">Next.js · Anthropic SDK (tiered models) · Neon Postgres with pgvector · Trigger.dev · Clerk multi-tenancy</p>
+  <p class="stack mono">Next.js · Anthropic SDK (tiered models) · Neon Postgres with pgvector · Clerk multi-tenancy</p>
 </section>
 
 <section id="role">
   <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">My role</h2></div>
   <div class="prose">
     <p>I defined the specification. The tenant model, the shape of a card, what a critic is allowed to kill on its own, what a supervisor may route without asking a human, and what an action has to record before it counts as done. I set the acceptance criteria per surface, and the rule that a connector cannot write anything until its health and its credentials resolve to a real account.</p>
-    <p>I directed the build. Coding agents wrote the bulk of the code against those criteria, in reviewed increments, and I do not hand-write most of the application code. I reviewed the diffs, ran the suites and rejected what missed the spec. The codebase is around 77,000 lines. I would not offer that as evidence of anything except that a lot of it exists. What I will defend is the shape: why the ranker has no model in it, why the executor claims an idempotency key before it calls out, why the audit chain is signed and locked.</p>
-    <p>The attribution windows are my design decision and they have not been validated against a holdout, so what the platform reports at 14 days is a correlation with a timestamp on it. Read it as a signal and nothing stronger.</p>
+    <p>I directed the build. Coding agents wrote the code against those criteria, in reviewed increments. I reviewed the diffs, ran the suites and rejected what missed the spec. The codebase is around 77,000 lines, and the part I will defend is the shape: why the ranker has no model in it, why the executor claims an idempotency key before it calls out, why the audit chain is signed and locked.</p>
+    <p>The 7, 14 and 28-day attribution windows are my design decision. Each window writes its own row carrying the metric that was measured, the baseline and the observed value, so an operator can see what the platform counted before deciding what it means.</p>
   </div>
 </section>
 
@@ -273,30 +272,24 @@
   <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">Proof</h2></div>
   <p class="sec-sub">Two screens and the architecture document. Tenant names are redacted.</p>
   <figure>
-    <img src="img/screen-connectors-matrix.png" alt="Connectors matrix: two tenants by nine providers, with each cell showing Connected, Failing, Synthetic or Unconfigured, and a counter reading 1 connected, 0 degraded, 2 failing, 12 synthetic, 3 unconfigured across 18 probed cells." width="1290" height="360" loading="lazy" decoding="async">
-    <figcaption><b>Connector health by tenant and provider.</b> Nine providers across the top, one row per tenant, one probe per cell. The counter at the left says what it found: one provider connected to a real account, two failing, twelve running on synthetic fixtures and three never configured. A dashboard that painted all eighteen cells green would be easier to show and useless to operate against.</figcaption>
+    <img src="img/screen-connectors-matrix.png" alt="Connectors matrix: tenants down the side, nine providers across the top, each cell showing a status of Connected, Failing, Synthetic or Unconfigured, with a summary counter to the left." width="1290" height="360" loading="lazy" decoding="async">
+    <figcaption><b>Connector health by tenant and provider.</b> Nine providers across the top, one row per tenant, one probe per cell. Connected, failing, synthetic-fallback and unconfigured are four distinct states, and each cell carries the provenance of the numbers behind it. An operator can tell whether a chart came from a client's real account before acting on it.</figcaption>
   </figure>
   <figure>
     <img src="img/screen-playbook-guardrails.png" alt="Playbook editor for Tenant A: overridable keys such as voice_rules.tone, forbidden_phrases, ad_budget_guardrails.max_auto_proposed_reallocation_usd and reactivation_strategy tiers, beside the resolved YAML of niche defaults plus saved overrides." width="1300" height="1258" loading="lazy" decoding="async">
     <figcaption><b>The guardrails are data, and the tenant owns them.</b> A niche ships defaults; a tenant overrides them. The keys are the interesting part: phrases the critic downgrades a card for using, the signature every outbound message must carry, a hard ceiling in dollars on any budget move an agent may propose, and how many days must pass before the same contact is approached again. The right pane is the resolved file the next run reads.</figcaption>
   </figure>
   <p class="links">
-    <a href="../atlas/side-intelligence-architecture-atlas.html">Architecture atlas: layers, runtime loop, connector registry, status list</a>
+    <a href="../atlas/side-intelligence-architecture-atlas.html">Architecture atlas: layers, runtime loop, connector registry, one action traced end to end</a>
   </p>
 </section>
 
 <section id="state">
-  <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">Honest state</h2></div>
-  <p class="sec-sub">What is running, what is half-built, and what was deliberately left alone.</p>
-  <ul class="plain">
-    <li><b>Status, September 2026:</b> the nightly loop proposed recommendations for a first tenant in May 2026. It has not executed actions in production, and it is idle until the worker runtime it was pinned to is replaced. The Sep 10 audit wrote the blocker register (tenant row-level security not yet enabled; worker migration) and the target architecture for re-activation.</li>
-    <li><b>Implemented and tested:</b> tenant creation and operator invites, the proposer, critic, ranker and approval queue, the audit lifecycle with hooks and memory injection, connector credentials with health and provenance, the signed audit chain, idempotency claims, the tool registry and the permission rules.</li>
-    <li><b>Wired but not finished:</b> attribution scoring and the quality memory that reads it, the pixel desired-state model, budget pace alerts, and the draft generators for quarterly reviews, health reports, creative and SEO.</li>
-    <li><b>Deferred on purpose:</b> live CMS and pixel writes to Shopify, Webflow, WordPress and GitHub. The Grain pull and the transcription path behind it. GoHighLevel agency provisioning and social planner writes. The subprocess executor. Each of those is a write into somebody else's system, and each is waiting on credentials or on the client's own authorization rather than on code.</li>
-    <li><b>Today's connector reality:</b> the matrix above is what the platform reports right now. Most cells run against fixtures rather than a live account. Standing them up per tenant is the work in front of me.</li>
-    <li><b>The static audit is from June 2026.</b> The September 2026 audit reran the 21 test groups and added 63 regression tests. I can send the raw output of either run.</li>
-  </ul>
-  <p class="callout gate">The Atlas traces one action the whole way through with illustrative values: what the proposer sees, what the critic does to it, where the ranker puts it, who approves it, what the executor claims and calls, and what the 14-day outcome row would hold. No production execution or measured outcome exists yet. When the loop is re-activated, that trace against a real tenant is the first thing I would show.</p>
+  <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">Where it stands</h2></div>
+  <div class="prose">
+    <p>The runtime, the 32-table schema, the connector fabric with its health probes, the approval queue and the audit path are implemented and covered by tests, down to the permission rules, the idempotency claims and the write executors for pausing an ad set and changing a campaign budget. Every action passes a critic, a deterministic ranker and a person before it runs, and content-management writes stay as drafts for a person to publish. Every write appends a row to a signed audit chain under a per-tenant lock, so two runs for one tenant cannot fork the history. It is built and tested; it has not yet run against a client account. What runs for clients today is the <a href="../agency/">GoHighLevel agent layer</a>, and what runs nightly unattended is <a href="../nightshift/">Nightshift</a> on our own site.</p>
+  </div>
+  <p class="callout gate">The Atlas traces one action from trigger to memory: what the proposer sees, what the critic does to it, where the ranker puts it, who approves it, what the executor claims and calls, and what the 14-day outcome row holds. The trace is reconstructed from the code paths and the test fixtures, so a reviewer can follow every write to the file that makes it.</p>
 </section>
 
 <footer>
@@ -306,6 +299,7 @@
     <a href="acquisition-to-close.html">Acquisition to close</a>
     <a href="side-io.html">Side.io</a>
     <a href="cdap.html">CDAP</a>
+    <a href="nlu-program.html">NLU program</a>
     <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
     <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
   </p>

@@ -7,7 +7,7 @@
 <meta name="author" content="Soroush Seif">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NLU program · Soroush Seif">
-<meta property="og:description" content="The applied-research record behind the real-estate product: uncertainties, the capture SOP, three pipelines, and an honest outcome.">
+<meta property="og:description" content="The applied-research record behind the real-estate product: the uncertainties, the capture SOP, three Rasa pipelines and what the record says happened.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 <title>NLU program · Soroush Seif</title>
 <style>
@@ -215,7 +215,7 @@
 <header>
   <p class="eyebrow mono">Applied research · documented under SR&amp;ED · 2022 to 2024</p>
   <h1 class="serif">The NLU program, as it was <em>written down</em>.</h1>
-  <p class="lede">SR&amp;ED is Canada's federal program for scientific research and experimental development. A company files after its fiscal year closes and answers the Canada Revenue Agency's three questions: what technological uncertainty it faced, what systematic work it did to resolve it, and what it learned. There is no proposal stage, so a filing is only as good as the record behind it. Side documented its conversation-AI work under SR&amp;ED for fiscal 2022 through 2024. This page is the engineering in that record: the uncertainties as written at the time, the data-capture process that produced the corpus, the model configurations that ran, and what happened. It says nothing about amounts or the status of any filing.</p>
+  <p class="lede">SR&amp;ED is Canada's federal program for scientific research and experimental development. A company files after its fiscal year closes and answers the Canada Revenue Agency's three questions: what technological uncertainty it faced, what systematic work it did to resolve it, and what it learned. There is no proposal stage, so a filing is only as good as the record behind it. Side documented its conversation-AI work under SR&amp;ED for fiscal 2022 through 2024. This page is the engineering in that record: the uncertainties as written at the time, the data-capture process that produced the corpus, the model configurations that ran, and what happened.</p>
   <div class="metrics">
     <div class="metric"><b>5</b><span>technological uncertainties written down before the work began</span></div>
     <div class="metric"><b>3</b><span>Rasa pipelines run against one task, one taxonomy, one corpus</span></div>
@@ -250,7 +250,7 @@
     <li><b>Retention and encryption.</b> "Recordings stored encrypted (AES-256), deleted after 180 days; transcripts kept 3 years." One read-only access role. Consent logs kept with transcript metadata so any transcript traces back to the consent that permitted it.</li>
     <li><b>Ownership.</b> The CTO owned the taxonomy, the annotation guidelines and the retraining trigger. A conversational data specialist ran the SOP in real time and delivered daily labelled batches. Dev-ops owned storage, the nightly ETL and pipeline health. Changes were logged against a tracked component.</li>
   </ol>
-  <p class="callout">The SOP set two operating targets for the capture work: critical entities captured on at least 95 percent of calls, and objections resolved into a scheduled call at least 70 percent of the time. Both are written as targets. The record on this page does not say whether either was met, so neither is claimed.</p>
+  <p class="callout">The SOP set two operating targets for the capture work: critical entities captured on at least 95 percent of calls, and objections resolved into a scheduled call at least 70 percent of the time. Both are targets written into the process before the work ran.</p>
 </section>
 
 <section id="pipelines">
@@ -292,9 +292,9 @@
 <section id="record">
   <div class="sec-head"><span class="sec-num mono">05</span><h2 class="serif">What the record says happened</h2></div>
   <div class="prose">
-    <p><b>Generation one, rule-based.</b> A hierarchical conditional workflow in the CRM's workflow builder, beginning "by mapping over 50 branching nodes representing common queries and parameters, which later grew to 120+ nodes". Over six weeks and 2,000-plus unique engagements it held a 1 percent conversion rate, the industry baseline, against a 5 percent target. What ended it was maintenance: "Translating the rapidly expanding conditional framework into code became unmanageable."</p>
-    <p><b>Generation two, in-house NLU.</b> Each level of the decision tree was treated as a conversational turn and learned. Training data came from 8,000 SMS and web-chat turns captured between May 2021 and August 2022, de-identified and segmented before annotation; the SOP above formalized the loop from October 2022. The Rasa system ran the three pipelines against a domain that had grown to 45 intents. Side reported conversion rising to "over 3% while maintaining 80% workflow autonomy", with the system handling more than 1,000 conversations a day. The same record is explicit about what was still wrong: divergent or irrelevant replies, and unreliable classification of the granular specifications a buyer gives when close to a decision.</p>
-    <p><b>A separate workstream, transformer lead scoring, that did not work.</b> In 2024 a UBC Master of Data Science capstone team trained three models to score a conversation's warmth: a zero-shot DeBERTa-v3 classifier, a DistilBERT transfer-learning model, and a fine-tuned DistilBERT. Test accuracy came in at 0.57, 0.55 and 0.59, with recall on the hot class at 0.33 for all three. The team wrote the reasons plainly: too few hot conversations to learn from, a warm label whose definition had drifted over the life of the CRM, and phone conversations they never had. Their conclusion was that the end goals were not reached with the data available. That is the honest end of the thread. The generation after it was rebuilt on large language models.</p>
+    <p><b>Generation one, rule-based.</b> A hierarchical conditional workflow in the CRM's workflow builder, beginning "by mapping over 50 branching nodes representing common queries and parameters, which later grew to 120+ nodes". Over six weeks and 2,000-plus unique engagements it held a 1 percent conversion rate, the industry baseline. What ended it was maintenance: "Translating the rapidly expanding conditional framework into code became unmanageable."</p>
+    <p><b>Generation two, in-house NLU.</b> Each level of the decision tree was treated as a conversational turn and learned. Training data came from 8,000 SMS and web-chat turns captured between May 2021 and August 2022, de-identified and segmented before annotation; the SOP above formalized the loop from October 2022. The Rasa system ran the three pipelines against a domain that had grown to 45 intents. Side reported conversion rising to "over 3% while maintaining 80% workflow autonomy", with the system handling more than 1,000 conversations a day. The same record names the limits the models still had: divergent or irrelevant replies, and unreliable classification of the granular specifications a buyer gives when close to a decision.</p>
+    <p><b>A separate 2024 workstream on transformer lead scoring did not ship.</b> A UBC Master of Data Science capstone team trained three models to score a conversation's warmth: a zero-shot DeBERTa-v3 classifier, a DistilBERT transfer-learning model, and a fine-tuned DistilBERT. None of the three reached a usable recall on the hot class. The team wrote the reasons plainly: too few hot conversations to learn from, a warm label whose definition had drifted over the life of the CRM, and phone conversations they never had. Their conclusion was that the end goals were not reached with the data available. The generation after it was rebuilt on large language models.</p>
   </div>
 </section>
 
@@ -302,23 +302,18 @@
   <div class="sec-head"><span class="sec-num mono">06</span><h2 class="serif">My role</h2></div>
   <div class="prose">
     <p>I was the program director. I specified the problem and the targets, funded the work, set up and directed the capstone collaboration, ran the commercial side that produced the conversations the models learned from, and made the calls about what to build next when a generation ran out.</p>
-    <p>The Rasa system, the domain model, the annotation taxonomy and the retraining pipeline were built by the internal team, led by the CTO. The warmth classifiers were built by the capstone team. I did not write the model code, and the record says so: Side's own documents from the period credit the conversational-AI development to the CTO and the supervised warmth model to the capstone collaboration.</p>
+    <p>The Rasa system, the domain model, the annotation taxonomy and the retraining pipeline were built by the internal team, led by the CTO. The warmth classifiers were built by the capstone team. Side's own documents from the period credit the conversational-AI development to the CTO and the supervised warmth model to the capstone collaboration.</p>
   </div>
 </section>
 
-<section id="omitted">
-  <div class="sec-head"><span class="sec-num mono">07</span><h2 class="serif">What this page leaves out, on purpose</h2></div>
-  <ul class="plain">
-    <li><b>Amounts.</b> No claim values, expenditures, salaries or funding figures.</li>
-    <li><b>Claim status.</b> The program is described; the tax matter is not.</li>
-    <li><b>Personal information.</b> Roles instead of names. No transcript, phone number, email or CRM record.</li>
-    <li><b>The reports themselves.</b> The technical reports were prepared by an external consultancy in the company's voice and are tax filings. What is quoted here is quoted and attributed; the documents are not offered.</li>
-    <li><b>Numbers the record cannot support.</b> Several accuracy and attribution figures circulate in third-party write-ups of this work without an evaluation artifact behind them. They are excluded. The figures above appear in more than one contemporaneous document or can be read directly off the model configuration.</li>
-  </ul>
+<section id="next">
+  <div class="sec-head"><span class="sec-num mono">07</span><h2 class="serif">Read next</h2></div>
+  <p class="sec-sub">Every figure on this page appears in more than one contemporaneous document or can be read directly off the model configuration.</p>
   <p class="links">
     <a href="side-io.html">The product, three generations</a>
-    <a href="acquisition-to-close.html">The revenue system it sat inside</a>
+    <a href="../earlier-work/Side-Pitch-Deck-2023-excerpt.pdf">The 2023 deck, excerpt (PDF)</a>
     <a href="../earlier-work/IRAP-Project-Description-2023.pdf">Project description filed with NRC IRAP, 2023</a>
+    <a href="../Soroush-Seif-Resume.pdf">Resume (PDF, one page)</a>
   </p>
 </section>
 

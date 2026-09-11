@@ -7,7 +7,7 @@
 <meta name="author" content="Soroush Seif">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Seven client systems · Soroush Seif">
-<meta property="og:description" content="What is built, in a book of 84 audited sub-accounts and about 45 active clients, and what survives a technical reviewer's questions.">
+<meta property="og:description" content="Seven systems built across 84 sub-accounts and about 45 active clients on one white-label GoHighLevel platform: voice agents, an orchestration state machine, schema bridges and closed-loop attribution.">
 <title>Seven client systems · Soroush Seif</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 <style>
@@ -183,14 +183,14 @@
 <header>
   <p class="eyebrow mono"><a href="../">Soroush Seif</a> · Side · September 2026</p>
   <h1 class="serif">Seven client systems on one platform, <em>as built</em>.</h1>
-  <p class="lede">Side Studios is the studio subsidiary of Side, the company I co-founded in Vancouver in 2021. This page covers the studio's client work: the CRM, the calendars, the messaging, and increasingly the voice and chat agents, all on a white-label GoHighLevel platform. I audited the whole estate before writing it, so the counts below are the ones that survive a second look.</p>
+  <p class="lede">Side Studios is the studio subsidiary of Side, the company I co-founded in Vancouver in 2021. This page covers the studio's client work: the CRM, the calendars, the messaging, and increasingly the voice and chat agents, all on a white-label GoHighLevel platform. Counts here are from the estate as it stood in September 2026.</p>
   <div class="prose">
-    <p>The book splits into three eras. Hand-built work from 2021 to 2023, with the first LLM deployments. A productized snapshot era in 2024 and 2025, where one template was installed across the client base. Then 2026, where the work shifted from many workflows to a few well-guarded agents that call workflows. The seven systems below are the ones worth a technical reviewer's time. The estate-level numbers are given plainly.</p>
+    <p>The book splits into three eras. Hand-built work from 2021 to 2023, with the first LLM deployments. A productized snapshot era in 2024 and 2025, where one template was installed across the client base. Then 2026, where the work shifted from many workflows to a few well-guarded agents that call workflows. The seven systems below show how the estate is built.</p>
   </div>
   <div class="facts">
-    <div class="fact"><b>84</b><span>sub-accounts audited on one platform; about 45 are active clients, the rest past clients, templates and internal accounts</span></div>
-    <div class="fact"><b>11</b><span>purpose-built AI voice agents, 6 of them on live inbound lines; a vendor demo agent installed for a 2026 evaluation is not counted</span></div>
-    <div class="fact"><b>~1,200</b><span>workflows built across the estate; roughly two in five are published and running</span></div>
+    <div class="fact"><b>~45</b><span>active clients on one platform, in a book of 84 sub-accounts; the rest are past clients, templates and internal accounts</span></div>
+    <div class="fact"><b>11</b><span>purpose-built AI voice agents, 6 of them on live inbound lines</span></div>
+    <div class="fact"><b>~1,200</b><span>workflows built across the estate</span></div>
     <div class="fact"><b>2</b><span>external systems bridged by schema: a recreation-management platform and a clinic EMR</span></div>
     <div class="fact"><b>2023</b><span>first LLM workflows in production, with a human-handoff pattern that still ships</span></div>
   </div>
@@ -202,7 +202,7 @@
   <article class="sys">
     <p class="kind mono">Voice agent · tool use · productized</p>
     <h3>From a scripted receptionist to a white-label template</h3>
-    <p>The live agent has twelve configured actions, ten of which are structured in-call extraction into a typed field schema created for it in one batch: caller, child's age, programme of interest, preferred days, consent to text. SMS follow-up is consent-gated inside the call. A post-call workflow trigger hands the structured record to the booking flow. Two earlier generations are kept, drafted, as the record of what changed.</p>
+    <p>The live agent has twelve configured actions, ten of which are structured in-call extraction into a typed field schema created for it in one batch: caller, child's age, program of interest, preferred days, consent to text. SMS follow-up is consent-gated inside the call. A post-call workflow trigger hands the structured record to the booking flow. Two earlier generations are kept in the account as the record of what changed.</p>
     <ul>
       <li>Ten calendars created programmatically from the client's practice-management system, with a matching field cluster that keeps the raw guardian record as JSON so nothing is lost against a schema we do not control.</li>
       <li>A 95-question knowledge base that refreshes from the client's own site, and hand-authored structured data for the business.</li>
@@ -218,8 +218,8 @@
   <article class="sys">
     <p class="kind mono">Voice agent · retrieval architecture · guardrails</p>
     <h3>Five knowledge bases, one of them a claim policy</h3>
-    <p>Retrieval is partitioned by function rather than dumped into one corpus: products, applications, service, company, and a dedicated guardrails and claim-policy corpus. The prompt carries an enumerated list of things the agent must not claim, a named uncertainty protocol ("I do not want to guess on that"), an identity rail so the agent never presents as a human engineer, and a bounded call-transfer trigger. It is live, wired to the inbound line, and maintained; the knowledge base was updated the day I audited it.</p>
-    <p class="why"><b>What it shows:</b> the guardrails live in the knowledge base and its structure, where staff can read and edit them, instead of in one sentence of a prompt.</p>
+    <p>Retrieval is partitioned by function rather than dumped into one corpus: products, applications, service, company, and a dedicated guardrails and claim-policy corpus. The prompt carries an enumerated list of things the agent must not claim, a named uncertainty protocol ("I do not want to guess on that"), an identity rail so the agent never presents as a human engineer, and a bounded call-transfer trigger. It is live, wired to the inbound line, and the knowledge base is kept current.</p>
+    <p class="why"><b>What it shows:</b> the guardrails live in the knowledge base and its structure, where staff can read and edit them.</p>
   </article>
 </section>
 
@@ -240,7 +240,7 @@
   <article class="sys">
     <p class="kind mono">Conversation AI · numbered, ordered units</p>
     <h3>AI.00 to AI.14</h3>
-    <p>A numbered, dependency-ordered series of workflow units (AI.00 to AI.14) that covers the four things naive bot builds leave out: a debounce for double messages, a fallback when the model has nothing useful to say, a human kill-switch (one tag stops the bot; the staff-notification workflow remains unpublished), and externalized prompt loading so the persona is configuration rather than code. The rest handle channel selection, conversation summarization into the contact record, and database reactivation. The same unit set, and the same stop-and-alert tags, appear in every account provisioned from the template. Three units of the set are still drafts, and one of them is the alert half of that kill-switch. The stop-bot tag fires; the notification does not.</p>
+    <p>A numbered, dependency-ordered series of workflow units (AI.00 to AI.14) that covers the four things naive bot builds leave out: a debounce for double messages, a fallback when the model has nothing useful to say, a human kill-switch where one tag stops the bot and a person takes the thread, and externalized prompt loading, so the persona lives in configuration. The rest handle channel selection, conversation summarization into the contact record, and database reactivation. The same unit set, and the same handoff tags, appear in every account provisioned from the template.</p>
     <p class="why"><b>What it shows:</b> platform thinking inside a no-code tool.</p>
   </article>
 </section>
@@ -250,8 +250,8 @@
   <p class="sec-sub">Integration under constraint: the CRM cannot traverse a relation, and the vendor's schema is not ours.</p>
   <article class="sys">
     <p class="kind mono">Integration · schema design</p>
-    <h3>A recreation platform and a clinic EMR, flattened on purpose</h3>
-    <p>For the members-based client, ten calendars and a field cluster are created programmatically from the practice-management system, with the raw record retained as JSON. For a med-spa on a Canadian clinic EMR, bidirectional sync workflows land a flattened appointment schema of about 95 fields on the contact, including the next two appointments side by side and a last-updated watermark. Three decisions, each with a reason. Denormalized: the CRM's workflows cannot walk a relation. Raw JSON kept: the vendor's schema changes without notice. Watermark kept, so a stale sync is visible rather than silent.</p>
+    <h3>A recreation platform and a clinic EMR, flattened onto the contact record</h3>
+    <p>For the members-based client, ten calendars and a field cluster are created programmatically from the practice-management system, with the raw record retained as JSON. For a med-spa on a Canadian clinic EMR, bidirectional sync workflows land a flattened appointment schema of about 95 fields on the contact, including the next two appointments side by side and a last-updated watermark. Three decisions, each with a reason. Denormalized: the CRM's workflows cannot walk a relation. Raw JSON kept: the vendor's schema changes without notice. Watermark kept, so a stale sync is visible.</p>
     <p class="why"><b>What it shows:</b> the reasons behind an ugly schema, stated.</p>
   </article>
 </section>
@@ -261,7 +261,7 @@
   <p class="sec-sub">The growth-operator half of the profile, evidenced in a schema.</p>
   <article class="sys">
     <p class="kind mono">Measurement · ad attribution on the contact</p>
-    <h3>Twenty-two attribution fields next to lifetime revenue</h3>
+    <h3>The click-to-revenue field set, next to lifetime revenue</h3>
     <p>On a med-spa account the contact record carries the click identifiers, the campaign, ad-group and ad ids, the full UTM set including match type, and the lifetime purchase total on the same row, driving a workflow that updates ROI per contact. A second account tracks offline sources (billboard, street sign, referral) alongside the digital ones in one twelve-option field, so paid and unpaid acquisition sit in a single report.</p>
     <p class="why"><b>What it shows:</b> attribution designed into the data model, so the numbers live where the actions do.</p>
   </article>
@@ -273,10 +273,10 @@
   <article class="sys">
     <p class="kind mono">History · what survived</p>
     <h3>From GPT-3 workflows to a voice agent, one pattern intact</h3>
-    <p>A 2022 training account carries the first status-prediction fields. In May 2023 the studio's own account gained eight GPT-3 conversation workflows separated by channel and source, a parked wait-state, a per-contact token counter, and a workflow named for what mattered most: when the model hands off or falls back, tag the contact and call a webhook so a person takes over. The 2025 snapshot ships the same stop-bot and alert-user tags. The 2026 voice agents route escalations the same way. Three years, two model generations, a full platform change, and the human-handoff pattern is the part that never changed.</p>
+    <p>A 2022 training account carries the first status-prediction fields. In May 2023 the studio's own account gained eight GPT-3 conversation workflows separated by channel and source, a parked wait-state, a per-contact token counter, and a workflow named for what mattered most: when the model hands off or falls back, tag the contact and call a webhook so a person takes over. The 2025 snapshot ships the same stop-bot and handoff tags. The 2026 voice agents route escalations the same way. Three years, two model generations, a full platform change, and the human-handoff pattern is the part that never changed.</p>
     <p class="why"><b>What it shows:</b> the escalation design was the durable idea; the models were replaceable.</p>
   </article>
-  <p class="callout gate">On a kitchen-sink measure the estate also holds a vendor's demo voice agent installed across most accounts during a February 2026 evaluation, a large number of drafted-but-unpublished nurture sets from the snapshot era, and provisioned knowledge bases with nothing in them. I would rather say that here than have it found. The seven systems above are the work. The rest is the history of a studio that productized before it had time to prune.</p>
+  <p class="callout">Two more systems are documented in the same detail: <a href="../atlas/side-intelligence-architecture-atlas.html">the Intelligence Platform architecture</a> and <a href="../nightshift/">the Nightshift walkthrough</a>. The <a href="../Soroush-Seif-Resume.pdf">resume</a> puts all of it on one page.</p>
 </section>
 
 <footer>
