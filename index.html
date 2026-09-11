@@ -219,7 +219,7 @@
         <span class="stage is-gate"><span class="dot"></span>Supervisor → human approves</span><span class="arrow"></span>
         <span class="stage"><span class="dot"></span>Execute with an idempotency claim, signed audit row</span>
       </div>
-      <p class="role"><b>My role:</b> I defined the product, the agent roles, the data model, the approval and service-tier model, and the acceptance criteria. I directed the build, reviewed the diffs and tested the flows. I did not hand-write most of the code. <b>Status, September 2026:</b> the runtime, schema, connectors, approval and audit paths are implemented and tested (0 TypeScript errors, 0 ESLint findings across 369 files, 21 test groups; 63 more regression tests added in this month's audit). The nightly loop proposed recommendations for a first tenant in May 2026. It has not executed actions in production, and it is idle until the worker runtime it was pinned to is replaced. The blocker register and the target architecture for that are written, and the Atlas links them.</p>
+      <p class="role"><b>My role:</b> I defined the product, the agent roles, the data model, the approval and service-tier model, and the acceptance criteria. I directed the build, reviewed the diffs and tested the flows. I did not hand-write most of the code. <b>Status, September 2026:</b> the runtime, schema, connectors, approval and audit paths are implemented and tested (0 TypeScript errors, 0 ESLint findings across 369 files, 21 test groups). The nightly loop proposed recommendations for a first tenant in May 2026. It has not executed actions in production, and it is idle until the worker runtime it was pinned to is replaced. The blocker register and the target architecture for that are written, and the Atlas links them.</p>
       <p class="stack mono">Next.js · Anthropic SDK (tiered models) · Neon Postgres + pgvector · Trigger.dev · Clerk</p>
       <p class="links"><a href="atlas/side-intelligence-architecture-atlas.html">Architecture Atlas</a> <a href="work/intelligence-platform.html">Case study</a></p>
     </article>
@@ -239,7 +239,7 @@
         <span class="stage"><span class="dot"></span>Do: agent in a worktree, verifier re-runs the gates</span><span class="arrow"></span>
         <span class="stage is-gate"><span class="dot"></span>Land by class: A same night, B after canary, C waits for me</span>
       </div>
-      <p class="role"><b>My role:</b> I wrote the spec and the trust ladder, set the budgets and the gates, directed the build, and read it every morning. Honest state: it runs on our own site only, and the answer-engine citation count is 0 of 20 right now. A kill gate is set for December 15, 2026. If the engine cannot show ten non-branded clicks by then, it stops.</p>
+      <p class="role"><b>My role:</b> I wrote the spec and the trust ladder, set the budgets and the gates, directed the build, and read it every morning. It runs on our own site today. The numbers it reports, including the ones still at zero, are on the walkthrough, with the date by which it has to earn its keep or stop.</p>
       <p class="stack mono">Python · LangGraph · GitHub Actions · Next.js 16 · Auth.js v5 magic link</p>
       <p class="links"><a href="nightshift/">Console walkthrough</a> <a href="work/nightshift.html">Case study</a></p>
     </article>
@@ -248,7 +248,7 @@
       <p class="sys-kind mono">Client systems · voice and chat agents · one white-label platform</p>
       <h3>Seven client systems on GoHighLevel</h3>
       <p class="what">The client side of Side Studios. An AI receptionist that became a white-label template. A voice agent with a dedicated claim-policy knowledge base. An agent that routes to five post-call workflows. A numbered orchestration state machine, AI.00 to AI.14. Two external-system bridges, attribution on the contact record, and the first LLM workflows from 2023, whose human-handoff pattern still ships.</p>
-      <p class="role"><b>Honest count:</b> ~45 active clients on one white-label platform. 11 purpose-built AI voice agents, 6 of them on live inbound lines. About 1,200 workflows built, roughly two in five published and running. The page says which is which, and the full audited estate is counted there.</p>
+      <p class="role"><b>Honest count:</b> ~45 active clients on one white-label platform; 11 purpose-built AI voice agents, 6 of them on live lines. The page counts the whole audited estate and says which is which.</p>
       <p class="links"><a href="agency/">Seven client systems, as built</a></p>
     </article>
 
@@ -268,7 +268,7 @@
     <article class="sys">
       <p class="sys-kind mono">Revenue system · pre-construction real estate</p>
       <h3>From first touch to transaction</h3>
-      <p class="what">Project-marketing firms served developers. Nothing served the agent. I designed the acquisition-to-close system that filled that gap: acquire, capture, prequalify, nurture, route, close, with the CRM orchestrating every step. The conversation layer was a rule-based workflow first, and it grew from 50 branches to more than 120. In-house NLU models replaced it, trained on transcripts from 8,000 captured SMS and web-chat turns and built by our engineering team. A UBC Master of Data Science capstone team built the lead-warmth classifiers, which we did not ship. LLM agents carry it now.</p>
+      <p class="what">Project-marketing firms served developers. Nothing served the agent. I designed the acquisition-to-close system that filled that gap: acquire, capture, prequalify, nurture, route, close, with the CRM orchestrating every step. The conversation layer was a rule-based workflow first, and it grew from 50 branches to more than 120. In-house NLU models replaced it, trained on transcripts from 8,000 captured SMS and web-chat turns and built by our engineering team. A UBC data-science student team later built lead-scoring models that were not good enough to ship. LLM agents carry it now.</p>
       <div class="metrics">
         <div class="metric"><b>1,000+</b><span>buyer conversations handled a day</span></div>
         <div class="metric"><b>1% → 3%</b><span>lead-to-transaction conversion</span></div>
