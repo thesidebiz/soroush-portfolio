@@ -8,7 +8,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nightshift, a walkthrough">
 <meta property="og:description" content="What the operator sees behind theside.studio/engine: trust classes, budgets, receipts, a council, and a veto button.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>"><text y='.9em' font-size='90'>🌙</text></svg>">
 <title>Nightshift, a walkthrough</title>
 <style>
   :root{
@@ -78,10 +78,53 @@
   footer{padding:3rem 0 5rem}
   .links{display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; margin:.8rem 0 0; font-size:.95rem}
   @media (max-width:34rem){ body{font-size:16px} header{padding:3rem 0 2rem} section{padding:2.8rem 0} }
+
+  /* ---------- shared chrome: skip link, top bar, focus, measure ---------- */
+  .skip{position:absolute; left:-9999px; top:0; z-index:60; padding:.7rem 1.1rem; background:var(--raise);
+    color:var(--ink); border:1px solid var(--rule); border-radius:3px; font-size:.9rem;
+    text-decoration:none; box-shadow:var(--shadow)}
+  .skip:focus{left:1rem; top:.7rem}
+  a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{
+    outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+  .sitebar{position:sticky; top:0; z-index:40; border-bottom:1px solid var(--rule);
+    background:color-mix(in srgb, var(--ground) 88%, transparent);
+    -webkit-backdrop-filter:saturate(150%) blur(12px); backdrop-filter:saturate(150%) blur(12px)}
+  .sitebar-in{display:flex; align-items:center; justify-content:space-between; gap:.1rem 1.5rem;
+    flex-wrap:wrap; min-height:48px}
+  .sitebar a{display:inline-flex; align-items:center; min-height:40px; text-decoration:none}
+  .sitebar a:hover{text-decoration:underline; text-underline-offset:3px}
+  .sitebar .home{color:var(--ink); font-weight:600; font-size:.86rem}
+  .sitebar nav{display:flex; flex-wrap:wrap; gap:0 1.15rem}
+  .sitebar nav a{color:var(--ink-3); font-size:.7rem; letter-spacing:.14em; text-transform:uppercase}
+  .sitebar nav a:hover{color:var(--ink)}
+  main{display:block}
+  [id]{scroll-margin-top:4.5rem}
+  @media (max-width:34rem){
+    .sitebar-in{min-height:44px; padding:.15rem 0 .35rem}
+    .sitebar nav{gap:0 .9rem}
+    .sitebar nav a{font-size:.66rem; letter-spacing:.1em}
+  }
+  @media print{ .skip,.sitebar{display:none!important} }
+  .ident{font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin:1.6rem 0 0}
+  .entity{color:var(--ink-3); font-size:.86rem; max-width:64ch; margin:.7rem 0 0}
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="sitebar">
+  <div class="wrap sitebar-in">
+    <a class="home serif" href="../">Soroush Seif</a>
+    <nav class="mono" aria-label="Portfolio sections">
+      <a href="../#systems">Systems</a>
+      <a href="../nightshift/">Nightshift</a>
+      <a href="../atlas/side-intelligence-architecture-atlas.html">Atlas</a>
+      <a href="../agency/">Clients</a>
+      <a href="../#documents">Documents</a>
+    </nav>
+  </div>
+</div>
 <div class="wrap">
+<main id="main">
 
 <header>
   <p class="eyebrow mono"><a href="../">Soroush Seif</a> · Side Studios · September 2026</p>
@@ -277,9 +320,13 @@
     <a href="../atlas/side-intelligence-architecture-atlas.html">Intelligence Platform architecture</a>
     <a href="https://theside.studio/">theside.studio</a>
     <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
+    <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
   </p>
+  <p class="ident mono">Soroush Seif · AI Systems Lead · Agentic Platforms &amp; Revenue Automation</p>
+  <p class="entity">Side Studios (theside.studio) is my firm; theSide.io is the intelligence platform we built for our clients; Nightshift is the console for our autonomous SEO and AI-visibility engine. Vancouver, BC · Canadian citizen.</p>
 </footer>
 
+</main>
 </div>
 </body>
 </html>

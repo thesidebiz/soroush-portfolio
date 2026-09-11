@@ -8,7 +8,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="CDAP advisory">
 <meta property="og:description" content="800 small businesses assessed, 300 roadmaps delivered. What an engagement looked like, and what it means to make adoption the deliverable.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>"><text y='.9em' font-size='90'>🧾</text></svg>">
 <title>CDAP Advisory · Soroush Seif</title>
 <style>
   :root{
@@ -132,12 +132,51 @@
     a{color:inherit; text-decoration:none}
     .links a[href^="http"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666}
   }
+
+  /* ---------- shared chrome: skip link, top bar, focus, measure ---------- */
+  .skip{position:absolute; left:-9999px; top:0; z-index:60; padding:.7rem 1.1rem; background:var(--raise);
+    color:var(--ink); border:1px solid var(--rule); border-radius:3px; font-size:.9rem;
+    text-decoration:none; box-shadow:var(--shadow)}
+  .skip:focus{left:1rem; top:.7rem}
+  a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{
+    outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+  .sitebar{position:sticky; top:0; z-index:40; border-bottom:1px solid var(--rule);
+    background:color-mix(in srgb, var(--ground) 88%, transparent);
+    -webkit-backdrop-filter:saturate(150%) blur(12px); backdrop-filter:saturate(150%) blur(12px)}
+  .sitebar-in{display:flex; align-items:center; justify-content:space-between; gap:.1rem 1.5rem;
+    flex-wrap:wrap; min-height:48px}
+  .sitebar a{display:inline-flex; align-items:center; min-height:40px; text-decoration:none}
+  .sitebar a:hover{text-decoration:underline; text-underline-offset:3px}
+  .sitebar .home{color:var(--ink); font-weight:600; font-size:.86rem}
+  .sitebar nav{display:flex; flex-wrap:wrap; gap:0 1.15rem}
+  .sitebar nav a{color:var(--ink-3); font-size:.7rem; letter-spacing:.14em; text-transform:uppercase}
+  .sitebar nav a:hover{color:var(--ink)}
+  main{display:block}
+  [id]{scroll-margin-top:4.5rem}
+  @media (max-width:34rem){
+    .sitebar-in{min-height:44px; padding:.15rem 0 .35rem}
+    .sitebar nav{gap:0 .9rem}
+    .sitebar nav a{font-size:.66rem; letter-spacing:.1em}
+  }
+  @media print{ .skip,.sitebar{display:none!important} }
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="sitebar">
+  <div class="wrap sitebar-in">
+    <a class="home serif" href="../">Soroush Seif</a>
+    <nav class="mono" aria-label="Portfolio sections">
+      <a href="../#systems">Systems</a>
+      <a href="../nightshift/">Nightshift</a>
+      <a href="../atlas/side-intelligence-architecture-atlas.html">Atlas</a>
+      <a href="../agency/">Clients</a>
+      <a href="../#documents">Documents</a>
+    </nav>
+  </div>
+</div>
 <div class="wrap">
-
-<p class="back mono"><a href="../">&larr; Soroush Seif · portfolio</a></p>
+<main id="main">
 
 <header>
   <p class="eyebrow mono">Advisory · Government of Canada</p>
@@ -207,7 +246,6 @@
 </section>
 
 <footer>
-  <p class="ident mono">Soroush Seif · AI Systems Lead · Agentic Platforms &amp; Revenue Automation</p>
   <p class="links">
     <a href="../">Portfolio</a>
     <a href="intelligence-platform.html">Intelligence Platform</a>
@@ -217,9 +255,11 @@
     <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
     <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
   </p>
+  <p class="ident mono">Soroush Seif · AI Systems Lead · Agentic Platforms &amp; Revenue Automation</p>
   <p class="entity">Side Studios (theside.studio) is my firm; theSide.io is the intelligence platform we built for our clients; Nightshift is the console for our autonomous SEO and AI-visibility engine. Vancouver, BC · Canadian citizen.</p>
 </footer>
 
+</main>
 </div>
 </body>
 </html>

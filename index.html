@@ -89,10 +89,39 @@
   .contact{display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; margin:1rem 0 0; font-size:.95rem}
   @media (max-width:34rem){ body{font-size:16px} .sys{padding:1.5rem 1.15rem 1.35rem 1.5rem} header{padding:3.5rem 0 2.5rem} section{padding:3rem 0} .docs{columns:1} }
   @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+  /* ---------- shared chrome: skip link, top bar, focus, measure ---------- */
+  .skip{position:absolute; left:-9999px; top:0; z-index:60; padding:.7rem 1.1rem; background:var(--raise);
+    color:var(--ink); border:1px solid var(--rule); border-radius:3px; font-size:.9rem;
+    text-decoration:none; box-shadow:var(--shadow)}
+  .skip:focus{left:1rem; top:.7rem}
+  a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{
+    outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+  .sitebar{position:sticky; top:0; z-index:40; border-bottom:1px solid var(--rule);
+    background:color-mix(in srgb, var(--ground) 88%, transparent);
+    -webkit-backdrop-filter:saturate(150%) blur(12px); backdrop-filter:saturate(150%) blur(12px)}
+  .sitebar-in{display:flex; align-items:center; justify-content:space-between; gap:.1rem 1.5rem;
+    flex-wrap:wrap; min-height:48px}
+  .sitebar a{display:inline-flex; align-items:center; min-height:40px; text-decoration:none}
+  .sitebar a:hover{text-decoration:underline; text-underline-offset:3px}
+  .sitebar .home{color:var(--ink); font-weight:600; font-size:.86rem}
+  .sitebar nav{display:flex; flex-wrap:wrap; gap:0 1.15rem}
+  .sitebar nav a{color:var(--ink-3); font-size:.7rem; letter-spacing:.14em; text-transform:uppercase}
+  .sitebar nav a:hover{color:var(--ink)}
+  main{display:block}
+  [id]{scroll-margin-top:4.5rem}
+  @media (max-width:34rem){
+    .sitebar-in{min-height:44px; padding:.15rem 0 .35rem}
+    .sitebar nav{gap:0 .9rem}
+    .sitebar nav a{font-size:.66rem; letter-spacing:.1em}
+  }
+  @media print{ .skip,.sitebar{display:none!important} }
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <div class="wrap">
+<main id="main">
 
   <header>
     <p class="eyebrow mono">Soroush Seif · Vancouver, BC</p>
@@ -107,7 +136,7 @@
     </p>
   </header>
 
-  <section>
+  <section id="start">
     <div class="sec-head"><span class="sec-num mono">00</span><h2 class="serif">Start here</h2></div>
     <p class="sec-sub">If you have fifteen minutes, these four answer most questions.</p>
     <div class="start start-4">
@@ -138,7 +167,7 @@
     </div>
   </section>
 
-  <section>
+  <section id="systems">
     <div class="sec-head"><span class="sec-num mono">01</span><h2 class="serif">Systems I've built</h2></div>
     <p class="sec-sub">I define the architecture, the agent roles, the acceptance criteria and the gates, then direct AI coding agents through implementation and testing. I review the diffs, run the tests and reject what misses the spec. I do not hand-write most of the application code.</p>
 
@@ -200,7 +229,7 @@
     </article>
   </section>
 
-  <section>
+  <section id="revenue">
     <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">A revenue system, through three technology generations</h2></div>
     <p class="sec-sub">The product I am known for, and the reason I care about gates. Built for pre-construction real-estate agents in 2020-21, before generative AI.</p>
 
@@ -223,7 +252,7 @@
     </article>
   </section>
 
-  <section>
+  <section id="advisory">
     <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">800 businesses, diagnosed</h2></div>
     <p class="sec-sub">Why I can walk into an unfamiliar business and find the constraint quickly.</p>
     <article class="sys">
@@ -239,7 +268,7 @@
     </article>
   </section>
 
-  <section>
+  <section id="method">
     <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">How I work</h2></div>
     <p class="sec-sub">Outcome first. I own the system and the result; AI coding agents are how the implementation gets done.</p>
     <div class="method">
@@ -251,7 +280,7 @@
     <p class="callout">Building revenue and AI systems since 2012, as a founder and as an advisor. Now looking for long-horizon ownership inside one embedded team.</p>
   </section>
 
-  <section>
+  <section id="documents">
     <div class="sec-head"><span class="sec-num mono">05</span><h2 class="serif">Documents</h2></div>
     <p class="sec-sub">Everything referenced above, in one place.</p>
     <ul class="docs">
@@ -279,6 +308,7 @@
     </p>
   </footer>
 
+</main>
 </div>
 </body>
 </html>
