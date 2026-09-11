@@ -6,12 +6,12 @@
 <meta name="description" content="Soroush Seif. I build AI systems that run without me and stop where they shouldn't: a multi-tenant agent runtime, built and audited, and an autonomous SEO engine that has run 58 times on our own site since July 11, 2026.">
 <meta name="author" content="Soroush Seif">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Soroush Seif, AI systems I've shipped">
-<meta property="og:description" content="A multi-tenant agent runtime with a human approval gate, and a 19-node nightly engine with a veto instead of an approval inbox. Architecture, walkthroughs, receipts.">
+<meta property="og:title" content="Soroush Seif · AI systems I've shipped">
+<meta property="og:description" content="A multi-tenant agent runtime with a human approval gate, and a 19-node nightly engine whose only control is Revert. The architecture, the walkthroughs and the receipts are on the page.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 <style>*,*::before,*::after{box-sizing:border-box}html,body{margin:0;padding:0}</style>
-<title>Soroush Seif, AI systems I've shipped</title>
+<title>Soroush Seif · AI systems I've shipped</title>
 <style>
   :root{
     --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#6E7A69;
@@ -97,8 +97,8 @@
   <header>
     <p class="eyebrow mono">Soroush Seif · Vancouver, BC</p>
     <h1 class="serif">I build AI systems that run without me, and <em>stop</em> where they shouldn't.</h1>
-    <p class="lede">One of them runs unattended at night: an autonomous engine that has worked on our own site 58 times since July 11, with a veto instead of an approval inbox. Another is built and audited and waiting on a runtime migration: a multi-tenant agent runtime where every action passes a critic, a ranker and a human before it executes. A third is the AI receptionist and sales layer running for clients today.</p>
-    <p class="entity">Side Studios (theside.studio) is my firm. theSide.io is the intelligence platform we built for our clients. Nightshift is the console for our autonomous SEO and AI-visibility engine. Everything on this page links to the thing itself or to the receipt.</p>
+    <p class="lede">One runs unattended at night. It has worked on our own site 58 times since July 11, and its only control is Revert. One is built and audited, waiting on a runtime migration: a multi-tenant agent runtime where every action passes a critic, a ranker and a human before it executes. One is the AI receptionist and sales layer running for clients today.</p>
+    <p class="entity">Side is the company I co-founded in Vancouver in 2021. Side Studios, its studio subsidiary, designs and runs client sites and agents (theside.studio). theSide.io is the intelligence platform we built for those clients. Nightshift is the console for our autonomous SEO and AI-visibility engine. Everything on this page links to the thing itself or to the receipt.</p>
     <p class="id-line mono">
       <span>19-node nightly engine, 58 runs since July 11</span>
       <span>Agent runtime, 9 connectors, human approval gate</span>
@@ -114,25 +114,25 @@
       <div class="card">
         <p class="k mono">Architecture</p>
         <h3>Intelligence Platform, the architecture</h3>
-        <p>How a client's live data becomes scored, human-approved actions: the loop, the agents, the guardrails as configuration, one action followed from trigger to memory, and what is not built yet.</p>
+        <p>How a client's live data becomes scored, human-approved actions. The runtime loop, the agent roles, the guardrails as configuration. One action is traced from trigger to memory, and four known gaps are named.</p>
         <a class="go" href="atlas/side-intelligence-architecture-atlas.html">Open the Atlas →</a>
       </div>
       <div class="card">
         <p class="k mono">Walkthrough</p>
         <h3>Nightshift, behind the login</h3>
-        <p>What the operator of an autonomous engine reads in the morning: trust classes, budgets, receipts, a council, and the only button, which is Revert.</p>
+        <p>What the operator of an autonomous engine reads in the morning. Trust classes, budgets, receipts and a weekly council, screen by screen. The one control that writes anything is Revert.</p>
         <a class="go" href="nightshift/">See the console →</a>
       </div>
       <div class="card">
         <p class="k mono">Product story</p>
         <h3>The real-estate platform, three generations</h3>
-        <p>The product I'm known for: an acquisition-to-close system for pre-construction agents, built before generative AI. A rule-based conversation layer, then in-house NLU, then LLM agents; 1,000+ buyer conversations a day; conversion from 1% to 3%. Including the generation that did not work.</p>
+        <p>The product I am known for. An acquisition-to-close system for pre-construction agents, built before generative AI. A rule-based conversation layer first, then in-house NLU, then LLM agents. 1,000+ buyer conversations a day, conversion from 1% to 3%, and the generation that did not work.</p>
         <a class="go" href="work/side-io.html">Read the product story →</a>
       </div>
       <div class="card">
         <p class="k mono">A receipt</p>
         <h3>Pacific One Dental, measured</h3>
-        <p>A client site rebuild with stated windows, named sources, a disclosed confound and the fact that the client later rolled it back. The way I prefer to report results.</p>
+        <p>A client site rebuild reported with stated windows, named sources and a disclosed confound. It also records that the client later rolled it back. This is how I prefer to report a result.</p>
         <a class="go" href="https://theside.studio/work/pacific-one-dental-nanaimo">Read the case →</a>
       </div>
     </div>
@@ -145,7 +145,7 @@
     <article class="sys">
       <p class="sys-kind mono">Agent runtime · multi-tenant · built and audited</p>
       <h3>theSide.io Intelligence Platform</h3>
-      <p class="what">Each night the platform reads a client's live data (ads, calendar, CRM, search, reviews) and proposes actions. A critic removes weak ones, a deterministic ranker orders them, and an operator approves. Approved actions run through one of nine connectors, the result is measured 7, 14 and 28 days later, and what was learned is written back as memory the next run reads.</p>
+      <p class="what">Each night the platform reads a client's live data (ads, calendar, CRM, search, reviews) and proposes actions. A critic removes the weak ones. A deterministic ranker orders what survives, and an operator approves. Approved actions run through one of nine connectors. The result is measured 7, 14 and 28 days later, and what was learned is written back as memory the next run reads.</p>
       <div class="metrics">
         <div class="metric"><b>9</b><span>connectors (ads, CRM, calendar, search, reviews, practice management)</span></div>
         <div class="metric"><b>32</b><span>tables, including quarantine, history and idempotency-claim tables</span></div>
@@ -158,7 +158,7 @@
         <span class="stage is-gate"><span class="dot"></span>Supervisor → human approves</span><span class="arrow"></span>
         <span class="stage"><span class="dot"></span>Execute with an idempotency claim, signed audit row</span>
       </div>
-      <p class="role"><b>My role:</b> defined the product, the agent roles, the data model, the approval and service-tier model, and the acceptance criteria; directed the build; reviewed and tested. <b>Status, September 2026:</b> the runtime, schema, connectors, approval and audit paths are implemented and tested (0 TypeScript errors, 0 ESLint findings across 369 files, 21 test groups; 63 more regression tests added in this month's audit). The nightly loop proposed recommendations for a first tenant in May; it has not executed actions in production, and it is idle until the worker runtime it was pinned to is replaced. The blocker register and the target architecture for that are written and linked from the Atlas.</p>
+      <p class="role"><b>My role:</b> I defined the product, the agent roles, the data model, the approval and service-tier model, and the acceptance criteria. I directed the build, reviewed the diffs and tested the flows. I did not hand-write most of the code. <b>Status, September 2026:</b> the runtime, schema, connectors, approval and audit paths are implemented and tested (0 TypeScript errors, 0 ESLint findings across 369 files, 21 test groups; 63 more regression tests added in this month's audit). The nightly loop proposed recommendations for a first tenant in May 2026. It has not executed actions in production, and it is idle until the worker runtime it was pinned to is replaced. The blocker register and the target architecture for that are written, and the Atlas links them.</p>
       <p class="stack mono">Next.js · Anthropic SDK (tiered models) · Neon Postgres + pgvector · Trigger.dev · Clerk</p>
       <p class="links"><a href="atlas/side-intelligence-architecture-atlas.html">Architecture Atlas</a> <a href="work/intelligence-platform.html">Case study</a></p>
     </article>
@@ -166,7 +166,7 @@
     <article class="sys">
       <p class="sys-kind mono">Autonomous engine · runs nightly · ships its own code</p>
       <h3>Nightshift and the Side Studios engine</h3>
-      <p class="what">A 19-node LangGraph graph runs at 08:23 UTC: it crawls theside.studio, runs nine analyzer categories, sweeps 20 positioning queries against a ChatGPT-class answer engine to see who gets cited, scores two separate grades, and drafts one page through writer, designer, illustrator and brand-QA nodes with a bounded revision loop. A decision layer then picks up to three missions, dispatches AI coding agents in their own worktrees, verifies them, and lands them by trust class. I can revert anything; I cannot approve anything, on purpose.</p>
+      <p class="what">A 19-node LangGraph state graph runs at 08:23 UTC. It crawls theside.studio and runs nine analyzer categories. It sweeps 20 positioning queries against a ChatGPT-class answer engine to record who gets cited, then scores two separate grades. It drafts one page through writer, designer, illustrator and brand-QA nodes, with a bounded revision loop. A decision layer then picks up to three missions, dispatches AI coding agents in their own worktrees, verifies them, and lands them by trust class. I can revert anything. There is no approval control anywhere in the console, on purpose.</p>
       <div class="metrics">
         <div class="metric"><b>58</b><span>runs across 48 nights since Jul 11, 2026</span></div>
         <div class="metric"><b>1,559</b><span>tests passing (1,100 pytest, 459 node)</span></div>
@@ -178,7 +178,7 @@
         <span class="stage"><span class="dot"></span>Do: agent in a worktree, verifier re-runs the gates</span><span class="arrow"></span>
         <span class="stage is-gate"><span class="dot"></span>Land by class: A same night, B after canary, C waits for me</span>
       </div>
-      <p class="role"><b>My role:</b> wrote the spec and the trust ladder, set the budgets and the gates, directed the build, and use it every morning. Honest state: it runs on our own site only, the AI-citation count is 0 of 20 right now, and a kill gate is set for December 15: if it cannot show ten non-branded clicks by then, it stops.</p>
+      <p class="role"><b>My role:</b> I wrote the spec and the trust ladder, set the budgets and the gates, directed the build, and read it every morning. Honest state: it runs on our own site only, and the answer-engine citation count is 0 of 20 right now. A kill gate is set for December 15, 2026. If the engine cannot show ten non-branded clicks by then, it stops.</p>
       <p class="stack mono">Python · LangGraph · GitHub Actions · Next.js 16 · Auth.js v5 magic link</p>
       <p class="links"><a href="nightshift/">Console walkthrough</a> <a href="work/nightshift.html">Case study</a></p>
     </article>
@@ -186,15 +186,15 @@
     <article class="sys">
       <p class="sys-kind mono">Client systems · voice and chat agents · one white-label platform</p>
       <h3>Seven client systems on GoHighLevel</h3>
-      <p class="what">The client side of the studio: an AI receptionist that became a white-label template, a voice agent with a dedicated claim-policy knowledge base, an agent that routes to five post-call workflows, a numbered orchestration state machine (AI.00 to AI.14), two external-system bridges, attribution on the contact record, and the first LLM workflows from 2023 whose human-handoff pattern still ships.</p>
-      <p class="role"><b>Honest count:</b> 84 sub-accounts audited, of which about 45 are active clients and the rest past clients, templates and internal accounts; 11 purpose-built AI voice agents, 6 of them on live inbound lines; about 1,200 workflows built, roughly two in five running. The page says which is which.</p>
+      <p class="what">The client side of Side Studios. An AI receptionist that became a white-label template. A voice agent with a dedicated claim-policy knowledge base. An agent that routes to five post-call workflows. A numbered orchestration state machine, AI.00 to AI.14. Two external-system bridges, attribution on the contact record, and the first LLM workflows from 2023, whose human-handoff pattern still ships.</p>
+      <p class="role"><b>Honest count:</b> ~45 active clients on one white-label platform. 11 purpose-built AI voice agents, 6 of them on live inbound lines. About 1,200 workflows built, roughly two in five published and running. The page says which is which, and the full audited estate is counted there.</p>
       <p class="links"><a href="agency/">Seven client systems, as built</a></p>
     </article>
 
     <article class="sys">
       <p class="sys-kind mono">Integration · Model Context Protocol</p>
       <h3>PerfectMind MCP server</h3>
-      <p class="what">A read-only-first MCP server that exposes a recreation-management platform's operations (appointments, attendance, memberships, catalog, revenue, contacts) to AI agents as typed business tools rather than raw vendor calls. About 9,400 lines of Python with one rule stated up front: no delete behaviour anywhere. Built for one client's staff so an assistant could work their real system instead of describing it.</p>
+      <p class="what">A read-only-first MCP server. It exposes a recreation-management platform's operations (appointments, attendance, memberships, catalog, revenue, contacts) to AI agents as typed business tools rather than raw vendor calls. About 9,400 lines of Python, with one rule stated up front: no delete behaviour anywhere. It was built for one client's staff, so an assistant could work their real system instead of describing it.</p>
       <p class="role"><b>My role:</b> defined the tool surface, the tenant scope and the access model; directed implementation and the owner onboarding.</p>
       <p class="stack mono">Python · MCP · Docker · Cloudflare Worker</p>
     </article>
@@ -207,7 +207,7 @@
     <article class="sys">
       <p class="sys-kind mono">Revenue system · pre-construction real estate</p>
       <h3>From first touch to transaction</h3>
-      <p class="what">Project-marketing firms served developers. Nothing served the agent. I designed the acquisition-to-close system that filled that gap: acquire, capture, prequalify, nurture, route, close, with the CRM orchestrating every step. The conversation layer was a rule-based workflow first (it grew from 50 to 120 branches), then in-house NLU models trained on 8,000 annotated buyer conversations, built by the internal team with a UBC Master of Data Science capstone collaboration, and LLM agents now.</p>
+      <p class="what">Project-marketing firms served developers. Nothing served the agent. I designed the acquisition-to-close system that filled that gap: acquire, capture, prequalify, nurture, route, close, with the CRM orchestrating every step. The conversation layer was a rule-based workflow first, and it grew from 50 branches to more than 120. In-house NLU models replaced it, trained on 8,000 annotated buyer conversations and built by our engineering team. A UBC Master of Data Science capstone team built the lead-warmth classifiers, which we did not ship. LLM agents carry it now.</p>
       <div class="metrics">
         <div class="metric"><b>1,000+</b><span>buyer conversations handled a day</span></div>
         <div class="metric"><b>1% → 3%</b><span>lead-to-transaction conversion</span></div>
@@ -218,7 +218,7 @@
         <span class="stage"><span class="dot"></span>In-house NLU on proprietary data</span><span class="arrow"></span>
         <span class="stage"><span class="dot"></span>LLM agents</span>
       </div>
-      <p class="role"><b>My role:</b> found the gap, defined the business model and the customer journey, designed the funnel and the CRM logic, directed the team through each transition, and productised the service into a subscription agents could buy. I did not build the models; I owned what they had to do.</p>
+      <p class="role"><b>My role:</b> I found the gap and defined the business model and the customer journey. I designed the funnel and the CRM logic, directed the team through each transition, and productized the service into a subscription agents could buy. I did not build the models. I owned what they had to do.</p>
       <p class="links"><a href="work/acquisition-to-close.html">The revenue system</a> <a href="work/side-io.html">The product and its three generations</a> <a href="earlier-work/IRAP-Project-Description-2023.pdf">IRAP project description, 2023 (PDF)</a> <a href="earlier-work/Side-Pitch-Deck-2023-excerpt.pdf">The 2023 deck, excerpt (PDF)</a></p>
     </article>
   </section>
@@ -245,7 +245,7 @@
     <div class="method">
       <div class="step"><span class="k mono">DEFINE</span><h4>Architecture and acceptance criteria</h4><p>Operating model, workflows, agent roles, data flows, integration behaviour, and what "correct" means before anything is built.</p></div>
       <div class="step"><span class="k mono">DIRECT</span><h4>Agent-directed delivery</h4><p>I direct Claude Code and Codex through implementation and testing, in worktrees, against the criteria I set. I read the diffs and run the tests.</p></div>
-      <div class="step"><span class="k mono">GATE</span><h4>Guardrails that hold</h4><p>Human approval where money moves, trust classes where it does not, scope allowlists, brand checks, budgets in files the agents cannot edit.</p></div>
+      <div class="step"><span class="k mono">GATE</span><h4>Gates by class of change</h4><p>Human approval where money moves, trust classes where it does not. Scope allowlists, brand checks, and budgets in files the agents cannot edit.</p></div>
       <div class="step"><span class="k mono">MEASURE</span><h4>Outcome attribution</h4><p>Every approved action is checked against what happened 7, 14 and 28 days later. Numbers that could not be measured are shown as gaps.</p></div>
     </div>
     <p class="callout">Building revenue and AI systems since 2012, as a founder and as an advisor. Now looking for long-horizon ownership inside one embedded team.</p>
@@ -255,17 +255,17 @@
     <div class="sec-head"><span class="sec-num mono">05</span><h2 class="serif">Documents</h2></div>
     <p class="sec-sub">Everything referenced above, in one place.</p>
     <ul class="docs">
-      <li><a href="Soroush-Seif-Resume.pdf">Resume (PDF, one page)</a></li>
-      <li><a href="atlas/side-intelligence-architecture-atlas.html">Intelligence Platform Architecture Atlas</a><small>the loop, the agents, the schema, one action from trigger to memory, status honesty</small></li>
-      <li><a href="nightshift/">Nightshift walkthrough</a><small>what the operator sees behind theside.studio/engine</small></li>
-      <li><a href="work/intelligence-platform.html">Case study: Intelligence Platform</a></li>
-      <li><a href="work/nightshift.html">Case study: Nightshift and the engine</a></li>
-      <li><a href="work/acquisition-to-close.html">Case study: acquisition to close</a></li>
-      <li><a href="work/side-io.html">Case study: Side.io, three technology generations</a></li>
-      <li><a href="work/cdap.html">Case study: CDAP advisory</a></li>
+      <li><a href="Soroush-Seif-Resume.pdf">Resume (PDF, one page)</a><small>the same numbers as these pages, on one sheet</small></li>
+      <li><a href="atlas/side-intelligence-architecture-atlas.html">Intelligence Platform Architecture Atlas</a><small>one action traced from trigger to memory, and the four gaps I would raise first</small></li>
+      <li><a href="nightshift/">Nightshift walkthrough</a><small>what the operator sees behind the login at theside.studio/engine</small></li>
+      <li><a href="work/intelligence-platform.html">Case study: Intelligence Platform</a><small>the runtime loop, and why it is idle</small></li>
+      <li><a href="work/nightshift.html">Case study: Nightshift and the engine</a><small>the trust ladder, and the human gate I removed</small></li>
+      <li><a href="work/acquisition-to-close.html">Case study: acquisition to close</a><small>six stages, and where each number comes from</small></li>
+      <li><a href="work/side-io.html">Case study: Side.io, three technology generations</a><small>including the one that did not work</small></li>
+      <li><a href="work/cdap.html">Case study: CDAP advisory</a><small>how an assessment ran, and what got cut from every roadmap</small></li>
       <li><a href="earlier-work/IRAP-Project-Description-2023.pdf">IRAP project description, 2023 (PDF)</a><small>the filing NRC approved for support; company and financial annexes omitted</small></li>
-      <li><a href="earlier-work/Side-Pitch-Deck-2023-excerpt.pdf">The 2023 deck, excerpt (PDF)</a><small>nine of fifteen slides; pricing, financials and the raise omitted on purpose</small></li>
-      <li><a href="https://theside.studio/">theside.studio</a><small>the studio: 17 client cases, AI receptionists and sales agents in production for clients</small></li>
+      <li><a href="earlier-work/Side-Pitch-Deck-2023-excerpt.pdf">The 2023 deck, excerpt (PDF)</a><small>eight of fifteen slides; pricing, financials, the team slide and the raise left out</small></li>
+      <li><a href="https://theside.studio/">theside.studio</a><small>17 published client cases, from a larger and older client book</small></li>
       <li><a href="https://theside.studio/work/pacific-one-dental-nanaimo">Pacific One Dental case</a><small>sourced metrics, stated windows, a disclosed rollback</small></li>
     </ul>
   </section>
