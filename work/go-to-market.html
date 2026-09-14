@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="How I take a product to market: find the segment nobody is serving, build for it, build the machine that sells it, and own the number. The method, and the record behind it.">
+<meta name="author" content="Soroush Seif">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How I take a product to market">
+<meta property="og:description" content="Segment and positioning, the one metric that proves fit, and the machine from acquire to close with attribution. Worked through Side, Lazymeal, the CDAP practice and ~45 client systems.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+<title>How I Take a Product to Market · Soroush Seif</title>
+<style>
+  :root{
+    --ground:#F4F5F1; --raise:#FFFFFF; --ink:#12180F; --ink-2:#43503F; --ink-3:#667162;
+    --rule:#DCE0D6; --accent:#0F7F62; --gate:#8F671C; --spine:#C9D2C4;
+    --shadow:0 1px 2px rgba(18,24,15,.05), 0 8px 24px -12px rgba(18,24,15,.14);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+      --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0F1613; --raise:#161E1A; --ink:#E9EEE6; --ink-2:#AEBAA9; --ink-3:#7C8A78;
+    --rule:#27322B; --accent:#3FCCA3; --gate:#D3A44E; --spine:#2C3830;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--ground); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Palladio,Georgia,ui-serif,serif}
+  .mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
+  .wrap{max-width:60rem; margin:0 auto; padding:0 1.5rem}
+  a{color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px}
+  a:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+
+  .back{font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); margin:0; padding:1.8rem 0 0}
+  .back a{color:inherit; text-decoration:none}
+  .back a:hover{text-decoration:underline}
+
+  header{padding:2.4rem 0 3rem; border-bottom:1px solid var(--rule)}
+  .eyebrow{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); margin:0 0 1.4rem}
+  h1{font-size:clamp(2.1rem,5.4vw,3.4rem); line-height:1.05; margin:0 0 1.2rem; font-weight:600; letter-spacing:-.02em; text-wrap:balance}
+  h1 em{font-style:italic; color:var(--accent)}
+  .lede{font-size:clamp(1.03rem,2.1vw,1.15rem); color:var(--ink-2); margin:0; max-width:40rem}
+  .prose{max-width:40rem}
+  .prose p{margin:0 0 1rem}
+
+  section{padding:3.4rem 0; border-bottom:1px solid var(--rule)}
+  .sec-head{display:flex; align-items:baseline; gap:1rem; margin:0 0 .5rem}
+  .sec-num{font-size:.72rem; letter-spacing:.14em; color:var(--ink-3)}
+  h2{font-size:clamp(1.4rem,3.3vw,1.85rem); margin:0; font-weight:600; letter-spacing:-.01em; text-wrap:balance}
+  h3{font-size:1.05rem; margin:1.8rem 0 .5rem; font-weight:600}
+  .sec-sub{color:var(--ink-2); margin:0 0 1.6rem; max-width:40rem}
+
+  .metrics{display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:1px;
+    background:var(--rule); border:1px solid var(--rule); border-radius:2px; overflow:hidden; margin:2.2rem 0 0}
+  .metric{background:var(--raise); padding:.9rem 1rem}
+  .metric b{display:block; font-size:1.5rem; line-height:1.1; font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .metric span{display:block; font-size:.75rem; color:var(--ink-3); margin-top:.28rem; line-height:1.35}
+
+  .run{display:flex; gap:0; overflow-x:auto; padding-bottom:.5rem; margin:1.4rem 0 0}
+  .stage{flex:0 0 auto; display:flex; align-items:center; gap:.6rem; font-size:.76rem; color:var(--ink-2); white-space:nowrap}
+  .stage .dot{width:6px; height:6px; border-radius:50%; background:var(--spine); flex:0 0 auto}
+  .stage.is-gate{color:var(--gate); font-weight:600}
+  .stage.is-gate .dot{background:var(--gate); box-shadow:0 0 0 3px color-mix(in srgb, var(--gate) 22%, transparent)}
+  .arrow{flex:0 0 auto; width:1.75rem; height:1px; background:var(--spine); margin:0 .7rem; align-self:center}
+
+  table{border-collapse:collapse; width:100%; font-size:.9rem; margin:1.2rem 0 0; background:var(--raise); border:1px solid var(--rule)}
+  th,td{text-align:left; vertical-align:top; padding:.6rem .8rem; border-top:1px solid var(--rule)}
+  th{font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); border-top:0}
+  .tbl{overflow-x:auto}
+
+  .callout{border-left:2px solid var(--accent); padding:.2rem 0 .2rem 1.25rem; margin:1.6rem 0 0; color:var(--ink-2); font-size:.95rem; max-width:38rem}
+  .callout.gate{border-left-color:var(--gate)}
+  .stack{font-size:.78rem; color:var(--ink-3); margin:.7rem 0 0}
+
+  ul.plain{padding-left:1.2rem; margin:.5rem 0 0; max-width:40rem}
+  ul.plain li{margin:0 0 .5rem}
+  .links{display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; margin:.8rem 0 0; font-size:.95rem}
+
+  footer{padding:3rem 0 5rem}
+  .entity{color:var(--ink-3); font-size:.86rem; max-width:44rem; margin:.9rem 0 0}
+  .ident{font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin:0 0 .6rem}
+
+  @media (max-width:34rem){ body{font-size:16px} header{padding:2rem 0 2rem} section{padding:2.6rem 0} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+
+  /* ---------- reading comfort + mobile behaviour ---------- */
+  .prose,.sec-sub,ul.plain,ol.steps,.role,.callout,.entity,.sys .what,.sys p,.sys ul,figcaption{max-width:64ch}
+  figcaption{font-size:.88rem}
+  .run{flex-wrap:wrap; row-gap:.55rem}
+  .tbl table{min-width:34rem}
+  .tbl{-webkit-overflow-scrolling:touch}
+  td{font-variant-numeric:tabular-nums}
+  .links a,.contact a,nav.toc a,.docs a{display:inline-flex; align-items:center; min-height:40px}
+  .docs li{margin:0 0 .2rem}
+  @media (max-width:34rem){
+    .metrics,.facts{grid-template-columns:1fr}
+    .callout{padding-left:1rem}
+    figcaption{padding:.75rem .9rem .85rem}
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]) figure{border-color:#45584E}
+  }
+  :root[data-theme="dark"] figure{border-color:#45584E}
+  .contact{align-items:center}
+  @media print{
+    @page{size:Letter; margin:.45in}
+    :root{--ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
+      --rule:#c0c0c0; --accent:#0b5a45; --gate:#7a5714; --spine:#b5b5b5; --shadow:none}
+    body{background:#fff; font-size:8.2pt; line-height:1.27; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .wrap{max-width:none; padding:0}
+    .back{display:none}
+    header{padding:0 0 .4rem}
+    .eyebrow{font-size:6.6pt; margin:0 0 .3rem}
+    h1{font-size:14pt; line-height:1.08; margin:0 0 .3rem}
+    .lede{font-size:8.6pt; max-width:none; margin:0}
+    .prose{max-width:none}
+    .prose p{margin:0 0 .3rem}
+    section{padding:.4rem 0; break-inside:auto}
+    .sec-head{margin:0 0 .25rem}
+    h2{font-size:9.8pt}
+    h3{font-size:8.6pt; margin:.45rem 0 .18rem}
+    .sec-sub{margin:0 0 .4rem; max-width:none}
+    .metrics,.facts{margin:.5rem 0 0; break-inside:avoid}
+    .metric,.fact{padding:.28rem .4rem}
+    .metric b,.fact b{font-size:9.8pt}
+    .metric span,.fact span{font-size:6.4pt; margin-top:.1rem; line-height:1.25}
+    .run{margin:.45rem 0 0; flex-wrap:wrap; overflow:visible; break-inside:avoid}
+    .stage{font-size:6.8pt; white-space:normal}
+    .arrow{width:.9rem; margin:0 .35rem}
+    figure{margin:.5rem 0 0; box-shadow:none; break-inside:avoid}
+    figure img{max-height:1.35in; width:auto; max-width:100%; margin:0 auto}
+    figcaption{padding:.3rem .45rem .35rem; font-size:7pt; line-height:1.3}
+    .callout{margin:.45rem 0 0; font-size:8.2pt; max-width:none; padding-left:.7rem; break-inside:avoid}
+    .role{margin:.45rem 0 0; padding-top:.35rem; font-size:8.2pt; max-width:none; break-inside:avoid}
+    .stack{font-size:6.8pt; margin:.35rem 0 0}
+    table{font-size:7.2pt; margin:.4rem 0 0; break-inside:avoid}
+    th,td{padding:.24rem .35rem}
+    ul.plain,ol.steps{margin:.3rem 0 0; max-width:none; padding-left:.9rem}
+    ul.plain li,ol.steps li{margin:0 0 .2rem}
+    .links{margin:.35rem 0 0; font-size:7.6pt; gap:.25rem .9rem}
+    footer{padding:.5rem 0 0}
+    .ident{font-size:6.6pt; margin:0 0 .25rem}
+    .entity{font-size:7.2pt; max-width:none; margin:.35rem 0 0}
+    a{color:inherit; text-decoration:none}
+    .links a[href^="http"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666}
+  }
+
+  /* ---------- shared chrome: skip link, top bar, focus, measure ---------- */
+  .skip{position:absolute; left:1rem; top:-6rem; z-index:60; padding:.7rem 1.1rem; background:var(--raise);
+    color:var(--ink); border:1px solid var(--rule); border-radius:3px; font-size:.9rem;
+    text-decoration:none; box-shadow:var(--shadow)}
+  .skip:focus{top:.7rem}
+  a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{
+    outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+  .sitebar{position:sticky; top:0; z-index:40; border-bottom:1px solid var(--rule);
+    background:color-mix(in srgb, var(--ground) 88%, transparent);
+    -webkit-backdrop-filter:saturate(150%) blur(12px); backdrop-filter:saturate(150%) blur(12px)}
+  .sitebar-in{display:flex; align-items:center; justify-content:space-between; gap:.1rem 1.5rem;
+    flex-wrap:wrap; min-height:48px}
+  .sitebar a{display:inline-flex; align-items:center; min-height:40px; text-decoration:none}
+  .sitebar a:hover{text-decoration:underline; text-underline-offset:3px}
+  .sitebar .home{color:var(--ink); font-weight:600; font-size:.86rem}
+  .sitebar nav{display:flex; flex-wrap:wrap; gap:0 1.15rem}
+  .sitebar nav a{color:var(--ink-3); font-size:.7rem; letter-spacing:.14em; text-transform:uppercase}
+  .sitebar nav a:hover{color:var(--ink)}
+  main{display:block}
+  [id]{scroll-margin-top:4.5rem}
+  @media (max-width:34rem){
+    .sitebar-in{min-height:44px; padding:.15rem 0 .35rem}
+    .sitebar nav{gap:0 .9rem}
+    .sitebar nav a{font-size:.66rem; letter-spacing:.1em}
+  }
+  @media print{ .skip,.sitebar{display:none!important} }
+
+  @media print{
+      :root,:root:not([data-theme="light"]),:root[data-theme="dark"]{
+      --ground:#fff; --raise:#fff; --ink:#111; --ink-2:#2f2f2f; --ink-3:#5f5f5f;
+      --rule:#c0c0c0; --accent:#0b5a45; --gate:#7a5714; --spine:#b5b5b5; --shadow:none}
+    body{background:#fff; color:#111}
+    .skip,.sitebar{display:none!important}
+    .links a,.docs a,.contact a{min-height:0}
+    a[href^="http"]::after,a[href^="mailto"]::after{content:" (" attr(href) ")"; font-size:6.4pt; color:#666;
+      word-break:break-all}
+  }
+  @media print{ figure{border-color:var(--rule)} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="sitebar">
+  <div class="wrap sitebar-in">
+    <a class="home serif" href="../">Soroush Seif</a>
+    <nav class="mono" aria-label="Portfolio sections">
+      <a href="../#systems">Systems</a>
+      <a href="../nightshift/">Nightshift</a>
+      <a href="../atlas/side-intelligence-architecture-atlas.html">Atlas</a>
+      <a href="../agency/">Clients</a>
+      <a href="../#documents">Documents</a>
+    </nav>
+  </div>
+</div>
+<div class="wrap">
+<main id="main">
+
+<header>
+  <p class="eyebrow mono">Method · product and go-to-market · since 2012</p>
+  <h1 class="serif">How I take a product <em>to market</em>.</h1>
+  <p class="lede">The pattern has been the same since 2012. I look for the segment nobody is serving, and I build for that segment first. Then I build the machine that sells it: the channels, the capture, the qualification, the nurture, the handoff to a salesperson, and the attribution that says which spend produced a closed deal. Then I own the number it moves. The rest of this site shows the systems I have built; this page is the other half of the job, which is putting a product in front of the people who will pay for it.</p>
+  <div class="metrics">
+    <div class="metric"><b>1% &rarr; 3%</b><span>lead-to-transaction conversion at Side</span></div>
+    <div class="metric"><b>~$45M</b><span>year-one transaction value: transactions, not revenue</span></div>
+    <div class="metric"><b>$17M+</b><span>gross food sales at Lazymeal, counted as marketplace GMV</span></div>
+    <div class="metric"><b>400+</b><span>vendor accounts onboarded at Lazymeal</span></div>
+    <div class="metric"><b>800 / 300</b><span>businesses assessed and roadmaps delivered by the CDAP practice I led</span></div>
+    <div class="metric"><b>~45</b><span>active clients whose acquisition systems I run today</span></div>
+  </div>
+</header>
+
+<section id="method">
+  <div class="sec-head"><span class="sec-num mono">01</span><h2 class="serif">The method, in four steps</h2></div>
+  <p class="sec-sub">The same four steps whether the thing being sold is software, a marketplace or a service somebody wants to buy on repeat.</p>
+
+  <h3>1. Find the segment nobody is serving, and position for it</h3>
+  <div class="prose">
+    <p>I start with who is underserved rather than with the product. In pre-construction real estate the money went to project-marketing firms who sold to developers, and the developer's marketing ended at the sales centre door. Demand for presale homes was rising while the individual agent's access to those buyers stayed limited. That gap set the positioning: everything the product did, it did for the agent and under the agent's own name.</p>
+    <p>I would rather hold most of a narrow segment than a sliver of a broad one. A narrow segment gives you one buyer to write for, one objection to answer, and one definition of a good lead that the whole team can agree on.</p>
+  </div>
+
+  <h3>2. Pick the one metric that proves fit</h3>
+  <div class="prose">
+    <p>Before any money goes into channels I decide which single number says the product is working for the person who pays, and I make it the number everyone reads. At Side the paying customer was the agent, and an agent judges a lead source by one thing: whether the leads it sends turn into signed deals. So lead-to-transaction conversion was the number. Traffic and form fills move early and prove little on their own; conversion is what the agent pays for, and it went from 1% to 3%.</p>
+    <p>Fit shows up as pull. When retention and word of mouth start doing the work the sales effort used to do, the product has it. Until then the job is to land the value proposition for the smallest group with the sharpest pain, and to be strict about which number is allowed to count as progress.</p>
+  </div>
+
+  <h3>3. Build the machine: acquire, capture, qualify, nurture, route, close</h3>
+  <div class="prose">
+    <p>The machine is one system rather than a set of tools that only meet in a spreadsheet. Six stages, each with an owner and a definition of done, with the CRM as the spine and attribution running the whole length of it. Acquire brings demand in. Capture pulls every source into one flow. Qualify asks a fixed set of questions before anybody spends an hour on a coffee. Nurture holds the thread across a buying cycle measured in months. Route hands a salesperson a person with context attached. Close and measure feed the result back into the next round of targeting.</p>
+    <p>Route is where most funnels break, because a scored lead becomes a name on a list and the context evaporates. So I design the handoff first: what the salesperson receives, what moves in the CRM at the same moment, and what happens when nobody picks it up.</p>
+  </div>
+  <div class="run" aria-label="The machine, stage by stage">
+    <span class="stage"><span class="dot"></span>Acquire</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Capture</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Qualify</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Nurture</span><span class="arrow"></span>
+    <span class="stage is-gate"><span class="dot"></span>Route with the context attached</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Close</span><span class="arrow"></span>
+    <span class="stage"><span class="dot"></span>Attribute the result back to source</span>
+  </div>
+
+  <h3>4. Measure it, then productize it</h3>
+  <div class="prose">
+    <p>Source has to hold all the way through to the closed transaction, because closings are the only number that pays anybody. That is a decision about the data model, taken at the start rather than reported at the end. On client accounts today the click identifiers, the campaign and ad ids, the full set of tracking parameters and the lifetime purchase total sit on the same contact record, which is what makes return on ad spend readable per person.</p>
+    <p>Then I turn what worked into something a buyer can buy again. At Side that meant converting a services engagement into a product an agent could purchase, which changed what we had to build. A service can be held together by an operator paying attention. A product cannot.</p>
+  </div>
+</section>
+
+<section id="side">
+  <div class="sec-head"><span class="sec-num mono">02</span><h2 class="serif">Side: the product, and the machine that sold it</h2></div>
+  <p class="sec-sub">Pre-construction real estate, 2020-21, before generative AI. The same four steps, worked end to end.</p>
+  <div class="prose">
+    <p><b>The segment.</b> Project-marketing firms sold to developers. Nothing served the individual agent who brought buyers to those projects, and that agent was working on commission with ad spend, a phone and a spreadsheet. He was the customer.</p>
+    <p><b>The value proposition, in plain words.</b> Every presale project gets a site under the agent's own name, so the lead belongs to him. A buyer asking at eleven at night whether the parking stall is included gets an answer in seconds, out of a project database rather than a brochure. The people who are actually buying reach the agent already qualified, with their answers attached and a stage already set in the CRM.</p>
+    <p><b>The channels.</b> Paid social and search into agent-branded project sites. SMS and email sequencing to hold the thread across a cycle measured in months. One CRM instance per agent team running the tags, the stage movement, the campaign triggers, the routing and the attribution.</p>
+    <p><b>The pricing and packaging.</b> It began as a service engagement and became something an agent could buy: a subscription with a commission component, sold to the agent directly.</p>
+    <p><b>The result.</b> The conversation layer handled 1,000+ buyer conversations a day at its peak, counted in the CRM. Lead-to-transaction conversion moved from 1% to 3%. Year-one transaction value across the projects the system carried was about $45M, which is the value of the transactions themselves.</p>
+    <p>The conversation layer went through three technology generations: rule-based workflows first, then in-house models built by our engineering team, then LLM agents.</p>
+  </div>
+  <p class="callout">The applied-research project behind the second generation was filed with a federal agency in 2023, and its phase order is the same sequence I still design around: lead generation and nurturing first, then prequalification, then the transaction itself. <a href="../earlier-work/IRAP-Project-Description-2023.pdf">The filed project description</a> is in this package.</p>
+  <p class="stack mono">GoHighLevel as the CRM and workflow engine · paid social and search · agent-branded project sites · SMS and email sequencing</p>
+</section>
+
+<section id="lazymeal">
+  <div class="sec-head"><span class="sec-num mono">03</span><h2 class="serif">Lazymeal: taking a marketplace from zero</h2></div>
+  <div class="prose">
+    <p>Lazymeal was a business-to-business food marketplace I co-founded in 2012 and led growth for from nothing. A marketplace has two sides and neither one works without the other, so supply and demand were the same week's work: selling to the businesses placing the orders, signing partnerships, onboarding vendors one kitchen at a time, and running the marketing that kept order volume ahead of the vendors we had just signed.</p>
+    <p>This is the least glamorous version of go-to-market and the one that teaches the most. Every vendor is a sales cycle, an onboarding and a quality risk at once, and every new buyer has to find an order worth placing on the day they arrive. Holding both sides in balance is what produced the outcome: $17M+ in gross food sales as marketplace GMV, across 400+ vendor accounts.</p>
+  </div>
+</section>
+
+<section id="scale">
+  <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">Positioning, at volume</h2></div>
+  <div class="prose">
+    <p>Two things gave me the repetition. As a government-appointed advisor under the Canada Digital Adoption Program I led the practice that assessed 800 businesses, which is 800 readings of where a business is stuck, and it is almost never where the owner says it is. The practice delivered 300 roadmaps, each one sequenced by what the business could actually staff. Anything that needed a person they did not have and were not going to hire came out of the plan.</p>
+    <p>The second is current. I architect and run the client-acquisition systems for <a href="../agency/">~45 active clients</a>: demand generation, landing pages, qualification, nurture, CRM orchestration, handoff and attribution, on one platform. Running the same machine across that many businesses is how I know which parts of it are the product and which parts were only ever true of one client.</p>
+  </div>
+</section>
+
+<section id="first">
+  <div class="sec-head"><span class="sec-num mono">05</span><h2 class="serif">What I look at first on a product hunting for fit</h2></div>
+  <div class="prose">
+    <p>Three questions come before any recommendation, and each is answered from the product's own data. Which segment is already pulling hardest, where the drop-off sits between interest and activation, and whether the positioning matches the buyer who converts rather than the one we wish converted. Those answers decide whether the first work is positioning, product or the machine, and getting that order right matters more than the plan that follows it.</p>
+  </div>
+  <p class="links">
+    <a href="acquisition-to-close.html">Acquisition to close: the system, stage by stage</a>
+    <a href="side-io.html">Side.io: the product and its three generations</a>
+    <a href="cdap.html">CDAP: what an advisor does inside a small business</a>
+    <a href="../Soroush-Seif-Resume.pdf">Resume (PDF, one page)</a>
+  </p>
+</section>
+
+<footer>
+  <p class="links">
+    <a href="../">Portfolio</a>
+    <a href="intelligence-platform.html">Intelligence Platform</a>
+    <a href="nightshift.html">Nightshift</a>
+    <a href="acquisition-to-close.html">Acquisition to close</a>
+    <a href="side-io.html">Side.io</a>
+    <a href="cdap.html">CDAP</a>
+    <a href="nlu-program.html">NLU program</a>
+    <a href="mailto:soroushcaa@gmail.com">soroushcaa@gmail.com</a>
+    <a href="https://www.linkedin.com/in/soroushseif">linkedin.com/in/soroushseif</a>
+  </p>
+  <p class="ident mono">Soroush Seif · AI Systems Lead · Agentic Platforms &amp; Revenue Automation</p>
+  <p class="entity">Side is the company I co-founded in Vancouver in 2021. Side Studios, its studio subsidiary, designs and runs client sites and agents (theside.studio). theSide.io is the intelligence platform we built for those clients. Nightshift is the console for our autonomous SEO and AI-visibility engine. Canadian citizen.</p>
+</footer>
+
+</main>
+</div>
+</body>
+</html>
