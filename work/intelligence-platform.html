@@ -210,9 +210,9 @@
     <a class="home serif" href="../">Soroush Seif</a>
     <nav class="mono" aria-label="Portfolio sections">
       <a href="../#systems">Systems</a>
-      <a href="../nightshift/">Nightshift</a>
+      <a href="../nightshift/index.html">Nightshift</a>
       <a href="../atlas/side-intelligence-architecture-atlas.html">Atlas</a>
-      <a href="../agency/">Clients</a>
+      <a href="../agency/index.html">Clients</a>
       <a href="../#documents">Documents</a>
     </nav>
   </div>
@@ -287,7 +287,7 @@
 <section id="state">
   <div class="sec-head"><span class="sec-num mono">04</span><h2 class="serif">Where it stands</h2></div>
   <div class="prose">
-    <p>The runtime, the 32-table schema, the connector fabric with its health probes, the approval queue and the audit path are implemented and covered by tests, down to the permission rules, the idempotency claims and the write executors for pausing an ad set and changing a campaign budget. Every action passes a critic, a deterministic ranker and a person before it runs, and content-management writes stay as drafts for a person to publish. Every write appends a row to a signed audit chain under a per-tenant lock, so two runs for one tenant cannot fork the history. It is built and tested; it has not yet run against a client account. What runs for clients today is the <a href="../agency/">GoHighLevel agent layer</a>, and what runs nightly unattended is <a href="../nightshift/">Nightshift</a> on our own site.</p>
+    <p>The runtime, the 32-table schema, the connector fabric with its health probes, the approval queue and the audit path are implemented and covered by tests, down to the permission rules, the idempotency claims and the write executors for pausing an ad set and changing a campaign budget. Every action passes a critic, a deterministic ranker and a person before it runs, and content-management writes stay as drafts for a person to publish. Every write appends a row to a signed audit chain under a per-tenant lock, so two runs for one tenant cannot fork the history. It is built and tested; it has not yet run against a client account. What runs for clients today is the <a href="../agency/index.html">GoHighLevel agent layer</a>, and what runs nightly unattended is <a href="../nightshift/index.html">Nightshift</a> on our own site.</p>
   </div>
   <p class="callout gate">The Atlas traces one action from trigger to memory: what the proposer sees, what the critic does to it, where the ranker puts it, who approves it, what the executor claims and calls, and what the 14-day outcome row holds. The trace is reconstructed from the code paths and the test fixtures, so a reviewer can follow every write to the file that makes it.</p>
 </section>
