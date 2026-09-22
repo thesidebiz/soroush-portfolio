@@ -7,7 +7,7 @@
 <meta name="author" content="Soroush Seif">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nightshift walkthrough · Soroush Seif">
-<meta property="og:description" content="What the operator sees behind theside.studio/engine: 58 runs across 48 nights, trust classes, caps the engine cannot raise, every figure linked to its source file in git, and no approval control anywhere in the console.">
+<meta property="og:description" content="What the operator sees behind theside.studio/engine: 72 runs across 59 nights, trust classes, caps the engine cannot raise, every figure linked to its source file in git, and no approval control anywhere in the console.">
 <title>Nightshift walkthrough · Soroush Seif</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 <style>
@@ -217,8 +217,8 @@
     <p>The console carries no approval control. The operator vetoes and reverts. Every number on every screen links to the file in git it was read from, and a number nobody measured is drawn as a gap. Its budget, its trust classes and its own policy are files the engine is not allowed to edit.</p>
   </div>
   <div class="facts">
-    <div class="fact"><b>58</b><span>runs across 48 nights since Jul 11, 2026</span></div>
-    <div class="fact"><b>29</b><span>missions across the last 7 nights: 23 landed, 4 staged for me, 2 unresolved</span></div>
+    <div class="fact"><b>72</b><span>runs across 59 nights since Jul 11, 2026</span></div>
+    <div class="fact"><b>66</b><span>missions across 18 nights: 50 landed by trust class, 16 held or unresolved</span></div>
     <div class="fact"><b>$45 / $250</b><span>hard caps per night and per week, set in policy.json</span></div>
     <div class="fact"><b>12</b><span>self-checks the console runs on itself</span></div>
     <div class="fact"><b>19</b><span>nodes in the nightly graph, 12 of them deterministic</span></div>
@@ -291,7 +291,7 @@
   <p class="callout">Routing is capability-gated. With no answer-engine credentials the GEO node emits no mentions and a loud digest line. A missing measurement is never recorded as a zero. The writer path closes in one decision for any site without a brand guide or a platform the engine may write to. A scope contract forbids the in-graph agents from touching layout, components, shared libraries, workflows, package files, and the engine's own source.</p>
   <h3>By the numbers</h3>
   <div class="facts" style="margin-top:.6rem">
-    <div class="fact"><b>1,559</b><span>tests passing: 1,100 pytest, 459 node</span></div>
+    <div class="fact"><b>1,992</b><span>tests passing: 1,414 pytest, 578 node</span></div>
     <div class="fact"><b>~15.8k</b><span>lines of Python in the engine, ~20.3k in its tests</span></div>
     <div class="fact"><b>~5.5k</b><span>lines in the decision layer (land, verify, retro, council, budget)</span></div>
     <div class="fact"><b>2</b><span>required CI workflows polled green before any class A merge</span></div>
@@ -348,7 +348,7 @@
   </figure>
   <figure class="clip">
     <div class="shot"><img src="img/nights.png" alt="Nights page: every run newest first with sensor, brain, landed, staged, queued, failed, incidents, cost, duration and headline." width="1440" height="1300" loading="lazy" decoding="async"></div>
-    <figcaption><b>Every run, newest first.</b> 58 runs across 48 nights. A cell reading a dash is a record the night never wrote, and its reason is announced with the cell.
+    <figcaption><b>Every run, newest first.</b> 58 runs across 48 nights when this was captured on Sep 10; 72 across 59 by Sep 21. A cell reading a dash is a record the night never wrote, and its reason is announced with the cell.
     <a class="full" href="img/nights.png" target="_blank" rel="noopener">Open the full screenshot</a></figcaption>
   </figure>
 </section>
@@ -390,7 +390,7 @@
   <div class="prose">
     <p>I wrote the specification: two audiences, three questions each, and four principles. Two of them read, in the spec's words, "Veto, not approve. Receipts, not logs." Each principle earned its place from a recorded failure, and the spec names the failure beside the rule.</p>
     <p>I defined the trust classes, the budgets, the acceptance criteria per phase, the projection schema and the locked metrics contract. AI coding agents (Claude Code and Codex) implemented it under those constraints, in their own worktrees, with the same gates the engine uses at night. I reviewed the diffs, ran the tests, and vetoed what did not meet the spec. I own what it must do, how it is allowed to do it, and whether it did.</p>
-    <p>The engine that Nightshift reads was built the same way, over the summer of 2026. It has run 58 times across 48 nights since July 11, and the Nights page lists every run. The unattended landing evidenced here is class A; class B opens a pull request and waits a night of canary, and I merge those myself.</p>
+    <p>The engine that Nightshift reads was built the same way, over the summer of 2026. It has run 72 times across 59 nights since July 11, and the Nights page lists every run. The unattended landing evidenced here is class A; class B opens a pull request and waits a night of canary, and I merge those myself.</p>
   </div>
   <p class="callout gate">If you want the primary sources, I can walk your team through the repository on a call.</p>
 </section>

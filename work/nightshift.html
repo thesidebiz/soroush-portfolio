@@ -7,7 +7,7 @@
 <meta name="author" content="Soroush Seif">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nightshift">
-<meta property="og:description" content="An engine that finds its own work, writes the code and lands it by trust class. 58 runs across 48 nights. 1,559 tests passing. Veto and revert, no approval inbox.">
+<meta property="og:description" content="An engine that finds its own work, writes the code and lands it by trust class. 72 runs across 59 nights. 1,992 tests passing. Veto and revert, no approval inbox.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 <title>Nightshift · Soroush Seif</title>
 <style>
@@ -231,9 +231,9 @@
   <h1 class="serif">Nightshift: an engine that finds its own work, and the rules it works <em>under</em>.</h1>
   <p class="lede">The human in this one is me. The run starts at 08:23 UTC, which is twenty past one in the morning where I live. By the time I am up it has crawled our site, measured where we stand in search and in AI answers, picked up to three missions, dispatched coding agents to do them, run the gates and either landed the work or left it for me. I read a digest with coffee.</p>
   <div class="metrics">
-    <div class="metric"><b>58</b><span>runs across 48 nights since Jul 11, 2026</span></div>
-    <div class="metric"><b>29</b><span>missions across the last 7 nights: 23 landed, 4 staged for me, 2 unresolved</span></div>
-    <div class="metric"><b>1,559</b><span>tests passing: 1,100 pytest, 459 node</span></div>
+    <div class="metric"><b>72</b><span>runs across 59 nights since Jul 11, 2026</span></div>
+    <div class="metric"><b>66</b><span>missions across 18 nights: 50 landed by trust class, 16 held or unresolved</span></div>
+    <div class="metric"><b>1,992</b><span>tests passing: 1,414 pytest, 578 node</span></div>
   </div>
 </header>
 
@@ -310,7 +310,7 @@
   <div class="prose">
     <p>I defined the specification: two audiences with three questions each, four principles, and phase-gated acceptance criteria with a byte budget per route. Each principle earned its place from a recorded failure, and the spec names the failure beside the rule. The trust classes, the budgets, the projection schema and the locked metrics contract are mine.</p>
     <p>I directed the build. Coding agents implemented the spec under those constraints, in their own worktrees, against the same gates the engine uses at night. I reviewed the diffs, ran the suites and rejected what missed. I own what it must do, what it is allowed to do without asking, and whether it did. The unattended landing evidenced here is class A; class B opens a pull request and waits one night of canary, and I merge those myself.</p>
-    <p>The design decision that matters most here is removing the human merge gate rather than keeping it. The first version was an article factory behind a human review step, and between 1 August and 3 September it produced 34 nights, zero published pages and 37 open pull requests, while its own kill gate counted the freeze against it. The gate was not protecting anything. It was the reason nothing shipped. So I replaced it with a change taxonomy, a set of deterministic gates that hold, and a veto. The veto design has run for seven nights and landed 23 of 29 missions; the sensor graph underneath it has run since July 11.</p>
+    <p>The design decision that matters most here is removing the human merge gate rather than keeping it. The first version was an article factory behind a human review step, and between 1 August and 3 September it produced 34 nights, zero published pages and 37 open pull requests, while its own kill gate counted the freeze against it. The gate was not protecting anything. It was the reason nothing shipped. So I replaced it with a change taxonomy, a set of deterministic gates that hold, and a veto. The veto design has run since September 4 and landed 50 of 66 missions; the sensor graph underneath it has run since July 11.</p>
   </div>
 </section>
 
